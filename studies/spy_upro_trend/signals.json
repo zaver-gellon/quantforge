@@ -6,17 +6,20 @@
   },
   "strategy": "trend_core",
   "strategy_name": "core50_slv50_L3_sma200_band2_daily_quarterly",
-  "generated_at": "2026-10-25T21:13:30Z",
+  "generated_at": "2026-10-25T21:27:49Z",
   "signal_date": "2026-10-23",
   "trade": false,
   "trade_reason": "none",
   "rebalance_mix": false,
   "diagnostics": {
     "trend_on": true,
+    "hedge_on": false,
+    "hedge_rule": "baa10y_d20_gt_10bp",
+    "sleeve_on": true,
     "dip_on": false,
     "dip_rule": "3_down_closes",
     "reference_close": 759.969970703125,
-    "sma": 724.0022952270508,
+    "sma": 724.0022961425781,
     "sma_window": 200,
     "band": 0.02,
     "freq": "daily",
@@ -24,6 +27,12 @@
     "core_weight": 0.5,
     "sleeve_weight": 0.5,
     "sleeve_symbol": "UPRO",
-    "leverage": 3
+    "leverage": 3,
+    "hedge_threshold": 0.1,
+    "hedge_series": "BAA10Y",
+    "hedge_lookback": 20,
+    "spread_change": 0.0,
+    "spread_date": "2026-10-22",
+    "spread_value": 1.46
   }
 }

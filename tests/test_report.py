@@ -77,3 +77,60 @@ def test_report_prints_numbers_from_the_payload():
     assert "does not survive" in text
     assert "Protocol text." in text
     assert "signals.json" in text
+    assert "## Iteration log" not in text
+
+
+def test_iteration_log_prints_payload_numbers():
+    report = _report()
+    results = {
+        "protocol_md": "Protocol text.",
+        "caveats": ["A caveat."],
+        "sample": {"start": "2000-01-03", "end": "2026-10-23", "n_days": 10, "years": 1.0},
+        "costs_one_way_bps": 5.0,
+        "financing_spread": 0.004,
+        "irx_unit": "percent",
+        "n_trials": 10,
+        "multiple_testing_bar_t": 2.5,
+        "sharpe_dispersion_daily": 0.01,
+        "validation": [],
+        "headline": [
+            ("BH_SPY", _metrics(0.08)),
+            ("BH_SPY_walk_window", _metrics(0.081)),
+            ("desk_50_50", _metrics(0.12)),
+            ("desk_50_50_stitched", _metrics(0.12)),
+            ("walk_forward", {**_metrics(0.09), "start": "2006-01-03", "end": "2026-10-23"}),
+        ],
+        "walk_forward": {"picks": [], "frequency": []},
+        "subperiod_labels": [],
+        "subperiods": {},
+        "spy_subperiods": [],
+        "full_sample_top": [],
+        "bootstrap_block": 63,
+        "bootstrap_paths": 10,
+        "bootstrap_seed": 7,
+        "bootstrap": {},
+        "stress": {},
+        "dip": [],
+        "recommendation": {
+            "action": "hold_spy",
+            "edge_survives": False,
+            "live_variant": "cell_a",
+            "variant": "SPY",
+        },
+        "iterations": [{
+            "date": "2026-10-25",
+            "title": "Credit-spread sleeve hedge",
+            "hypothesis": "Move the sleeve to T-bills when the spread widens.",
+            "decision": "rejected",
+            "oos_window": {"start": "2006-01-03", "end": "2026-10-23", "n_days": 100},
+            "oos": {
+                "current": {"cagr": 0.111, "sharpe": 0.42, "dsr": 0.31, "max_drawdown": -0.22},
+                "candidate": {"cagr": 0.105, "sharpe": 0.40, "dsr": 0.28, "max_drawdown": -0.18},
+            },
+        }],
+    }
+    text = report.render_report(results)
+    assert "## Iteration log" in text
+    assert "11.10%" in text
+    assert "10.50%" in text
+    assert "Decision: rejected." in text

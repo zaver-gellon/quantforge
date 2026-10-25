@@ -13,6 +13,7 @@ from quantforge.data.base import DataError
 from quantforge.eval.ledger import TrialLedger
 from quantforge.signals.emit import write_signal
 from quantforge.strategies.dipbuy import build_dip_signal
+from quantforge.strategies.credit import kept_hedge_stress
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal
 
 
@@ -86,7 +87,11 @@ def _signals(args) -> int:
     close = frames["SPY"]["close"]
     study = Path(args.study_dir)
     if args.strategy == "trend-core":
-        payload = build_trend_signal(TrendCoreSpec(), close, strategy_id="trend_core")
+        stress, rule, info = kept_hedge_stress(study / "iterations.json", close.index)
+        payload = build_trend_signal(
+            TrendCoreSpec(), close, strategy_id="trend_core",
+            hedge_on=stress, hedge_rule=rule, hedge_info=info,
+        )
         dest = Path(args.out) if args.out else study / "signals.json"
     else:
         payload = build_dip_signal(close, strategy_id="dip_buy")

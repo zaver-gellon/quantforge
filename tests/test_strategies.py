@@ -105,6 +105,32 @@ def test_trend_band_holds_through_a_small_dip_and_monthly_does_not_flip_midmonth
     assert bool(month.loc[pd.Timestamp("2019-06-28")]) is False
 
 
+def test_credit_hedge_moves_only_the_sleeve_to_bil_and_ignores_a_future_print():
+    idx = pd.bdate_range("2018-01-02", periods=80)
+    close = pd.Series(np.linspace(80, 120, len(idx)), index=idx)
+    stress = pd.Series(False, index=idx)
+    stress.iloc[-1] = True
+    future = stress.copy()
+    future.iloc[-1] = False
+    future.iloc[10] = True
+    payload = build_trend_signal(
+        TrendCoreSpec(window=20), close, as_of=idx[-1], generated_at="2026-01-01T00:00:00Z",
+        apply_dip=False, hedge_on=stress, hedge_rule="baa10y_d20_gt_10bp",
+    )
+    validate_signal(payload, allowed_tickers=ALLOWED_TREND_TICKERS)
+    assert payload["diagnostics"]["trend_on"] is True
+    assert payload["diagnostics"]["hedge_on"] is True
+    assert payload["weights"]["SPY"] == pytest.approx(0.5)
+    assert payload["weights"]["BIL"] == pytest.approx(0.5)
+    assert "UPRO" not in payload["weights"]
+    earlier = build_trend_signal(
+        TrendCoreSpec(window=20), close, as_of=idx[40], generated_at="2026-01-01T00:00:00Z",
+        apply_dip=False, hedge_on=future, hedge_rule="baa10y_d20_gt_10bp",
+    )
+    assert earlier["diagnostics"]["hedge_on"] is False
+    assert earlier["weights"]["UPRO"] == pytest.approx(0.5)
+
+
 def test_two_times_sleeve_uses_sso_and_flat_trend_uses_bil():
     idx = pd.bdate_range("2018-01-02", periods=400)
     close = pd.Series(np.linspace(100, 40, len(idx)), index=idx)
