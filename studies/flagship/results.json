@@ -1,0 +1,1926 @@
+{
+  "protocol_md": "## Protocol\n\nPrecommitted before this sample was scored:\n\n- Objective: maximize out-of-sample CAGR subject to a drawdown budget. The budgets are 30%, 45%, and 60%. A separate track maximizes trailing excess Sharpe and is not allowed to win the growth recommendation.\n- Decision: first session of each year from 2010. Score only returns strictly before that session. A variant needs 756 sessions. The growth score is CAGR. A variant is eligible for a budget only if its expanding-window max drawdown is no worse than the cap. Ties break alphabetically. If nothing qualifies, the book is cash.\n- Candidates, all counted as trials: the final SPY/UPRO trend-core book; a monthly managed-futures basket (SPY, QQQ, IWM, EFA, EEM, TLT, GLD, DBC) that is long/flat the 1x, 2x, or 3x sleeve when the SMA trend is on, plus a long/short margin version at 1x, 2x, and 3x; inverse-vol risk parity with and without that trend, at 1x, 2x, and 3x gross; 12-1 and 6-1 cross-asset momentum in the top 2 or 3, at 1x and 2x; the same momentum on sector ETFs; BTC and ETH trend and BTC Donchian, plus BTC vol targets of 25% and 40% capped at 2x; half-Kelly (cap 3x, expanding, month-end) on a fixed list of those books. Concentrated stock momentum is estimated and counted, and it is ineligible for the recommendation because the list is names that still exist.\n- Leverage above 1x on an unlevered basket is margin financed at the lagged T-bill plus 0.40%. Leveraged-ETF sleeves are the daily-reset model with a 0.95% expense ratio unless the fund is SSO, UPRO, QLD, or TQQQ, which use the sponsor expense ratios from the trend study. Equity trades pay 5 bps. Crypto pays 25 bps plus 3 bps.\n- A budget path survives only if its out-of-sample CAGR beats SPY over the same sessions, its deflated Sharpe is at least 0.95 using the persistent ledger, its 5-year block-bootstrap probability of beating SPY is at least 0.55 (20,000 paths, 63-day blocks, seed 7), and its realized out-of-sample max drawdown is inside the cap. The recommendation is the surviving budget path with the highest out-of-sample CAGR. If none survive, the flagship file is 100% SPY and is not endorsed. The full-sample ranking is not a recommendation.",
+  "caveats": [
+    "Stock momentum uses a fixed list of companies that are still listed. Delisted names are missing, so that sleeve is biased upward. It is shown and counted, and it cannot be the recommendation.",
+    "BTC and ETH are the assets that became the liquid majors. That choice is a form of selection. The sleeve is tested because those are the markets a book can actually trade, and the caveat stays attached to the result.",
+    "Listed 3x funds for EAFE, emerging markets, Treasuries, and gold are not all modeled with their own expense ratios. Unspecified sleeves use 0.95% plus 40 bps of financing. The overlap table is the check where a fund was downloaded.",
+    "Crypto is marked to the last Coinbase daily close at or before the NYSE session. A position that was already on earns that change; a new position does not earn it until the next session.",
+    "The drawdown cap is applied to the past. The realized path can be worse. A breach fails the survival rule and the path is not recommended.",
+    "Half-Kelly is the growth-optimal fraction of the base book's daily excess return, halved and capped at 3. It is not a promise that the estimate is stable.",
+    "This is research on public prices. It is not a recommendation to use margin or leveraged ETFs."
+  ],
+  "sample": {
+    "start": "2006-02-06",
+    "end": "2026-10-23",
+    "n_days": 5212
+  },
+  "walk_forward_start": 2010,
+  "min_obs": 756,
+  "n_trials": 194,
+  "multiple_testing_bar_t": 2.755552127905318,
+  "sharpe_dispersion_daily": 0.008033306951566838,
+  "universe": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "EFA",
+    "EEM",
+    "TLT",
+    "GLD",
+    "DBC"
+  ],
+  "dropped": [],
+  "frontier": [
+    {
+      "track": "growth_30",
+      "cap": 0.3,
+      "recommendable": true,
+      "cagr": 0.08204000747188611,
+      "vol": 0.1827026518379075,
+      "sharpe": 0.44213333769768576,
+      "max_drawdown": -0.3533373382769611,
+      "ir_t": -1.3808047431754187,
+      "dsr": 0.64425550083099,
+      "spy_cagr": 0.1411239856395503,
+      "start": "2010-01-04",
+      "end": "2026-10-23",
+      "p_beats_spy": 0.17065,
+      "p_loss": 0.1227,
+      "bootstrap": {
+        "1y": {
+          "horizon_days": 252,
+          "n_paths": 20000,
+          "block": 63,
+          "seed": 7,
+          "start_value": 5000.0,
+          "median": 5486.362706784434,
+          "p10": 4423.327108280428,
+          "p90": 6482.929291718619,
+          "p5": 4136.020927708344,
+          "p_loss": 0.2755,
+          "p_down_30": 0.0058,
+          "p_beats_benchmark": 0.32085
+        },
+        "5y": {
+          "horizon_days": 1260,
+          "n_paths": 20000,
+          "block": 63,
+          "seed": 7,
+          "start_value": 5000.0,
+          "median": 7566.533392621078,
+          "p10": 4753.017498922227,
+          "p90": 11334.064996265057,
+          "p5": 4151.3767577482395,
+          "p_loss": 0.1227,
+          "p_down_30": 0.0189,
+          "p_beats_benchmark": 0.17065
+        }
+      },
+      "survives": false,
+      "picks": [
+        [
+          "2010-01-04",
+          "rp_trend_G2"
+        ],
+        [
+          "2011-01-03",
+          "rp_trend_G2"
+        ],
+        [
+          "2012-01-03",
+          "rp_trend_G2"
+        ],
+        [
+          "2013-01-02",
+          "rp_trend_G2"
+        ],
+        [
+          "2014-01-02",
+          "rp_trend_G2"
+        ],
+        [
+          "2015-01-02",
+          "rp_trend_G2"
+        ],
+        [
+          "2016-01-04",
+          "xasset_top3_lb252_G1"
+        ],
+        [
+          "2017-01-03",
+          "xasset_top3_lb252_G1"
+        ],
+        [
+          "2018-01-02",
+          "xasset_top3_lb252_G1"
+        ],
+        [
+          "2019-01-02",
+          "cta_L1_sma100_band2"
+        ],
+        [
+          "2020-01-02",
+          "xasset_top3_lb252_G1"
+        ],
+        [
+          "2021-01-04",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2022-01-03",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2023-01-03",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2024-01-02",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2025-01-02",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2026-01-02",
+          "cta_L1_sma100_band0"
+        ]
+      ],
+      "frequency": [
+        [
+          "cta_L1_sma100_band0",
+          6
+        ],
+        [
+          "rp_trend_G2",
+          6
+        ],
+        [
+          "xasset_top3_lb252_G1",
+          4
+        ],
+        [
+          "cta_L1_sma100_band2",
+          1
+        ]
+      ],
+      "live_variant": "cta_L1_sma100_band0"
+    },
+    {
+      "track": "growth_45",
+      "cap": 0.45,
+      "recommendable": true,
+      "cagr": 0.163808056381878,
+      "vol": 0.37079815278495737,
+      "sharpe": 0.5525387197371386,
+      "max_drawdown": -0.5888257165651309,
+      "ir_t": 0.912164923192439,
+      "dsr": 0.7985802287901193,
+      "spy_cagr": 0.1411239856395503,
+      "start": "2010-01-04",
+      "end": "2026-10-23",
+      "p_beats_spy": 0.5328,
+      "p_loss": 0.18835,
+      "bootstrap": {
+        "1y": {
+          "horizon_days": 252,
+          "n_paths": 20000,
+          "block": 63,
+          "seed": 7,
+          "start_value": 5000.0,
+          "median": 5701.888197676208,
+          "p10": 3683.840204322471,
+          "p90": 9434.963215591073,
+          "p5": 3231.351688443429,
+          "p_loss": 0.34455,
+          "p_down_30": 0.07815,
+          "p_beats_benchmark": 0.48965
+        },
+        "5y": {
+          "horizon_days": 1260,
+          "n_paths": 20000,
+          "block": 63,
+          "seed": 7,
+          "start_value": 5000.0,
+          "median": 10373.048141231135,
+          "p10": 3618.0066682270126,
+          "p90": 33354.69110093407,
+          "p5": 2703.391256864996,
+          "p_loss": 0.18835,
+          "p_down_30": 0.0933,
+          "p_beats_benchmark": 0.5328
+        }
+      },
+      "survives": false,
+      "picks": [
+        [
+          "2010-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2011-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2012-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2013-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2014-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2015-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2016-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2017-01-03",
+          "rp_trend_G2"
+        ],
+        [
+          "2018-01-02",
+          "rp_trend_G2"
+        ],
+        [
+          "2019-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2020-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2021-01-04",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2022-01-03",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2023-01-03",
+          "crypto_btc_sma_vol25"
+        ],
+        [
+          "2024-01-02",
+          "cta_L2_sma200_band2"
+        ],
+        [
+          "2025-01-02",
+          "cta_L2_sma200_band2"
+        ],
+        [
+          "2026-01-02",
+          "cta_L2_sma200_band2"
+        ]
+      ],
+      "frequency": [
+        [
+          "rp_trend_G3",
+          7
+        ],
+        [
+          "cta_L2_sma200_band2",
+          3
+        ],
+        [
+          "crypto_btc_donchian_vol40",
+          2
+        ],
+        [
+          "crypto_btc_sma_vol40",
+          2
+        ],
+        [
+          "rp_trend_G2",
+          2
+        ],
+        [
+          "crypto_btc_sma_vol25",
+          1
+        ]
+      ],
+      "live_variant": "cta_L2_sma200_band2"
+    },
+    {
+      "track": "growth_60",
+      "cap": 0.6,
+      "recommendable": true,
+      "cagr": 0.12350123843651284,
+      "vol": 0.3884453376503318,
+      "sharpe": 0.4547301646054186,
+      "max_drawdown": -0.639257349658823,
+      "ir_t": 0.5153086409615432,
+      "dsr": 0.6650811607419046,
+      "spy_cagr": 0.1411239856395503,
+      "start": "2010-01-04",
+      "end": "2026-10-23",
+      "p_beats_spy": 0.44465,
+      "p_loss": 0.25465,
+      "bootstrap": {
+        "1y": {
+          "horizon_days": 252,
+          "n_paths": 20000,
+          "block": 63,
+          "seed": 7,
+          "start_value": 5000.0,
+          "median": 5515.424968940562,
+          "p10": 3515.13910188182,
+          "p90": 9189.086214552583,
+          "p5": 3039.237948588611,
+          "p_loss": 0.38565,
+          "p_down_30": 0.09805,
+          "p_beats_benchmark": 0.44895
+        },
+        "5y": {
+          "horizon_days": 1260,
+          "n_paths": 20000,
+          "block": 63,
+          "seed": 7,
+          "start_value": 5000.0,
+          "median": 8741.919352309586,
+          "p10": 2983.484847336355,
+          "p90": 28256.880373321215,
+          "p5": 2186.674433576859,
+          "p_loss": 0.25465,
+          "p_down_30": 0.1381,
+          "p_beats_benchmark": 0.44465
+        }
+      },
+      "survives": false,
+      "picks": [
+        [
+          "2010-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2011-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2012-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2013-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2014-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2015-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2016-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2017-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2018-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2019-01-02",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2020-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2021-01-04",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2022-01-03",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2023-01-03",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2024-01-02",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2025-01-02",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2026-01-02",
+          "crypto_btc_donchian"
+        ]
+      ],
+      "frequency": [
+        [
+          "rp_trend_G3",
+          9
+        ],
+        [
+          "crypto_btc_donchian",
+          6
+        ],
+        [
+          "crypto_btc_donchian_vol40",
+          1
+        ],
+        [
+          "crypto_btc_sma_vol40",
+          1
+        ]
+      ],
+      "live_variant": "crypto_btc_donchian"
+    },
+    {
+      "track": "sharpe",
+      "cap": null,
+      "recommendable": false,
+      "cagr": 0.10183211229359479,
+      "vol": 0.3012705348378445,
+      "sharpe": 0.41745281128075545,
+      "max_drawdown": -0.5311061170403344,
+      "ir_t": -0.07910586904883433,
+      "dsr": 0.6118953490254757,
+      "spy_cagr": 0.1411239856395503,
+      "start": "2010-01-04",
+      "end": "2026-10-23",
+      "p_beats_spy": 0.3685,
+      "p_loss": 0.2969,
+      "bootstrap": {
+        "1y": {
+          "horizon_days": 252,
+          "n_paths": 20000,
+          "block": 63,
+          "seed": 7,
+          "start_value": 5000.0,
+          "median": 5154.234881623659,
+          "p10": 3844.7303155766563,
+          "p90": 8953.867602347851,
+          "p5": 3521.087292608194,
+          "p_loss": 0.44905,
+          "p_down_30": 0.04695,
+          "p_beats_benchmark": 0.3374
+        },
+        "5y": {
+          "horizon_days": 1260,
+          "n_paths": 20000,
+          "block": 63,
+          "seed": 7,
+          "start_value": 5000.0,
+          "median": 7377.269162037052,
+          "p10": 3154.462452593253,
+          "p90": 23840.557383937976,
+          "p5": 2586.737004958445,
+          "p_loss": 0.2969,
+          "p_down_30": 0.1352,
+          "p_beats_benchmark": 0.3685
+        }
+      },
+      "survives": false,
+      "picks": [
+        [
+          "2010-01-04",
+          "rp_trend_G1"
+        ],
+        [
+          "2011-01-03",
+          "rp_trend_G1"
+        ],
+        [
+          "2012-01-03",
+          "cta_L1_sma100_band2"
+        ],
+        [
+          "2013-01-02",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2014-01-02",
+          "rp_trend_G1"
+        ],
+        [
+          "2015-01-02",
+          "rp_trend_G1"
+        ],
+        [
+          "2016-01-04",
+          "xasset_top3_lb252_G1"
+        ],
+        [
+          "2017-01-03",
+          "rp_trend_G1"
+        ],
+        [
+          "2018-01-02",
+          "rp_trend_G1"
+        ],
+        [
+          "2019-01-02",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2020-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2021-01-04",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2022-01-03",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2023-01-03",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2024-01-02",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2025-01-02",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2026-01-02",
+          "crypto_btc_sma"
+        ]
+      ],
+      "frequency": [
+        [
+          "rp_trend_G1",
+          6
+        ],
+        [
+          "crypto_btc_donchian",
+          3
+        ],
+        [
+          "crypto_btc_sma_vol40",
+          3
+        ],
+        [
+          "crypto_btc_donchian_vol40",
+          1
+        ],
+        [
+          "crypto_btc_sma",
+          1
+        ],
+        [
+          "cta_L1_sma100_band0",
+          1
+        ],
+        [
+          "cta_L1_sma100_band2",
+          1
+        ],
+        [
+          "xasset_top3_lb252_G1",
+          1
+        ]
+      ],
+      "live_variant": "crypto_btc_sma"
+    },
+    {
+      "track": "growth_45_including_stocks",
+      "cap": 0.45,
+      "recommendable": false,
+      "cagr": 0.16064263414198088,
+      "vol": 0.37158168188426843,
+      "sharpe": 0.5446983538490924,
+      "max_drawdown": -0.5888257165651309,
+      "ir_t": 0.8771158484270312,
+      "dsr": 0.789408238758548,
+      "spy_cagr": 0.1411239856395503,
+      "start": "2010-01-04",
+      "end": "2026-10-23",
+      "p_beats_spy": 0.52485,
+      "p_loss": 0.19605,
+      "bootstrap": {
+        "1y": {
+          "horizon_days": 252,
+          "n_paths": 20000,
+          "block": 63,
+          "seed": 7,
+          "start_value": 5000.0,
+          "median": 5648.735181907654,
+          "p10": 3655.424325785084,
+          "p90": 9477.146909714367,
+          "p5": 3195.5142641773723,
+          "p_loss": 0.3541,
+          "p_down_30": 0.0807,
+          "p_beats_benchmark": 0.4824
+        },
+        "5y": {
+          "horizon_days": 1260,
+          "n_paths": 20000,
+          "block": 63,
+          "seed": 7,
+          "start_value": 5000.0,
+          "median": 10184.097905560251,
+          "p10": 3513.8071538779764,
+          "p90": 33509.0147698602,
+          "p5": 2621.8017330925677,
+          "p_loss": 0.19605,
+          "p_down_30": 0.09905,
+          "p_beats_benchmark": 0.52485
+        }
+      },
+      "survives": false,
+      "picks": [
+        [
+          "2010-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2011-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2012-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2013-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2014-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2015-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2016-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2017-01-03",
+          "rp_trend_G2"
+        ],
+        [
+          "2018-01-02",
+          "rp_trend_G2"
+        ],
+        [
+          "2019-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2020-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2021-01-04",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2022-01-03",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2023-01-03",
+          "crypto_btc_sma_vol25"
+        ],
+        [
+          "2024-01-02",
+          "stock_top5_lb252_G1"
+        ],
+        [
+          "2025-01-02",
+          "stock_top5_lb252_G1"
+        ],
+        [
+          "2026-01-02",
+          "stock_top5_lb252_G1"
+        ]
+      ],
+      "frequency": [
+        [
+          "rp_trend_G3",
+          7
+        ],
+        [
+          "stock_top5_lb252_G1",
+          3
+        ],
+        [
+          "crypto_btc_donchian_vol40",
+          2
+        ],
+        [
+          "crypto_btc_sma_vol40",
+          2
+        ],
+        [
+          "rp_trend_G2",
+          2
+        ],
+        [
+          "crypto_btc_sma_vol25",
+          1
+        ]
+      ],
+      "live_variant": "stock_top5_lb252_G1"
+    }
+  ],
+  "picks": [
+    {
+      "track": "growth_30",
+      "picks": [
+        [
+          "2010-01-04",
+          "rp_trend_G2"
+        ],
+        [
+          "2011-01-03",
+          "rp_trend_G2"
+        ],
+        [
+          "2012-01-03",
+          "rp_trend_G2"
+        ],
+        [
+          "2013-01-02",
+          "rp_trend_G2"
+        ],
+        [
+          "2014-01-02",
+          "rp_trend_G2"
+        ],
+        [
+          "2015-01-02",
+          "rp_trend_G2"
+        ],
+        [
+          "2016-01-04",
+          "xasset_top3_lb252_G1"
+        ],
+        [
+          "2017-01-03",
+          "xasset_top3_lb252_G1"
+        ],
+        [
+          "2018-01-02",
+          "xasset_top3_lb252_G1"
+        ],
+        [
+          "2019-01-02",
+          "cta_L1_sma100_band2"
+        ],
+        [
+          "2020-01-02",
+          "xasset_top3_lb252_G1"
+        ],
+        [
+          "2021-01-04",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2022-01-03",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2023-01-03",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2024-01-02",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2025-01-02",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2026-01-02",
+          "cta_L1_sma100_band0"
+        ]
+      ],
+      "frequency": [
+        [
+          "cta_L1_sma100_band0",
+          6
+        ],
+        [
+          "rp_trend_G2",
+          6
+        ],
+        [
+          "xasset_top3_lb252_G1",
+          4
+        ],
+        [
+          "cta_L1_sma100_band2",
+          1
+        ]
+      ]
+    },
+    {
+      "track": "growth_45",
+      "picks": [
+        [
+          "2010-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2011-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2012-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2013-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2014-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2015-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2016-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2017-01-03",
+          "rp_trend_G2"
+        ],
+        [
+          "2018-01-02",
+          "rp_trend_G2"
+        ],
+        [
+          "2019-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2020-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2021-01-04",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2022-01-03",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2023-01-03",
+          "crypto_btc_sma_vol25"
+        ],
+        [
+          "2024-01-02",
+          "cta_L2_sma200_band2"
+        ],
+        [
+          "2025-01-02",
+          "cta_L2_sma200_band2"
+        ],
+        [
+          "2026-01-02",
+          "cta_L2_sma200_band2"
+        ]
+      ],
+      "frequency": [
+        [
+          "rp_trend_G3",
+          7
+        ],
+        [
+          "cta_L2_sma200_band2",
+          3
+        ],
+        [
+          "crypto_btc_donchian_vol40",
+          2
+        ],
+        [
+          "crypto_btc_sma_vol40",
+          2
+        ],
+        [
+          "rp_trend_G2",
+          2
+        ],
+        [
+          "crypto_btc_sma_vol25",
+          1
+        ]
+      ]
+    },
+    {
+      "track": "growth_60",
+      "picks": [
+        [
+          "2010-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2011-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2012-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2013-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2014-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2015-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2016-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2017-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2018-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2019-01-02",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2020-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2021-01-04",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2022-01-03",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2023-01-03",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2024-01-02",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2025-01-02",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2026-01-02",
+          "crypto_btc_donchian"
+        ]
+      ],
+      "frequency": [
+        [
+          "rp_trend_G3",
+          9
+        ],
+        [
+          "crypto_btc_donchian",
+          6
+        ],
+        [
+          "crypto_btc_donchian_vol40",
+          1
+        ],
+        [
+          "crypto_btc_sma_vol40",
+          1
+        ]
+      ]
+    },
+    {
+      "track": "sharpe",
+      "picks": [
+        [
+          "2010-01-04",
+          "rp_trend_G1"
+        ],
+        [
+          "2011-01-03",
+          "rp_trend_G1"
+        ],
+        [
+          "2012-01-03",
+          "cta_L1_sma100_band2"
+        ],
+        [
+          "2013-01-02",
+          "cta_L1_sma100_band0"
+        ],
+        [
+          "2014-01-02",
+          "rp_trend_G1"
+        ],
+        [
+          "2015-01-02",
+          "rp_trend_G1"
+        ],
+        [
+          "2016-01-04",
+          "xasset_top3_lb252_G1"
+        ],
+        [
+          "2017-01-03",
+          "rp_trend_G1"
+        ],
+        [
+          "2018-01-02",
+          "rp_trend_G1"
+        ],
+        [
+          "2019-01-02",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2020-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2021-01-04",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2022-01-03",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2023-01-03",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2024-01-02",
+          "crypto_btc_donchian"
+        ],
+        [
+          "2025-01-02",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2026-01-02",
+          "crypto_btc_sma"
+        ]
+      ],
+      "frequency": [
+        [
+          "rp_trend_G1",
+          6
+        ],
+        [
+          "crypto_btc_donchian",
+          3
+        ],
+        [
+          "crypto_btc_sma_vol40",
+          3
+        ],
+        [
+          "crypto_btc_donchian_vol40",
+          1
+        ],
+        [
+          "crypto_btc_sma",
+          1
+        ],
+        [
+          "cta_L1_sma100_band0",
+          1
+        ],
+        [
+          "cta_L1_sma100_band2",
+          1
+        ],
+        [
+          "xasset_top3_lb252_G1",
+          1
+        ]
+      ]
+    },
+    {
+      "track": "growth_45_including_stocks",
+      "picks": [
+        [
+          "2010-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2011-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2012-01-03",
+          "rp_trend_G3"
+        ],
+        [
+          "2013-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2014-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2015-01-02",
+          "rp_trend_G3"
+        ],
+        [
+          "2016-01-04",
+          "rp_trend_G3"
+        ],
+        [
+          "2017-01-03",
+          "rp_trend_G2"
+        ],
+        [
+          "2018-01-02",
+          "rp_trend_G2"
+        ],
+        [
+          "2019-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2020-01-02",
+          "crypto_btc_donchian_vol40"
+        ],
+        [
+          "2021-01-04",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2022-01-03",
+          "crypto_btc_sma_vol40"
+        ],
+        [
+          "2023-01-03",
+          "crypto_btc_sma_vol25"
+        ],
+        [
+          "2024-01-02",
+          "stock_top5_lb252_G1"
+        ],
+        [
+          "2025-01-02",
+          "stock_top5_lb252_G1"
+        ],
+        [
+          "2026-01-02",
+          "stock_top5_lb252_G1"
+        ]
+      ],
+      "frequency": [
+        [
+          "rp_trend_G3",
+          7
+        ],
+        [
+          "stock_top5_lb252_G1",
+          3
+        ],
+        [
+          "crypto_btc_donchian_vol40",
+          2
+        ],
+        [
+          "crypto_btc_sma_vol40",
+          2
+        ],
+        [
+          "rp_trend_G2",
+          2
+        ],
+        [
+          "crypto_btc_sma_vol25",
+          1
+        ]
+      ]
+    }
+  ],
+  "insample": [
+    {
+      "name": "kelly_crypto_btc_sma",
+      "family": "half_kelly",
+      "eligible": true,
+      "cagr": 0.6771263943793409,
+      "vol": 0.7667007474891838,
+      "sharpe": 1.0221113268735096,
+      "max_drawdown": -0.8908137255727515,
+      "ir_t": 2.8678212156416407,
+      "note": "Expanding half-Kelly on the base book, capped at 3x, reset on month-ends. Estimated only on past returns."
+    },
+    {
+      "name": "crypto_btc_sma",
+      "family": "crypto",
+      "eligible": true,
+      "cagr": 0.5983816055715205,
+      "vol": 0.5397419130687576,
+      "sharpe": 1.0949532613556983,
+      "max_drawdown": -0.70024279728781,
+      "ir_t": 2.8529305529033127,
+      "note": "Daily Coinbase mark on the NYSE calendar. Costs are 25 bps plus 3 bps of slippage."
+    },
+    {
+      "name": "crypto_btc_sma_vol40",
+      "family": "crypto_vol_target",
+      "eligible": true,
+      "cagr": 0.5231803845666063,
+      "vol": 0.46811836199761436,
+      "sharpe": 1.076214170935931,
+      "max_drawdown": -0.6188906454752285,
+      "ir_t": 2.636534757966938,
+      "note": "Trailing 63-day vol target, capped at 2x, reset monthly. This scales the already-costed sleeve."
+    },
+    {
+      "name": "crypto_basket_sma",
+      "family": "crypto",
+      "eligible": true,
+      "cagr": 0.5130137980961165,
+      "vol": 0.5990263834497292,
+      "sharpe": 0.9563342905125819,
+      "max_drawdown": -0.8391140415712385,
+      "ir_t": 2.419777448986968,
+      "note": "Equal weight in BTC and ETH while each is above its own 200-day average by the 2% band."
+    },
+    {
+      "name": "crypto_btc_donchian",
+      "family": "crypto",
+      "eligible": true,
+      "cagr": 0.4861253969821817,
+      "vol": 0.4681963051838909,
+      "sharpe": 1.028688651861122,
+      "max_drawdown": -0.5278646234231716,
+      "ir_t": 2.435459380525805,
+      "note": "Daily Coinbase mark on the NYSE calendar. Costs are 25 bps plus 3 bps of slippage."
+    },
+    {
+      "name": "crypto_btc_donchian_vol40",
+      "family": "crypto_vol_target",
+      "eligible": true,
+      "cagr": 0.41934157169254105,
+      "vol": 0.4877314827331626,
+      "sharpe": 0.9096252049747693,
+      "max_drawdown": -0.607650048481295,
+      "ir_t": 2.1151511345615135,
+      "note": "Trailing 63-day vol target, capped at 2x, reset monthly. This scales the already-costed sleeve."
+    },
+    {
+      "name": "crypto_btc_sma_vol25",
+      "family": "crypto_vol_target",
+      "eligible": true,
+      "cagr": 0.3710734209065323,
+      "vol": 0.36732456911144845,
+      "sharpe": 0.9714003036098131,
+      "max_drawdown": -0.5336871184558865,
+      "ir_t": 1.9813421456889813,
+      "note": "Trailing 63-day vol target, capped at 2x, reset monthly. This scales the already-costed sleeve."
+    },
+    {
+      "name": "crypto_eth_sma",
+      "family": "crypto",
+      "eligible": true,
+      "cagr": 0.3474197747148422,
+      "vol": 0.6987372518367144,
+      "sharpe": 0.7375456821306011,
+      "max_drawdown": -0.9111694978784866,
+      "ir_t": 1.7884558525401586,
+      "note": "Daily Coinbase mark on the NYSE calendar. Costs are 25 bps plus 3 bps of slippage."
+    },
+    {
+      "name": "crypto_btc_donchian_vol25",
+      "family": "crypto_vol_target",
+      "eligible": true,
+      "cagr": 0.2823726982237351,
+      "vol": 0.399323489909648,
+      "sharpe": 0.761580065577468,
+      "max_drawdown": -0.5774882250694167,
+      "ir_t": 1.4252690923849312,
+      "note": "Trailing 63-day vol target, capped at 2x, reset monthly. This scales the already-costed sleeve."
+    },
+    {
+      "name": "cta_L3_sma100_band2",
+      "family": "cta_long_flat",
+      "eligible": true,
+      "cagr": 0.1888875931984293,
+      "vol": 0.39120062657836485,
+      "sharpe": 0.5959629435895768,
+      "max_drawdown": -0.6478323959701366,
+      "ir_t": 1.646793500739178,
+      "note": "Equal weight in the trending listed or synthetic leveraged ETFs. Flat names are cash."
+    },
+    {
+      "name": "stock_top3_lb252_G1.5",
+      "family": "stock",
+      "eligible": false,
+      "cagr": 0.18139742549099802,
+      "vol": 0.39861302756548267,
+      "sharpe": 0.5747979303193226,
+      "max_drawdown": -0.662502585191025,
+      "ir_t": 1.9122446273988627,
+      "note": "Survivorship-biased. Ineligible for the recommendation."
+    },
+    {
+      "name": "stock_top5_lb252_G1.5",
+      "family": "stock",
+      "eligible": false,
+      "cagr": 0.17337958176043688,
+      "vol": 0.346960436956731,
+      "sharpe": 0.5857345711733937,
+      "max_drawdown": -0.6090448859630896,
+      "ir_t": 1.9269770098577248,
+      "note": "Survivorship-biased. Ineligible for the recommendation."
+    },
+    {
+      "name": "sector_top3_lb252_G2",
+      "family": "sector",
+      "eligible": true,
+      "cagr": 0.16860291695308094,
+      "vol": 0.36503917964004523,
+      "sharpe": 0.5635992994797807,
+      "max_drawdown": -0.6277934995887191,
+      "ir_t": 1.9407764755805774,
+      "note": "Sector-ETF momentum. Constituents can die without the sector disappearing."
+    },
+    {
+      "name": "rp_trend_G3",
+      "family": "risk_parity",
+      "eligible": true,
+      "cagr": 0.1682295149199322,
+      "vol": 0.38983093274432656,
+      "sharpe": 0.551013028024975,
+      "max_drawdown": -0.6392573496588241,
+      "ir_t": 1.442754454615259,
+      "note": "Inverse-vol across the basket. Gross above 1 is financed margin, reset monthly."
+    },
+    {
+      "name": "xasset_top3_lb252_G2",
+      "family": "xasset",
+      "eligible": true,
+      "cagr": 0.16175836108745845,
+      "vol": 0.30959748432524387,
+      "sharpe": 0.5848918412641333,
+      "max_drawdown": -0.5146513555785408,
+      "ir_t": 1.3063317840106043,
+      "note": "Cross-asset 6-1 and 12-1 momentum. Non-positive scores stay in cash."
+    },
+    {
+      "name": "trend_core",
+      "family": "trend_core",
+      "eligible": true,
+      "cagr": 0.15494779346149512,
+      "vol": 0.26036090001489964,
+      "sharpe": 0.6196921962145288,
+      "max_drawdown": -0.46826120813532657,
+      "ir_t": 1.725833009088619,
+      "note": "SPY half dips to SSO; UPRO half follows the 2% band."
+    },
+    {
+      "name": "cta_L2_sma100_band2",
+      "family": "cta_long_flat",
+      "eligible": true,
+      "cagr": 0.14812439556684787,
+      "vol": 0.26166707386736915,
+      "sharpe": 0.5946686959269432,
+      "max_drawdown": -0.4903432549399205,
+      "ir_t": 0.9184112089308505,
+      "note": "Equal weight in the trending listed or synthetic leveraged ETFs. Flat names are cash."
+    },
+    {
+      "name": "stock_top10_lb252_G1.5",
+      "family": "stock",
+      "eligible": false,
+      "cagr": 0.1456226900992288,
+      "vol": 0.304419562634698,
+      "sharpe": 0.5435779099477673,
+      "max_drawdown": -0.5892269995788906,
+      "ir_t": 1.5463686179233873,
+      "note": "Survivorship-biased. Ineligible for the recommendation."
+    },
+    {
+      "name": "stock_top3_lb252_G1",
+      "family": "stock",
+      "eligible": false,
+      "cagr": 0.14068833945842907,
+      "vol": 0.2618452782443319,
+      "sharpe": 0.5690541434779871,
+      "max_drawdown": -0.4848719347135524,
+      "ir_t": 1.0583172525044524,
+      "note": "Survivorship-biased. Ineligible for the recommendation."
+    },
+    {
+      "name": "cta_L3_sma200_band2",
+      "family": "cta_long_flat",
+      "eligible": true,
+      "cagr": 0.1391411061475436,
+      "vol": 0.3935325267865708,
+      "sharpe": 0.48623081273166746,
+      "max_drawdown": -0.6153726412987298,
+      "ir_t": 1.1327670864914061,
+      "note": "Equal weight in the trending listed or synthetic leveraged ETFs. Flat names are cash."
+    },
+    {
+      "name": "rp_always_G2",
+      "family": "risk_parity",
+      "eligible": true,
+      "cagr": 0.1381131833250553,
+      "vol": 0.255991175022006,
+      "sharpe": 0.5677719871193584,
+      "max_drawdown": -0.5760791862922789,
+      "ir_t": 1.4219479199464886,
+      "note": "Inverse-vol across the basket. Gross above 1 is financed margin, reset monthly."
+    },
+    {
+      "name": "sector_top2_lb252_G2",
+      "family": "sector",
+      "eligible": true,
+      "cagr": 0.13729908212325403,
+      "vol": 0.40650669810993667,
+      "sharpe": 0.47898948439944866,
+      "max_drawdown": -0.6921829991102373,
+      "ir_t": 1.4210149334871178,
+      "note": "Sector-ETF momentum. Constituents can die without the sector disappearing."
+    },
+    {
+      "name": "cta_L3_sma200_band0",
+      "family": "cta_long_flat",
+      "eligible": true,
+      "cagr": 0.1361731414945646,
+      "vol": 0.39475358977635017,
+      "sharpe": 0.47958585320917385,
+      "max_drawdown": -0.6616951325677494,
+      "ir_t": 1.0847093674494672,
+      "note": "Equal weight in the trending listed or synthetic leveraged ETFs. Flat names are cash."
+    },
+    {
+      "name": "rp_trend_G2",
+      "family": "risk_parity",
+      "eligible": true,
+      "cagr": 0.13190273229302996,
+      "vol": 0.2547133171211401,
+      "sharpe": 0.5478603929337441,
+      "max_drawdown": -0.4555204548727847,
+      "ir_t": 0.641692990988805,
+      "note": "Inverse-vol across the basket. Gross above 1 is financed margin, reset monthly."
+    },
+    {
+      "name": "stock_top5_lb252_G1",
+      "family": "stock",
+      "eligible": false,
+      "cagr": 0.13066438473534525,
+      "vol": 0.2280080441581073,
+      "sharpe": 0.5786333801775422,
+      "max_drawdown": -0.44516836899246526,
+      "ir_t": 0.813559128120884,
+      "note": "Survivorship-biased. Ineligible for the recommendation."
+    },
+    {
+      "name": "xasset_top3_lb126_G2",
+      "family": "xasset",
+      "eligible": true,
+      "cagr": 0.12448679034529908,
+      "vol": 0.3521365208007565,
+      "sharpe": 0.46242656491841605,
+      "max_drawdown": -0.7772386124594791,
+      "ir_t": 0.9252888564585486,
+      "note": "Cross-asset 6-1 and 12-1 momentum. Non-positive scores stay in cash."
+    },
+    {
+      "name": "kelly_trend_core",
+      "family": "half_kelly",
+      "eligible": true,
+      "cagr": 0.11813504010597198,
+      "vol": 0.2597088343673502,
+      "sharpe": 0.49634500817730315,
+      "max_drawdown": -0.479659672776212,
+      "ir_t": 0.5320363221391005,
+      "note": "Expanding half-Kelly on the base book, capped at 3x, reset on month-ends. Estimated only on past returns."
+    },
+    {
+      "name": "cta_L2_sma200_band2",
+      "family": "cta_long_flat",
+      "eligible": true,
+      "cagr": 0.11614815475681528,
+      "vol": 0.2634333031789812,
+      "sharpe": 0.48524562663742776,
+      "max_drawdown": -0.4381981340580816,
+      "ir_t": 0.4146817114781929,
+      "note": "Equal weight in the trending listed or synthetic leveraged ETFs. Flat names are cash."
+    },
+    {
+      "name": "cta_L2_sma200_band0",
+      "family": "cta_long_flat",
+      "eligible": true,
+      "cagr": 0.11340168227918812,
+      "vol": 0.26432385393658847,
+      "sharpe": 0.47528543964857617,
+      "max_drawdown": -0.4906327271157632,
+      "ir_t": 0.36249267955878245,
+      "note": "Equal weight in the trending listed or synthetic leveraged ETFs. Flat names are cash."
+    },
+    {
+      "name": "kelly_xasset_top3_lb252_G1",
+      "family": "half_kelly",
+      "eligible": true,
+      "cagr": 0.11253746237066364,
+      "vol": 0.29072048162643777,
+      "sharpe": 0.45477455095488295,
+      "max_drawdown": -0.5108071450822577,
+      "ir_t": 0.46951329873699466,
+      "note": "Expanding half-Kelly on the base book, capped at 3x, reset on month-ends. Estimated only on past returns."
+    },
+    {
+      "name": "xasset_top2_lb252_G2",
+      "family": "xasset",
+      "eligible": true,
+      "cagr": 0.11218228402420793,
+      "vol": 0.3453050569590668,
+      "sharpe": 0.43252603823352187,
+      "max_drawdown": -0.6781973573528676,
+      "ir_t": 0.6404007350087623,
+      "note": "Cross-asset 6-1 and 12-1 momentum. Non-positive scores stay in cash."
+    },
+    {
+      "name": "stock_top10_lb252_G1",
+      "family": "stock",
+      "eligible": false,
+      "cagr": 0.10999521313205407,
+      "vol": 0.19934987886140892,
+      "sharpe": 0.5385976283374616,
+      "max_drawdown": -0.43210375734149287,
+      "ir_t": 0.03483959017497711,
+      "note": "Survivorship-biased. Ineligible for the recommendation."
+    },
+    {
+      "name": "xasset_top2_lb126_G2",
+      "family": "xasset",
+      "eligible": true,
+      "cagr": 0.10944131072004692,
+      "vol": 0.3703480278160728,
+      "sharpe": 0.42144632971754775,
+      "max_drawdown": -0.781683135300258,
+      "ir_t": 0.7286883241808556,
+      "note": "Cross-asset 6-1 and 12-1 momentum. Non-positive scores stay in cash."
+    },
+    {
+      "name": "sector_top3_lb252_G1",
+      "family": "sector",
+      "eligible": true,
+      "cagr": 0.10399489418268582,
+      "vol": 0.17575747650574605,
+      "sharpe": 0.5548926517704089,
+      "max_drawdown": -0.3722428195373868,
+      "ir_t": -0.3736053052628628,
+      "note": "Sector-ETF momentum. Constituents can die without the sector disappearing."
+    },
+    {
+      "name": "kelly_rp_trend_G1",
+      "family": "half_kelly",
+      "eligible": true,
+      "cagr": 0.1015432291218934,
+      "vol": 0.3035778210173507,
+      "sharpe": 0.41569029684997816,
+      "max_drawdown": -0.5141306184490926,
+      "ir_t": 0.3371247484492064,
+      "note": "Expanding half-Kelly on the base book, capped at 3x, reset on month-ends. Estimated only on past returns."
+    },
+    {
+      "name": "cta_L1_sma100_band0",
+      "family": "cta_long_flat",
+      "eligible": true,
+      "cagr": 0.10116562289009678,
+      "vol": 0.13221607790504075,
+      "sharpe": 0.6672905065778789,
+      "max_drawdown": -0.2604432739010727,
+      "ir_t": -0.4646993821157504,
+      "note": "Equal weight in the trending listed or synthetic leveraged ETFs. Flat names are cash."
+    },
+    {
+      "name": "xasset_top3_lb252_G1",
+      "family": "xasset",
+      "eligible": true,
+      "cagr": 0.0999925071476988,
+      "vol": 0.15260201598224096,
+      "sharpe": 0.5902570351551013,
+      "max_drawdown": -0.26983129126712524,
+      "ir_t": -0.4471885390267138,
+      "note": "Cross-asset 6-1 and 12-1 momentum. Non-positive scores stay in cash."
+    },
+    {
+      "name": "cta_L1_sma100_band2",
+      "family": "cta_long_flat",
+      "eligible": true,
+      "cagr": 0.0971798755572777,
+      "vol": 0.13138345656032088,
+      "sharpe": 0.6430799150898299,
+      "max_drawdown": -0.27297203645603574,
+      "ir_t": -0.5745130150599889,
+      "note": "Equal weight in the trending listed or synthetic leveraged ETFs. Flat names are cash."
+    },
+    {
+      "name": "sector_top2_lb252_G1",
+      "family": "sector",
+      "eligible": true,
+      "cagr": 0.09257105184142289,
+      "vol": 0.19435283522275518,
+      "sharpe": 0.4660993001172907,
+      "max_drawdown": -0.42400243226954826,
+      "ir_t": -0.5684250492018081,
+      "note": "Sector-ETF momentum. Constituents can die without the sector disappearing."
+    },
+    {
+      "name": "kelly_cta_L1_sma200_band2",
+      "family": "half_kelly",
+      "eligible": true,
+      "cagr": 0.08980707813890199,
+      "vol": 0.26854509690979284,
+      "sharpe": 0.3924120367338509,
+      "max_drawdown": -0.4479057984393777,
+      "ir_t": -0.023148489970544372,
+      "note": "Expanding half-Kelly on the base book, capped at 3x, reset on month-ends. Estimated only on past returns."
+    },
+    {
+      "name": "kelly_sector_top3_lb252_G1",
+      "family": "half_kelly",
+      "eligible": true,
+      "cagr": 0.08777348571487353,
+      "vol": 0.20368542677754145,
+      "sharpe": 0.4324543282297447,
+      "max_drawdown": -0.3880704962420972,
+      "ir_t": -0.5202913541400156,
+      "note": "Expanding half-Kelly on the base book, capped at 3x, reset on month-ends. Estimated only on past returns."
+    },
+    {
+      "name": "rp_always_G1",
+      "family": "risk_parity",
+      "eligible": true,
+      "cagr": 0.08537831338900381,
+      "vol": 0.12467574583435881,
+      "sharpe": 0.5840861916043069,
+      "max_drawdown": -0.3267955149121863,
+      "ir_t": -1.5088294534119782,
+      "note": "Inverse-vol across the basket. Gross above 1 is financed margin, reset monthly."
+    },
+    {
+      "name": "xasset_top3_lb126_G1",
+      "family": "xasset",
+      "eligible": true,
+      "cagr": 0.0842293687688207,
+      "vol": 0.16761303413267276,
+      "sharpe": 0.4658555797208863,
+      "max_drawdown": -0.47274357914349385,
+      "ir_t": -0.8007730717483414,
+      "note": "Cross-asset 6-1 and 12-1 momentum. Non-positive scores stay in cash."
+    },
+    {
+      "name": "rp_trend_G1",
+      "family": "risk_parity",
+      "eligible": true,
+      "cagr": 0.08210582231613528,
+      "vol": 0.1257711716154984,
+      "sharpe": 0.5560343513199442,
+      "max_drawdown": -0.2419485753250432,
+      "ir_t": -0.9661265351791258,
+      "note": "Inverse-vol across the basket. Gross above 1 is financed margin, reset monthly."
+    },
+    {
+      "name": "cta_L1_sma200_band2",
+      "family": "cta_long_flat",
+      "eligible": true,
+      "cagr": 0.08205764286486406,
+      "vol": 0.1323432923153388,
+      "sharpe": 0.5345133398213417,
+      "max_drawdown": -0.24022681299500181,
+      "ir_t": -0.9733267036256265,
+      "note": "Equal weight in the trending listed or synthetic leveraged ETFs. Flat names are cash."
+    },
+    {
+      "name": "cta_L1_sma200_band0",
+      "family": "cta_long_flat",
+      "eligible": true,
+      "cagr": 0.08007483883182132,
+      "vol": 0.1328241268259944,
+      "sharpe": 0.5192714903373843,
+      "max_drawdown": -0.26194812682403723,
+      "ir_t": -0.9981541990726499,
+      "note": "Equal weight in the trending listed or synthetic leveraged ETFs. Flat names are cash."
+    },
+    {
+      "name": "xasset_top2_lb252_G1",
+      "family": "xasset",
+      "eligible": true,
+      "cagr": 0.07911296892926223,
+      "vol": 0.16925038992040425,
+      "sharpe": 0.4349014709731536,
+      "max_drawdown": -0.3898849105096739,
+      "ir_t": -0.8045996892839057,
+      "note": "Cross-asset 6-1 and 12-1 momentum. Non-positive scores stay in cash."
+    },
+    {
+      "name": "xasset_top2_lb126_G1",
+      "family": "xasset",
+      "eligible": true,
+      "cagr": 0.07886392517333252,
+      "vol": 0.17748476422860043,
+      "sharpe": 0.421624800532453,
+      "max_drawdown": -0.4698058510320605,
+      "ir_t": -0.8024916735535053,
+      "note": "Cross-asset 6-1 and 12-1 momentum. Non-positive scores stay in cash."
+    },
+    {
+      "name": "kelly_cta_L2_sma200_band2",
+      "family": "half_kelly",
+      "eligible": true,
+      "cagr": 0.06900150891350054,
+      "vol": 0.2596822335554941,
+      "sharpe": 0.322534459527809,
+      "max_drawdown": -0.4273488413002726,
+      "ir_t": -0.46054244589478716,
+      "note": "Expanding half-Kelly on the base book, capped at 3x, reset on month-ends. Estimated only on past returns."
+    },
+    {
+      "name": "cta_ls_G3_sma200_band2",
+      "family": "cta_long_short",
+      "eligible": true,
+      "cagr": 0.0652641065845716,
+      "vol": 0.37566283282378665,
+      "sharpe": 0.31149085566342216,
+      "max_drawdown": -0.7588396122903773,
+      "ir_t": 0.10688188426210657,
+      "note": "Margin long/short, not a listed inverse ETF. Shorts pay the financing spread."
+    },
+    {
+      "name": "cta_ls_G2_sma200_band2",
+      "family": "cta_long_short",
+      "eligible": true,
+      "cagr": 0.06210005539701702,
+      "vol": 0.2481445251028374,
+      "sharpe": 0.2988945963274604,
+      "max_drawdown": -0.5755958684225645,
+      "ir_t": -0.4375037923225557,
+      "note": "Margin long/short, not a listed inverse ETF. Shorts pay the financing spread."
+    },
+    {
+      "name": "cta_ls_G1_sma200_band2",
+      "family": "cta_long_short",
+      "eligible": true,
+      "cagr": 0.045987616608105686,
+      "vol": 0.12396708081599316,
+      "sharpe": 0.2883711092072631,
+      "max_drawdown": -0.3188606741631089,
+      "ir_t": -1.3110256749591331,
+      "note": "Margin long/short, not a listed inverse ETF. Shorts pay the financing spread."
+    }
+  ],
+  "bootstrap_block": 63,
+  "bootstrap_paths": 20000,
+  "bootstrap_seed": 7,
+  "recommendation": {
+    "endorsed": false,
+    "track": null,
+    "variant": "BH_SPY",
+    "best_failed_track": "growth_45",
+    "best_failed_cagr": 0.163808056381878,
+    "best_failed_variant": "cta_L2_sma200_band2"
+  },
+  "live_signal": {
+    "date": "2026-10-26",
+    "weights": {
+      "SPY": 1.0
+    },
+    "strategy": "flagship",
+    "generated_at": "2026-10-25T06:58:50Z",
+    "signal_date": "2026-10-23",
+    "endorsed": false,
+    "gross": 1.0,
+    "diagnostics": {
+      "track": null,
+      "variant": "BH_SPY",
+      "rule": "oos_growth_under_drawdown_budget",
+      "candidate_if_unendorsed": "cta_L2_sma200_band2"
+    }
+  },
+  "validation": [
+    {
+      "n_days": 5117,
+      "years": 20.305555555555557,
+      "start": "2006-06-22",
+      "end": "2026-10-23",
+      "actual_cagr": 0.1555625868015742,
+      "synthetic_cagr": 0.1587546511134046,
+      "daily_corr": 0.9956197796412051,
+      "tracking_error": 0.036405443423434276,
+      "cagr_gap": 0.0031920643118303893,
+      "etf": "SSO"
+    },
+    {
+      "n_days": 4359,
+      "years": 17.297619047619047,
+      "start": "2009-06-26",
+      "end": "2026-10-23",
+      "actual_cagr": 0.32362165570563484,
+      "synthetic_cagr": 0.3292630979176714,
+      "daily_corr": 0.9982850578944572,
+      "tracking_error": 0.02988103452840213,
+      "cagr_gap": 0.0056414422120365515,
+      "etf": "UPRO"
+    },
+    {
+      "n_days": 5117,
+      "years": 20.305555555555557,
+      "start": "2006-06-22",
+      "end": "2026-10-23",
+      "actual_cagr": 0.24648047128475148,
+      "synthetic_cagr": 0.249325606508211,
+      "daily_corr": 0.9960031083504465,
+      "tracking_error": 0.039371017382534346,
+      "cagr_gap": 0.0028451352234595273,
+      "etf": "QLD"
+    },
+    {
+      "n_days": 4200,
+      "years": 16.666666666666668,
+      "start": "2010-02-12",
+      "end": "2026-10-23",
+      "actual_cagr": 0.41435399910318904,
+      "synthetic_cagr": 0.41974525498657256,
+      "daily_corr": 0.9989554922101487,
+      "tracking_error": 0.029267369306006232,
+      "cagr_gap": 0.005391255883383517,
+      "etf": "TQQQ"
+    },
+    {
+      "n_days": 4408,
+      "years": 17.49206349206349,
+      "start": "2009-04-17",
+      "end": "2026-10-23",
+      "actual_cagr": -0.06623621542037639,
+      "synthetic_cagr": -0.0619949363998098,
+      "daily_corr": 0.9967641124548634,
+      "tracking_error": 0.036102422249881326,
+      "cagr_gap": 0.004241279020566591,
+      "etf": "TMF"
+    },
+    {
+      "n_days": 4499,
+      "years": 17.853174603174605,
+      "start": "2008-12-04",
+      "end": "2026-10-23",
+      "actual_cagr": 0.1130307715301837,
+      "synthetic_cagr": 0.126268111395881,
+      "daily_corr": 0.99676885281841,
+      "tracking_error": 0.02763260511385455,
+      "cagr_gap": 0.013237339865697306,
+      "etf": "UGL"
+    },
+    {
+      "n_days": 4508,
+      "years": 17.88888888888889,
+      "start": "2008-11-20",
+      "end": "2026-10-23",
+      "actual_cagr": 0.14510260008157716,
+      "synthetic_cagr": 0.15420092016488973,
+      "daily_corr": 0.9988382064946055,
+      "tracking_error": 0.03462646982809549,
+      "cagr_gap": 0.009098320083312572,
+      "etf": "TNA"
+    }
+  ],
+  "verdict": "growth_30 compounded at 8.2% with a realized max drawdown of -35.3% against SPY at 14.1% (DSR 0.64, 5y P(beat SPY) 0.17, survives=False). growth_45 compounded at 16.4% with a realized max drawdown of -58.9% against SPY at 14.1% (DSR 0.80, 5y P(beat SPY) 0.53, survives=False). growth_60 compounded at 12.4% with a realized max drawdown of -63.9% against SPY at 14.1% (DSR 0.67, 5y P(beat SPY) 0.44, survives=False). sharpe compounded at 10.2% with a realized max drawdown of -53.1% against SPY at 14.1% (DSR 0.61, 5y P(beat SPY) 0.37, survives=False). growth_45_including_stocks compounded at 16.1% with a realized max drawdown of -58.9% against SPY at 14.1% (DSR 0.79, 5y P(beat SPY) 0.52, survives=False). No budget path survived. The highest out-of-sample CAGR was growth_45 at 16.4%, and it is not a recommendation. The flagship file is 100% SPY and is not endorsed.",
+  "elapsed_seconds": 36.516419887542725
+}

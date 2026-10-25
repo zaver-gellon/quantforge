@@ -1,0 +1,233 @@
+"""Core plus a trend-gated sleeve. Decisions use the close; fills are next open."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import datetime, timezone
+
+import numpy as np
+import pandas as pd
+
+from quantforge.calendar import next_nyse_session
+from quantforge.engine.schedule import rebalance_mask
+from quantforge.signals.schema import ALLOWED_TREND_TICKERS, validate_signal
+from quantforge.strategies.dipbuy import dip_active
+
+SLEEVE_SYMBOL = {1: "SPY", 2: "SSO", 3: "UPRO"}
+
+
+@dataclass(frozen=True)
+class TrendCoreSpec:
+    """50/50 SPY + UPRO-when-trending is the default, not a fitted result.
+
+    ``core_weight`` stays in ``core_symbol``. ``sleeve_weight`` is invested in
+    the leveraged sleeve while the trend filter is on and in ``cash_symbol``
+    (BIL) while it is off. ``freq`` is how often the filter is evaluated.
+    ``rebalance`` is how often the mix is reset to those strategic weights.
+    A trend flip between mix dates moves only the sleeve.
+    """
+
+    core_symbol: str = "SPY"
+    core_weight: float = 0.5
+    leverage: int = 3
+    window: int = 200
+    band: float = 0.02
+    freq: str = "daily"
+    rebalance: str = "quarterly"
+    cash_symbol: str = "BIL"
+    sleeve_weight: float | None = None
+
+    def __post_init__(self):
+        sleeve = self.sleeve_weight
+        if sleeve is None:
+            sleeve = round(1.0 - float(self.core_weight), 10)
+        object.__setattr__(self, "sleeve_weight", float(sleeve))
+        if self.leverage not in SLEEVE_SYMBOL:
+            raise ValueError("leverage must be 1, 2, or 3")
+        if self.core_weight < 0 or sleeve < 0 or self.core_weight + sleeve > 1 + 1e-8:
+            raise ValueError("core and sleeve weights must be non-negative and sum to at most 1")
+        if self.freq not in ("daily", "monthly"):
+            raise ValueError("freq must be daily or monthly")
+        if self.rebalance not in ("daily", "monthly", "quarterly"):
+            raise ValueError("rebalance must be daily, monthly, or quarterly")
+        if self.core_symbol not in ALLOWED_TREND_TICKERS or self.cash_symbol not in ALLOWED_TREND_TICKERS:
+            raise ValueError("core and cash symbols must be SPY, UPRO, SSO, or BIL")
+
+    @property
+    def sleeve_symbol(self) -> str:
+        return SLEEVE_SYMBOL[self.leverage]
+
+    def name(self) -> str:
+        core = int(round(self.core_weight * 100))
+        sleeve = int(round(self.sleeve_weight * 100))
+        band = int(round(self.band * 100))
+        return (
+            f"core{core}_slv{sleeve}_L{self.leverage}"
+            f"_sma{self.window}_band{band}_{self.freq}_{self.rebalance}"
+        )
+
+    def params(self) -> dict:
+        return {
+            "core_symbol": self.core_symbol,
+            "core_weight": self.core_weight,
+            "sleeve_symbol": self.sleeve_symbol,
+            "sleeve_weight": self.sleeve_weight,
+            "leverage": self.leverage,
+            "window": self.window,
+            "band": self.band,
+            "freq": self.freq,
+            "rebalance": self.rebalance,
+            "cash_symbol": self.cash_symbol,
+        }
+
+
+def trend_state(close: pd.Series, window: int, band: float = 0.0, freq: str = "daily") -> pd.Series:
+    """True when the next session should be long the risky sleeve.
+
+    The value at t uses the close at t and earlier bars only. With a band, the
+    sleeve turns on only when price is above ``SMA * (1 + band)`` and turns off
+    only when price is below ``SMA * (1 - band)``. Inside the band the previous
+    state is kept, and the book stays off until the first real entry. Monthly
+    evaluation updates only on month-end closes and carries the state forward.
+    Before the SMA exists the state is off.
+    """
+    series = close.astype(float).sort_index()
+    average = series.rolling(window, min_periods=window).mean()
+    if freq == "daily":
+        evaluate = np.ones(len(series), dtype=bool)
+    elif freq == "monthly":
+        evaluate = rebalance_mask(series.index, "monthly").to_numpy()
+    else:
+        raise ValueError("freq must be daily or monthly")
+    prices = series.to_numpy(dtype=float)
+    means = average.to_numpy(dtype=float)
+    state = False
+    out = np.zeros(len(series), dtype=bool)
+    for i in range(len(series)):
+        if evaluate[i] and np.isfinite(means[i]) and np.isfinite(prices[i]):
+            upper = prices[i] > means[i] * (1.0 + band)
+            lower = prices[i] < means[i] * (1.0 - band)
+            if upper:
+                state = True
+            elif lower:
+                state = False
+        out[i] = state
+    return pd.Series(out, index=series.index, name="trend_on")
+
+
+def strategic_weights(spec: TrendCoreSpec, trend_on: bool, dip_on: bool = False) -> dict[str, float]:
+    """Strategic weights. A dip swaps the core from SPY to SSO and leaves the sleeve alone."""
+    raw: dict[str, float] = {}
+
+    def add(symbol: str, weight: float) -> None:
+        if weight > 0:
+            raw[symbol] = raw.get(symbol, 0.0) + float(weight)
+
+    add("SSO" if dip_on else spec.core_symbol, spec.core_weight)
+    if trend_on:
+        add(spec.sleeve_symbol, spec.sleeve_weight)
+    else:
+        add(spec.cash_symbol, spec.sleeve_weight)
+    rounded = {symbol: round(weight, 6) for symbol, weight in raw.items() if round(weight, 6) > 0}
+    total = sum(rounded.values())
+    if total > 1.0:
+        largest = max(rounded, key=rounded.get)
+        rounded[largest] = round(rounded[largest] - (total - 1.0), 6)
+        if rounded[largest] <= 0:
+            del rounded[largest]
+    return rounded
+
+
+def build_trend_signal(
+    spec: TrendCoreSpec,
+    spy_close: pd.Series,
+    as_of=None,
+    strategy_id: str = "trend_core",
+    generated_at: str | None = None,
+    apply_dip: bool = True,
+    dip_rule: str = "3_down_closes",
+    dip_hold: int = 5,
+) -> dict:
+    """Target weights for the next NYSE session after ``as_of``.
+
+    The default book is half SPY and half UPRO while SPY is above its 200-day
+    SMA by 2% (enter above 1.02x, exit below 0.98x, hold the previous state in
+    between). The UPRO half is replaced by BIL when the trend is off. After
+    three strictly down SPY closes, only the SPY half switches to SSO, for at
+    most five sessions or until the first up close. The UPRO half is not resized.
+    """
+    close = spy_close.dropna().astype(float).sort_index()
+    if close.empty:
+        raise ValueError("SPY close series is empty")
+    state = trend_state(close, spec.window, spec.band, spec.freq)
+    if as_of is None:
+        as_of_ts = state.index[-1]
+    else:
+        as_of_ts = pd.Timestamp(as_of)
+        if as_of_ts.tzinfo is not None:
+            as_of_ts = as_of_ts.tz_convert("America/New_York").tz_localize(None)
+        as_of_ts = as_of_ts.normalize()
+    history = state.loc[:as_of_ts]
+    if history.empty:
+        raise ValueError("as_of is before the price history")
+    as_of_ts = history.index[-1]
+    visible = close.loc[:as_of_ts]
+    dips = dip_active(visible, dip_rule, dip_hold) if apply_dip else pd.Series(False, index=visible.index)
+    on = bool(history.iloc[-1])
+    dip_on = bool(dips.iloc[-1]) if len(dips) else False
+    previous = bool(history.iloc[-2]) if len(history) > 1 else None
+    previous_dip = bool(dips.iloc[-2]) if len(dips) > 1 else False
+    schedule = rebalance_mask(state.index, spec.rebalance)
+    scheduled = bool(schedule.loc[as_of_ts])
+    changed = previous is None or on != previous
+    dip_changed = dip_on != previous_dip
+    if spec.rebalance == "daily":
+        trade = True
+        reason = "trend_change" if changed else "daily_target"
+    elif changed and dip_changed:
+        trade = True
+        reason = "trend_and_dip"
+    elif changed and scheduled:
+        trade = True
+        reason = "trend_change_and_schedule"
+    elif changed:
+        trade = True
+        reason = "trend_change"
+    elif dip_changed:
+        trade = True
+        reason = "dip_overlay"
+    elif scheduled:
+        trade = True
+        reason = "scheduled_rebalance"
+    else:
+        trade = False
+        reason = "none"
+    average = close.rolling(spec.window, min_periods=spec.window).mean().loc[as_of_ts]
+    payload = {
+        "date": next_nyse_session(as_of_ts).strftime("%Y-%m-%d"),
+        "weights": strategic_weights(spec, on, dip_on),
+        "strategy": strategy_id,
+        "strategy_name": spec.name(),
+        "generated_at": generated_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "signal_date": pd.Timestamp(as_of_ts).strftime("%Y-%m-%d"),
+        "trade": trade,
+        "trade_reason": reason,
+        "rebalance_mix": scheduled,
+        "diagnostics": {
+            "trend_on": on,
+            "dip_on": dip_on,
+            "dip_rule": dip_rule if apply_dip else None,
+            "reference_close": float(close.loc[as_of_ts]),
+            "sma": None if not np.isfinite(average) else float(average),
+            "sma_window": spec.window,
+            "band": spec.band,
+            "freq": spec.freq,
+            "rebalance": spec.rebalance,
+            "core_weight": spec.core_weight,
+            "sleeve_weight": spec.sleeve_weight,
+            "sleeve_symbol": spec.sleeve_symbol,
+            "leverage": spec.leverage,
+        },
+    }
+    validate_signal(payload, allowed_tickers=ALLOWED_TREND_TICKERS)
+    return payload
