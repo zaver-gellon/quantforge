@@ -153,6 +153,35 @@ def test_borrowed_cash_pays_the_financing_spread():
     assert result.returns.iloc[2] == pytest.approx(-0.01)
 
 
+def test_short_borrow_is_charged_on_the_short_notional():
+    idx = pd.bdate_range("2020-01-02", periods=4)
+    px = pd.DataFrame({"A": 100.0, "B": 100.0}, index=idx)
+    targets = pd.DataFrame({"A": 0.5, "B": -0.5}, index=idx)
+    reb = pd.Series([True, False, False, False], index=idx)
+    result = run_backtest(
+        px, px, targets, reb, CostModel(), pd.Series(0.0, index=idx),
+        max_gross=1.0, allow_short=True, short_borrow=0.01,
+    )
+    # The short is put on at the open of day 1. The fee hits the next overnight.
+    assert result.returns.iloc[1] == pytest.approx(0.0)
+    assert result.returns.iloc[2] == pytest.approx(-0.005)
+
+
+def test_impact_matrix_increases_the_cost_of_a_trade():
+    idx = pd.bdate_range("2020-01-02", periods=4)
+    px = pd.DataFrame({"ASSET": 100.0}, index=idx)
+    targets = pd.DataFrame({"ASSET": [0.0, 1.0, 1.0, 1.0]}, index=idx)
+    reb = pd.Series([False, True, False, False], index=idx)
+    impact = pd.DataFrame(0.0, index=idx, columns=["ASSET"])
+    impact.iloc[1] = 0.01
+    base = run_backtest(px, px, targets, reb, CostModel(), pd.Series(0.0, index=idx))
+    costly = run_backtest(
+        px, px, targets, reb, CostModel(), pd.Series(0.0, index=idx), impact=impact,
+    )
+    assert base.returns.iloc[2] == pytest.approx(0.0)
+    assert costly.returns.iloc[2] == pytest.approx(-0.01)
+
+
 def test_dip_flip_trades_the_core_and_leaves_a_flat_sleeve_untouched():
     from quantforge.engine.backtest import run_trend_core
 

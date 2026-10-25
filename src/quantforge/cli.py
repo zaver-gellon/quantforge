@@ -31,7 +31,7 @@ def main(argv: list[str] | None = None) -> int:
     fetch.add_argument("--refresh", action="store_true")
 
     signals = sub.add_parser("signals", help="write target weights for the next NYSE session")
-    signals.add_argument("--strategy", default="trend-core", choices=["trend-core", "flagship", "dip-buy"])
+    signals.add_argument("--strategy", default="trend-core", choices=["trend-core", "flagship", "dip-buy", "apex"])
     signals.add_argument("--out", default=None)
     signals.add_argument("--cache", default=None)
     signals.add_argument("--start", default="1998-01-01")
@@ -39,7 +39,7 @@ def main(argv: list[str] | None = None) -> int:
     signals.add_argument("--study-dir", default="studies/spy_upro_trend")
 
     study = sub.add_parser("study", help="run a study end to end")
-    study.add_argument("name", choices=["spy-upro-trend", "flagship"])
+    study.add_argument("name", choices=["spy-upro-trend", "flagship", "apex"])
 
     ledger = sub.add_parser("ledger", help="summarize the multiple-testing ledger")
     ledger.add_argument("--path", default="studies/trial_ledger.json")
@@ -79,6 +79,8 @@ def _fetch(args) -> int:
 def _signals(args) -> int:
     if args.strategy == "flagship":
         return _flagship_from_study(args)
+    if args.strategy == "apex":
+        return _apex_from_study(args)
     cache = args.cache
     frames = load_bars(get_source("yahoo"), ["SPY"], start=args.start, end=args.end, cache_dir=cache)
     close = frames["SPY"]["close"]
@@ -136,9 +138,26 @@ def _flagship_from_study(args) -> int:
     return 0
 
 
+def _apex_from_study(args) -> int:
+    """Replay the apex signal stored by the study. Does not refit it."""
+    summary_path = Path("studies/apex/results.json")
+    if not summary_path.exists():
+        raise DataError(f"no {summary_path}; run `quantforge study apex` first")
+    summary = json.loads(summary_path.read_text())
+    payload = summary.get("live_signal")
+    if not payload:
+        raise DataError("apex results.json has no live_signal")
+    dest = Path(args.out) if args.out else Path("studies/apex/signals.json")
+    negative = any(value < 0 for value in payload.get("weights", {}).values())
+    gross = max(1.0, float(payload.get("gross") or 1.0))
+    write_signal(payload, dest, allowed_tickers=None, max_gross=gross, allow_negative=negative)
+    print(f"wrote {dest} for {payload['date']} {payload['weights']}")
+    return 0
+
+
 def _study(args) -> int:
     root = _repo_root()
-    folder = "spy_upro_trend" if args.name == "spy-upro-trend" else "flagship"
+    folder = {"spy-upro-trend": "spy_upro_trend", "flagship": "flagship", "apex": "apex"}[args.name]
     script = root / "studies" / folder / "run.py"
     if not script.exists():
         raise DataError(f"study script not found at {script}")

@@ -47,6 +47,8 @@ def run_backtest(
     max_gross: float = 1.0,
     allow_short: bool = False,
     borrow_spread: float = 0.0,
+    short_borrow: float = 0.0,
+    impact: pd.DataFrame | None = None,
 ) -> BacktestResult:
     """Trade ``targets`` on the sessions after ``rebalance`` is True.
 
@@ -55,7 +57,11 @@ def run_backtest(
     cash earns the yield. ``max_gross`` is the cap on the sum of absolute
     weights. Above 1, the residual cash is negative and, when
     ``borrow_spread`` is set, that debit pays the cash yield plus the spread.
-    ``borrow_spread`` is a daily rate. Short weights require ``allow_short``.
+    ``borrow_spread`` and ``short_borrow`` are daily rates. Short borrow is
+    charged on the absolute short notional carried from the previous close.
+    ``impact`` is an extra one-way cost fraction by decision date and asset,
+    known at that close (a market-impact model, not a second signal).
+    Short weights require ``allow_short``.
     """
     if execution not in ("next_open", "next_close"):
         raise ValueError(f"unknown execution {execution!r}")
@@ -84,6 +90,10 @@ def run_backtest(
         raise ValueError("open and close prices must be finite and positive")
     asset_costs = np.array([cost.one_way_fraction(asset) for asset in assets], dtype=float)
     cash_cost = cost.one_way_fraction("CASH")
+    impact_arr = None
+    if impact is not None:
+        impact_arr = impact.reindex(index=open_px.index, columns=assets).fillna(0.0).to_numpy(dtype=float)
+        impact_arr = np.maximum(impact_arr, 0.0)
     n, k = opens.shape
     held = np.zeros(k)
     cash = 1.0
@@ -93,18 +103,29 @@ def run_backtest(
     exposure = np.full(n, np.nan)
     for i in range(1, n):
         prev = float(held.sum() + cash)
+        if short_borrow > 0.0 and np.any(held < 0.0):
+            fee = float((-np.minimum(held, 0.0)).sum()) * float(short_borrow)
+            cash -= fee
+            drag[i] += fee / prev if prev else 0.0
         rate = rf[i] + (borrow_spread if cash < -1e-12 else 0.0)
+        trade_costs = asset_costs
+        if impact_arr is not None:
+            trade_costs = asset_costs + impact_arr[i - 1]
         if execution == "next_open":
             held *= opens[i] / closes[i - 1]
             cash *= 1.0 + rate
             if reb[i - 1]:
-                held, cash, turn[i], drag[i] = _trade_to(held, cash, target_w[i - 1], asset_costs, cash_cost)
+                held, cash, traded, cost_drag = _trade_to(held, cash, target_w[i - 1], trade_costs, cash_cost)
+                turn[i] = traded
+                drag[i] += cost_drag
             held *= closes[i] / opens[i]
         else:
             held *= closes[i] / closes[i - 1]
             cash *= 1.0 + rate
             if reb[i - 1]:
-                held, cash, turn[i], drag[i] = _trade_to(held, cash, target_w[i - 1], asset_costs, cash_cost)
+                held, cash, traded, cost_drag = _trade_to(held, cash, target_w[i - 1], trade_costs, cash_cost)
+                turn[i] = traded
+                drag[i] += cost_drag
         new = float(held.sum() + cash)
         rets[i] = new / prev - 1.0
         exposure[i] = float(held.sum() / new) if new else 0.0
