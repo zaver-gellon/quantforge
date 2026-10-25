@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-26",
+  "weights": {
+    "SPY": 1.0
+  },
+  "strategy": "apex",
+  "generated_at": "2026-10-25T07:20:14Z",
+  "signal_date": "2026-10-23",
+  "endorsed": false,
+  "gross": 1.0,
+  "diagnostics": {
+    "track": null,
+    "variant": "er_long_crypto",
+    "endorsed_variant": null,
+    "beats_spy": false,
+    "beats_trend_core": false,
+    "components_that_added_value": [
+      "tsmom",
+      "xsmom",
+      "residual",
+      "reversal",
+      "hmm",
+      "turnover_penalty",
+      "btc_satellite"
+    ],
+    "ml_beats_equal_risk": false,
+    "rule": "walk_forward_excess_sharpe"
+  }
+}

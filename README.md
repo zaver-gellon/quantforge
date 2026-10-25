@@ -6,6 +6,8 @@ The trend-core book is half SPY and half UPRO while SPY is 2% above its 200-day 
 
 [`studies/flagship`](studies/flagship) is the return-max track: out-of-sample CAGR under 30%, 45%, and 60% drawdown budgets. A full-sample ranking in that write-up is not a recommendation.
 
+[`studies/apex`](studies/apex) is the multi-strategy book: a library of alphas, a regime scale, and a walk-forward choice between equal-risk and a purged machine-learning combiner. The tearsheet says whether that path beat SPY and the trend-core book after costs, and which components cleared a precommitted hurdle. A full-sample ranking there is not a recommendation.
+
 ## Install
 
 ```bash
@@ -85,9 +87,10 @@ The paper-trading bot reads a JSON object:
 ```bash
 python studies/spy_upro_trend/run.py
 python studies/flagship/run.py
+python studies/apex/run.py
 ```
 
-or `quantforge study spy-upro-trend` and `quantforge study flagship`.
+or `quantforge study spy-upro-trend`, `quantforge study flagship`, and `quantforge study apex`.
 
 The protocol is at the top of `studies/spy_upro_trend/run.py` and is copied into `RESULTS.md`. It specifies the grid, the walk-forward rule, and the bar a result has to clear. The desk cell is 50% SPY and 50% UPRO. The UPRO half turns on only when the close is above 1.02 times the 200-day average and turns off only when the close is below 0.98 times, with a quarterly mix reset. The live trend-core book adds the three-down-close overlay on the SPY half only. The 50/50 weight was chosen after the desk had seen results, so the study treats that mix as one cell among the trials and does not re-pick it on the full sample.
 
@@ -100,6 +103,8 @@ Outputs of the trend-core run:
 - `studies/trial_ledger.json` — every variant scored, shared with the flagship study
 
 The flagship run writes `studies/flagship/RESULTS.md`, `results.json`, and `signals_flagship.json`. It also copies that signal onto `studies/spy_upro_trend/signals_flagship.json` so it does not collide with `signals.json`.
+
+The apex run writes `studies/apex/RESULTS.md`, `results.json`, and `signals.json`. `signals_model.json` is the primary walk-forward book and `signals_long_only.json` is the cash-account book. Those files use the same `date` and `weights` object. Apex weights may name the core ETFs, and a short book may use a negative weight.
 
 ## Tests
 

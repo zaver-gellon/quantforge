@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-26",
+  "weights": {
+    "IWM": 0.044052,
+    "EFA": 0.00944,
+    "EEM": 0.000503,
+    "TLT": 0.004675,
+    "IEF": 0.024925,
+    "SHY": 0.029098,
+    "LQD": 0.013365,
+    "HYG": 0.164359,
+    "GLD": 0.000668,
+    "DBC": 0.135702,
+    "XLF": 0.016054,
+    "XLE": 0.087142,
+    "XLV": 0.09187,
+    "XLP": 0.066625,
+    "XLI": 9.4e-05,
+    "XLB": 0.042121,
+    "XLU": 0.006065,
+    "BTC-USD": 0.15
+  },
+  "strategy": "apex",
+  "generated_at": "2026-10-25T07:20:14Z",
+  "signal_date": "2026-10-23",
+  "endorsed": false,
+  "gross": 0.886758,
+  "diagnostics": {
+    "track": null,
+    "variant": "er_long_crypto",
+    "endorsed_variant": null,
+    "beats_spy": false,
+    "beats_trend_core": false,
+    "components_that_added_value": [
+      "tsmom",
+      "xsmom",
+      "residual",
+      "reversal",
+      "hmm",
+      "turnover_penalty",
+      "btc_satellite"
+    ],
+    "ml_beats_equal_risk": false,
+    "rule": "walk_forward_excess_sharpe",
+    "book": "primary_walk_forward"
+  }
+}
