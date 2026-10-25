@@ -6,7 +6,7 @@
   },
   "strategy": "trend_core",
   "strategy_name": "core50_slv50_L3_sma200_band2_daily_quarterly",
-  "generated_at": "2026-10-25T21:27:49Z",
+  "generated_at": "2026-10-25T21:31:39Z",
   "signal_date": "2026-10-23",
   "trade": false,
   "trade_reason": "none",

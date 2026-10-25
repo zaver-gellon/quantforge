@@ -43,6 +43,24 @@ def fetch_fred_csv(series_id: str, timeout: float = 60.0) -> str:
     return raw.decode("utf-8")
 
 
+def snapshot_path(iterations_path, series_id: str) -> Path:
+    """FRED graph CSV saved next to the iteration log."""
+    return Path(iterations_path).resolve().parent / f"{series_id}.csv"
+
+
+def load_spread(series_id: str, iterations_path) -> pd.Series:
+    """Load a spread from the study snapshot, fetching FRED only if it is missing.
+
+    The snapshot is the file written beside ``iterations.json``. Signal
+    generation uses that file so a FRED timeout cannot fail the command or
+    silently turn the hedge off.
+    """
+    path = snapshot_path(iterations_path, series_id)
+    if path.exists():
+        return parse_fred_csv(path.read_text())
+    return parse_fred_csv(fetch_fred_csv(series_id))
+
+
 def align_spread(spread: pd.Series, sessions: pd.DatetimeIndex) -> pd.Series:
     """Last spread print dated on or before each session. Later prints are not used."""
     clean = spread.dropna().astype(float).sort_index()
@@ -103,9 +121,10 @@ def _selection(entry: dict, as_of) -> tuple[str | None, float | None]:
 def kept_hedge_stress(iterations_path, sessions: pd.DatetimeIndex, as_of=None):
     """Stress flag for a kept credit-spread hedge, or ``(None, None, None)``.
 
-    The threshold is the walk-forward pick for ``as_of``. The spread is fetched
-    from the public FRED CSV named in the iteration entry. The returned series
-    is indexed like ``sessions`` and is safe to slice with ``as_of``.
+    The threshold is the walk-forward pick for ``as_of``. The spread is the
+    snapshot saved next to the iteration log (the public FRED CSV of the series
+    named in the entry). FRED is contacted only when that file is absent. The
+    returned series is indexed like ``sessions`` and is safe to slice with ``as_of``.
     """
     entry = _kept_entry(iterations_path)
     if entry is None:
@@ -124,7 +143,7 @@ def kept_hedge_stress(iterations_path, sessions: pd.DatetimeIndex, as_of=None):
     if not series_id:
         raise DataError("kept hedge does not name a spread series")
     lookback = int(entry.get("data", {}).get("lookback") or 20)
-    spread = parse_fred_csv(fetch_fred_csv(series_id))
+    spread = load_spread(series_id, iterations_path)
     # Drop prints after the signal date before aligning, so a later revision
     # of the file cannot leak into an earlier as_of.
     spread = spread.loc[:stamp]
