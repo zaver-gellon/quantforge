@@ -2,6 +2,42 @@
   "version": 1,
   "trials": [
     {
+      "trial_id": "011edb2fe527c9f2",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "gated_budget_ls",
+      "params": {
+        "name": "gated_budget_ls"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.015815926368366817,
+        "vol": 0.052918252613306925,
+        "sharpe": 0.03900402835005889,
+        "sharpe_per_period": 0.0024572727755072183,
+        "max_drawdown": -0.12888961726850856,
+        "maxdd_peak": "2018-01-26",
+        "maxdd_trough": "2023-03-17",
+        "longest_underwater_days": 1875,
+        "worst_year": 2016,
+        "worst_year_return": -0.08377027994988995,
+        "total_return": 0.35814747458858687,
+        "final_multiple": 1.3581474745885869,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.5353812605237672,
+        "ir_t": -2.364660694722754,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.01249743672194148
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "01cddc6d39fbbf37",
       "study": "flagship",
       "family": "trend_core",
@@ -493,6 +529,42 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "0a4a161de831bd83",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "no_kelly_long",
+      "params": {
+        "name": "no_kelly_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.04848544742322236,
+        "vol": 0.048592085228461056,
+        "sharpe": 0.6894279934609967,
+        "sharpe_per_period": 0.043434299242111944,
+        "max_drawdown": -0.07832989697092718,
+        "maxdd_peak": "2008-05-21",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 358,
+        "worst_year": 2018,
+        "worst_year_return": -0.038691411651848195,
+        "total_return": 1.5184314273397037,
+        "final_multiple": 2.5184314273397037,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.41806321849849953,
+        "ir_t": -1.8464928333979418,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.7326830498319181
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "0ab942e463f75fe2",
       "study": "flagship",
       "family": "crypto",
@@ -673,6 +745,41 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "0e6d559835a0e80f",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_tsmom",
+      "params": {
+        "alpha": "tsmom"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.005010695627256201,
+        "vol": 0.08078138567153531,
+        "sharpe": -0.08386027854412863,
+        "sharpe_per_period": -0.005283238376392685,
+        "max_drawdown": -0.29497122013252064,
+        "maxdd_peak": "2009-03-09",
+        "maxdd_trough": "2021-01-06",
+        "longest_underwater_days": 4435,
+        "worst_year": 2019,
+        "worst_year_return": -0.08997529469561083,
+        "total_return": 0.10241613077180167,
+        "final_multiple": 1.1024161307718017,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.46776659724451725,
+        "ir_t": -2.066021671595686,
+        "years_beating_benchmark": 0.25
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
     },
     {
       "trial_id": "118267007647f51d",
@@ -856,6 +963,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:57:42Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "14572aa3bbee6516",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "er_long_stocks",
+      "params": {
+        "name": "er_long_stocks"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.05748213160652238,
+        "vol": 0.06299288240230226,
+        "sharpe": 0.6802720195961117,
+        "sharpe_per_period": 0.04285746843095797,
+        "max_drawdown": -0.12354099319363943,
+        "maxdd_peak": "2008-05-20",
+        "maxdd_trough": "2009-03-05",
+        "longest_underwater_days": 475,
+        "worst_year": 2008,
+        "worst_year_return": -0.05881857839241689,
+        "total_return": 1.9752048958127038,
+        "final_multiple": 2.9752048958127038,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4132126092820506,
+        "ir_t": -1.8250687645981196,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.7200270914128255
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "147ab00d836ad4bf",
@@ -1172,6 +1315,42 @@
       "updated_at": "2026-10-25T06:32:33Z"
     },
     {
+      "trial_id": "1c78301e847d88dd",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "gbdt_budget_long",
+      "params": {
+        "name": "gbdt_budget_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.03758413938794947,
+        "vol": 0.05869409091099734,
+        "sharpe": 0.40197593508650187,
+        "sharpe_per_period": 0.025324679615961427,
+        "max_drawdown": -0.17980934580063168,
+        "maxdd_peak": "2020-02-19",
+        "maxdd_trough": "2020-03-23",
+        "longest_underwater_days": 683,
+        "worst_year": 2020,
+        "worst_year_return": -0.04925773461431415,
+        "total_return": 1.053912775184246,
+        "final_multiple": 2.053912775184246,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.5148935520136219,
+        "ir_t": -2.2741710145432834,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.26463717801375286
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "1cdaafa6340ea7ff",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -1266,6 +1445,41 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "1f31005fd3f82a9a",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_vrp",
+      "params": {
+        "alpha": "vrp"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.028776462770663036,
+        "vol": 0.09823364573027114,
+        "sharpe": 0.18494401921744497,
+        "sharpe_per_period": 0.01165156325231789,
+        "max_drawdown": -0.35045790521977016,
+        "maxdd_peak": "2018-12-24",
+        "maxdd_trough": "2020-10-12",
+        "longest_underwater_days": 1968,
+        "worst_year": 2019,
+        "worst_year_return": -0.17876019102599716,
+        "total_return": 0.7392325982535961,
+        "final_multiple": 1.739232598253596,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.41551377685323043,
+        "ir_t": -1.8352325131428784,
+        "years_beating_benchmark": 0.3
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
     },
     {
       "trial_id": "2064319b003abf41",
@@ -1503,6 +1717,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "23070a1807f587d5",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_tsmom",
+      "params": {
+        "name": "loo_tsmom"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.03986288266445226,
+        "vol": 0.04358059885630805,
+        "sharpe": 0.5739503202867163,
+        "sharpe_per_period": 0.036159149610813644,
+        "max_drawdown": -0.08791897096196166,
+        "maxdd_peak": "2008-05-21",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 730,
+        "worst_year": 2018,
+        "worst_year_return": -0.026144705729129303,
+        "total_return": 1.143720811055911,
+        "final_multiple": 2.143720811055911,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4578167560611522,
+        "ir_t": -2.022075422259242,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5469966867448957
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "231eac2ef6298779",
@@ -1918,6 +2168,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "336a62e04263d45a",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_carry",
+      "params": {
+        "name": "loo_carry"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.040413609217017754,
+        "vol": 0.04316032890075079,
+        "sharpe": 0.5913657648007205,
+        "sharpe_per_period": 0.03725633109405792,
+        "max_drawdown": -0.07001859130314414,
+        "maxdd_peak": "2008-05-21",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 415,
+        "worst_year": 2018,
+        "worst_year_return": -0.03772479424298314,
+        "total_return": 1.165977950772855,
+        "final_multiple": 2.165977950772855,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.45494732428221946,
+        "ir_t": -2.0094017763098253,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5768251387718806
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "357e699275fe84dc",
@@ -2898,6 +3184,42 @@
       "updated_at": "2026-10-25T06:58:50Z"
     },
     {
+      "trial_id": "4896c28a561fadbf",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_macro",
+      "params": {
+        "name": "loo_macro"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.046867728997062263,
+        "vol": 0.04758156731935733,
+        "sharpe": 0.6706384638421972,
+        "sharpe_per_period": 0.04225054972828018,
+        "max_drawdown": -0.08601066930179813,
+        "maxdd_peak": "2020-03-06",
+        "maxdd_trough": "2020-03-19",
+        "longest_underwater_days": 402,
+        "worst_year": 2018,
+        "worst_year_return": -0.044699966082800024,
+        "total_return": 1.443701819541337,
+        "final_multiple": 2.443701819541337,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.42685513700972605,
+        "ir_t": -1.8853247942222033,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.7043585189105217
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "4ae5b6d07d89bbee",
       "study": "spy_upro_trend",
       "family": "benchmark",
@@ -3128,6 +3450,41 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "4d671ee5c6e89618",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_carry",
+      "params": {
+        "alpha": "carry"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.022660013987643834,
+        "vol": 0.044796739781992556,
+        "sharpe": 0.1871208634155571,
+        "sharpe_per_period": 0.011788705496614656,
+        "max_drawdown": -0.1326975889176939,
+        "maxdd_peak": "2020-03-09",
+        "maxdd_trough": "2022-10-24",
+        "longest_underwater_days": 1032,
+        "worst_year": 2009,
+        "worst_year_return": -0.07342006160178904,
+        "total_return": 0.5482357874162731,
+        "final_multiple": 1.548235787416273,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.46314112794831835,
+        "ir_t": -2.0455919960619027,
+        "years_beating_benchmark": 0.25
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
+    },
+    {
       "trial_id": "4fb8b99b8017f277",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -3176,6 +3533,42 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "50f6d3f13751318f",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_lowvol",
+      "params": {
+        "name": "loo_lowvol"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.046531966582563644,
+        "vol": 0.05400519279940527,
+        "sharpe": 0.590949403121557,
+        "sharpe_per_period": 0.03723010010556128,
+        "max_drawdown": -0.08750068049019999,
+        "maxdd_peak": "2008-07-02",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 444,
+        "worst_year": 2018,
+        "worst_year_return": -0.05419120887192064,
+        "total_return": 1.4284573852194868,
+        "final_multiple": 2.428457385219487,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4278512394279704,
+        "ir_t": -1.8897243584393677,
+        "years_beating_benchmark": 0.2,
+        "dsr": 0.5761900542267325
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "54021345d931f4f0",
       "study": "flagship",
       "family": "stock",
@@ -3214,6 +3607,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:58:46Z",
       "updated_at": "2026-10-25T06:58:51Z"
+    },
+    {
+      "trial_id": "56a8f2642e901a44",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_value",
+      "params": {
+        "name": "loo_value"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.04691523526166552,
+        "vol": 0.049947144438393654,
+        "sharpe": 0.6420878727488816,
+        "sharpe_per_period": 0.04045184858929546,
+        "max_drawdown": -0.07959949877898187,
+        "maxdd_peak": "2020-03-06",
+        "maxdd_trough": "2020-03-19",
+        "longest_underwater_days": 457,
+        "worst_year": 2018,
+        "worst_year_return": -0.03750454637556222,
+        "total_return": 1.4458660375385457,
+        "final_multiple": 2.4458660375385457,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4291881723046327,
+        "ir_t": -1.8956292954590779,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.660497185606522
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "57b2c675298057e3",
@@ -3310,6 +3739,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "5b799f3102e53313",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "ridge_budget_long",
+      "params": {
+        "name": "ridge_budget_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.041462163752800985,
+        "vol": 0.06444756425407945,
+        "sharpe": 0.4295433886311605,
+        "sharpe_per_period": 0.027061442610731613,
+        "max_drawdown": -0.18746020159940058,
+        "maxdd_peak": "2020-02-19",
+        "maxdd_trough": "2020-03-23",
+        "longest_underwater_days": 519,
+        "worst_year": 2022,
+        "worst_year_return": -0.0788071659626235,
+        "total_return": 1.2089618379385083,
+        "final_multiple": 2.2089618379385083,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4847822750445177,
+        "ir_t": -2.1411761595364185,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.3051636752910996
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "5bc17dab144f1b6e",
@@ -3600,6 +4065,78 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "6056e49cde8885f6",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_xsmom",
+      "params": {
+        "name": "loo_xsmom"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.03600357595216086,
+        "vol": 0.038508050716183205,
+        "sharpe": 0.5474956868460215,
+        "sharpe_per_period": 0.03449249482437941,
+        "max_drawdown": -0.06860805602485087,
+        "maxdd_peak": "2020-03-06",
+        "maxdd_trough": "2020-03-19",
+        "longest_underwater_days": 457,
+        "worst_year": 2018,
+        "worst_year_return": -0.023615685487183957,
+        "total_return": 0.9937301506267555,
+        "final_multiple": 1.9937301506267555,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.470944786444873,
+        "ir_t": -2.080059030832207,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5011192109225489
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
+      "trial_id": "616c5edd40bec92b",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_vrp",
+      "params": {
+        "name": "loo_vrp"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.0408394991535439,
+        "vol": 0.04421709432030063,
+        "sharpe": 0.587494791985789,
+        "sharpe_per_period": 0.037012457922100145,
+        "max_drawdown": -0.09163681014654823,
+        "maxdd_peak": "2008-05-21",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 407,
+        "worst_year": 2008,
+        "worst_year_return": -0.03162615982111938,
+        "total_return": 1.1833400676446137,
+        "final_multiple": 2.1833400676446137,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.45119154317775245,
+        "ir_t": -1.9928133212954922,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.570286574226684
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "637e06dbd0281d85",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -3735,6 +4272,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "66ae7ceabafad590",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "er_hrp_long",
+      "params": {
+        "name": "er_hrp_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.03207590810433625,
+        "vol": 0.030321808743593952,
+        "sharpe": 0.5608202837167547,
+        "sharpe_per_period": 0.03533195091443254,
+        "max_drawdown": -0.060569302500612654,
+        "maxdd_peak": "2020-03-06",
+        "maxdd_trough": "2020-03-19",
+        "longest_underwater_days": 394,
+        "worst_year": 2018,
+        "worst_year_return": -0.018589497782685815,
+        "total_return": 0.8513384022342476,
+        "final_multiple": 1.8513384022342476,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4811776844813205,
+        "ir_t": -2.1252554797258805,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5242670732020196
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "6722bd55b8488a88",
@@ -4536,6 +5109,42 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "7212f0b910532f9d",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "gated_budget_long",
+      "params": {
+        "name": "gated_budget_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.04561579934344273,
+        "vol": 0.07038234271846881,
+        "sharpe": 0.45560859573455254,
+        "sharpe_per_period": 0.02870356334832014,
+        "max_drawdown": -0.14877053464221912,
+        "maxdd_peak": "2020-02-19",
+        "maxdd_trough": "2020-03-20",
+        "longest_underwater_days": 945,
+        "worst_year": 2015,
+        "worst_year_return": -0.02921823191575823,
+        "total_return": 1.3873187866099221,
+        "final_multiple": 2.387318786609922,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.47051434579074475,
+        "ir_t": -2.078157869601364,
+        "years_beating_benchmark": 0.2,
+        "dsr": 0.3458170400087027
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "74af14ecab607aeb",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -4624,6 +5233,42 @@
       "updated_at": "2026-10-25T06:58:50Z"
     },
     {
+      "trial_id": "75d2298254b14fa1",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "gbdt_budget_ls",
+      "params": {
+        "name": "gbdt_budget_ls"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.015217864414489357,
+        "vol": 0.03732669679943475,
+        "sharpe": 0.020643106549841847,
+        "sharpe_per_period": 0.0013005257629176274,
+        "max_drawdown": -0.07968043895291355,
+        "maxdd_peak": "2016-01-20",
+        "maxdd_trough": "2017-04-13",
+        "longest_underwater_days": 1280,
+        "worst_year": 2010,
+        "worst_year_return": -0.042647290871876464,
+        "total_return": 0.34263343303264193,
+        "final_multiple": 1.342633433032642,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.5274689818800031,
+        "ir_t": -2.3297139087700685,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.010082169985464684
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "76a05908e8e8bcd6",
       "study": "flagship",
       "family": "crypto_vol_target",
@@ -4709,6 +5354,41 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "77da6cbae713ae58",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_residual",
+      "params": {
+        "alpha": "residual"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.008399129028545449,
+        "vol": 0.07342200966112583,
+        "sharpe": -0.054116244397346906,
+        "sharpe_per_period": -0.0034093497440013734,
+        "max_drawdown": -0.27205661352127575,
+        "maxdd_peak": "2016-01-20",
+        "maxdd_trough": "2021-08-20",
+        "longest_underwater_days": 2518,
+        "worst_year": 2016,
+        "worst_year_return": -0.10728877568631878,
+        "total_return": 0.17723139632571927,
+        "final_multiple": 1.1772313963257193,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.47309587906638373,
+        "ir_t": -2.089559931494696,
+        "years_beating_benchmark": 0.3
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
     },
     {
       "trial_id": "782a27c89f6905b1",
@@ -4885,6 +5565,41 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "8010bb7858a6c05c",
+      "study": "apex",
+      "family": "benchmark",
+      "name": "trend_core",
+      "params": {
+        "book": "trend_core"
+      },
+      "sample_start": "2007-04-11",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4917,
+        "years": 19.511904761904763,
+        "cagr": 0.15957890282117382,
+        "vol": 0.2655523746259384,
+        "sharpe": 0.6348260955687756,
+        "sharpe_per_period": 0.03999435226403278,
+        "max_drawdown": -0.46826157894781517,
+        "maxdd_peak": "2007-07-19",
+        "maxdd_trough": "2009-03-09",
+        "longest_underwater_days": 673,
+        "worst_year": 2022,
+        "worst_year_return": -0.2665429419698625,
+        "total_return": 16.973035524104493,
+        "final_multiple": 17.973035524104493,
+        "start": "2007-04-11",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": 0.41525803141548234,
+        "ir_t": 1.8342894768224296,
+        "years_beating_benchmark": 0.65
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
+    },
+    {
       "trial_id": "8160459c6277d1d7",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -5029,6 +5744,78 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "83e54b848fe30544",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "ridge_meta_long",
+      "params": {
+        "name": "ridge_meta_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.023420838626899254,
+        "vol": 0.047319152252870575,
+        "sharpe": 0.19541524509721683,
+        "sharpe_per_period": 0.012311255580751735,
+        "max_drawdown": -0.09782094999601099,
+        "maxdd_peak": "2021-12-29",
+        "maxdd_trough": "2022-06-14",
+        "longest_underwater_days": 1151,
+        "worst_year": 2022,
+        "worst_year_return": -0.07877914915750162,
+        "total_return": 0.5708610890292458,
+        "final_multiple": 1.5708610890292458,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.5570335240681273,
+        "ir_t": -2.4602939570917757,
+        "years_beating_benchmark": 0.2,
+        "dsr": 0.061064406752684375
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
+      "trial_id": "84a4311837e91951",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_reversal",
+      "params": {
+        "name": "loo_reversal"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.04017583861913265,
+        "vol": 0.04336067897508097,
+        "sharpe": 0.5835293401294095,
+        "sharpe_per_period": 0.03676263252453319,
+        "max_drawdown": -0.07540472774251405,
+        "maxdd_peak": "2020-03-06",
+        "maxdd_trough": "2020-03-19",
+        "longest_underwater_days": 456,
+        "worst_year": 2018,
+        "worst_year_return": -0.04939955056838019,
+        "total_return": 1.1563418956628038,
+        "final_multiple": 2.1563418956628038,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4507341254644986,
+        "ir_t": -1.9907930083571141,
+        "years_beating_benchmark": 0.2,
+        "dsr": 0.5635506241178109
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "84fa2ac032b9ec58",
       "study": "flagship",
       "family": "xasset",
@@ -5067,6 +5854,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:58:46Z",
       "updated_at": "2026-10-25T06:58:51Z"
+    },
+    {
+      "trial_id": "88d1c8a9aa35233c",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_bab",
+      "params": {
+        "name": "loo_bab"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.04540466699543022,
+        "vol": 0.0531226736399599,
+        "sharpe": 0.5795735956232585,
+        "sharpe_per_period": 0.03651341869475675,
+        "max_drawdown": -0.08297095738200855,
+        "maxdd_peak": "2008-07-01",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 442,
+        "worst_year": 2018,
+        "worst_year_return": -0.04119335529850443,
+        "total_return": 1.377932515892383,
+        "final_multiple": 2.377932515892383,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.44545634769091264,
+        "ir_t": -1.9674822304556412,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5566376607743626
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "89192a15dacab67e",
@@ -5196,6 +6019,42 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "8c6bde6d51890afd",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "er_long_crypto",
+      "params": {
+        "name": "er_long_crypto"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.08897036964107996,
+        "vol": 0.07148629127981565,
+        "sharpe": 1.018021191615235,
+        "sharpe_per_period": 0.06413583070431127,
+        "max_drawdown": -0.1364091656205011,
+        "maxdd_peak": "2017-12-18",
+        "maxdd_trough": "2018-11-20",
+        "longest_underwater_days": 457,
+        "worst_year": 2018,
+        "worst_year_return": -0.10955034727293234,
+        "total_return": 4.273597821197818,
+        "final_multiple": 5.273597821197818,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.18950733260844121,
+        "ir_t": -0.8370120021431703,
+        "years_beating_benchmark": 0.3,
+        "dsr": 0.9818818398415822
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "8d667d2b2dc7754d",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -5242,6 +6101,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "8d686737b440d268",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "ridge_budget_ls",
+      "params": {
+        "name": "ridge_budget_ls"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.030788005572855104,
+        "vol": 0.05028379140501436,
+        "sharpe": 0.32936162948679437,
+        "sharpe_per_period": 0.020749943010267898,
+        "max_drawdown": -0.11350590630807877,
+        "maxdd_peak": "2018-09-20",
+        "maxdd_trough": "2020-06-08",
+        "longest_underwater_days": 784,
+        "worst_year": 2020,
+        "worst_year_return": -0.04983931756871307,
+        "total_return": 0.8067870459833286,
+        "final_multiple": 1.8067870459833286,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4819216243186282,
+        "ir_t": -2.1285412975574554,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.1701831265809683
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "900c27cf305722df",
@@ -5620,6 +6515,42 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "979c61c8ca3a9277",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "er_budget_long",
+      "params": {
+        "name": "er_budget_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.04169494668939522,
+        "vol": 0.045513329183842634,
+        "sharpe": 0.590111557189041,
+        "sharpe_per_period": 0.03717731540390012,
+        "max_drawdown": -0.07826294389253097,
+        "maxdd_peak": "2008-05-21",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 457,
+        "worst_year": 2018,
+        "worst_year_return": -0.042083529414420395,
+        "total_return": 1.2186135805564065,
+        "final_multiple": 2.2186135805564065,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4491072509581776,
+        "ir_t": -1.983607463243749,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5747220104544368
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "991f07966e52fea2",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -5762,6 +6693,112 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "9c989468a147e32a",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "hmm_budget_long",
+      "params": {
+        "name": "hmm_budget_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.042516919494996364,
+        "vol": 0.04845635054373482,
+        "sharpe": 0.5733938327697062,
+        "sharpe_per_period": 0.036124090626311174,
+        "max_drawdown": -0.13194293814797498,
+        "maxdd_peak": "2008-07-02",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 590,
+        "worst_year": 2008,
+        "worst_year_return": -0.0466810545453904,
+        "total_return": 1.2530156173389022,
+        "final_multiple": 2.253015617338902,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4453223027730396,
+        "ir_t": -1.966890183680766,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5460200125568551
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
+      "trial_id": "9d394256ec8f63e8",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_bab",
+      "params": {
+        "alpha": "bab"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": -0.028897825743459338,
+        "vol": 0.10603436740231426,
+        "sharpe": -0.36541419538331843,
+        "sharpe_per_period": -0.023021272214257024,
+        "max_drawdown": -0.659115737622318,
+        "maxdd_peak": "2009-03-09",
+        "maxdd_trough": "2026-06-22",
+        "longest_underwater_days": 4435,
+        "worst_year": 2009,
+        "worst_year_return": -0.17617168290058416,
+        "total_return": -0.4356286037045223,
+        "final_multiple": 0.5643713962954777,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4921910864659438,
+        "ir_t": -2.173899242047226,
+        "years_beating_benchmark": 0.25
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
+    },
+    {
+      "trial_id": "9e3e9386b3158109",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_pairs",
+      "params": {
+        "alpha": "pairs"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.010518538348730067,
+        "vol": 0.03354765948522204,
+        "sharpe": -0.11945503320848633,
+        "sharpe_per_period": -0.007525725249865915,
+        "max_drawdown": -0.13173523672389054,
+        "maxdd_peak": "2011-07-18",
+        "maxdd_trough": "2022-03-08",
+        "longest_underwater_days": 3243,
+        "worst_year": 2026,
+        "worst_year_return": -0.05676777631922114,
+        "total_return": 0.2264493788368791,
+        "final_multiple": 1.226449378836879,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.5777616938171855,
+        "ir_t": -2.5518457014154134,
+        "years_beating_benchmark": 0.25
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
     },
     {
       "trial_id": "9ea85461dc09e248",
@@ -6016,6 +7053,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:58:46Z",
       "updated_at": "2026-10-25T06:58:51Z"
+    },
+    {
+      "trial_id": "a52d87d26e319216",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "no_dd_long",
+      "params": {
+        "name": "no_dd_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.04169494668939522,
+        "vol": 0.045513329183842634,
+        "sharpe": 0.590111557189041,
+        "sharpe_per_period": 0.03717731540390012,
+        "max_drawdown": -0.07826294389253097,
+        "maxdd_peak": "2008-05-21",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 457,
+        "worst_year": 2018,
+        "worst_year_return": -0.042083529414420395,
+        "total_return": 1.2186135805564065,
+        "final_multiple": 2.2186135805564065,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4491072509581776,
+        "ir_t": -1.983607463243749,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5747220104544368
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "a5d5bae67c4fb024",
@@ -6471,6 +7544,42 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "b033a8206488d618",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "no_regime_long",
+      "params": {
+        "name": "no_regime_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.04345952278798193,
+        "vol": 0.05260309266434915,
+        "sharpe": 0.5493670922556498,
+        "sharpe_per_period": 0.03461039427629615,
+        "max_drawdown": -0.13194293814797498,
+        "maxdd_peak": "2008-07-02",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 637,
+        "worst_year": 2008,
+        "worst_year_return": -0.0466810545453904,
+        "total_return": 1.2930892875925935,
+        "final_multiple": 2.2930892875925935,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.44200191054241833,
+        "ir_t": -1.9522247450900847,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5043663966250088
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "b046f87508ea42f2",
       "study": "flagship",
       "family": "sector",
@@ -6687,6 +7796,41 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "b7dc5bf6613bccbb",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_reversal",
+      "params": {
+        "alpha": "reversal"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.028187101925708502,
+        "vol": 0.08790835246819971,
+        "sharpe": 0.18918333000999138,
+        "sharpe_per_period": 0.011918641896193979,
+        "max_drawdown": -0.33593316789150907,
+        "maxdd_peak": "2018-12-24",
+        "maxdd_trough": "2020-06-08",
+        "longest_underwater_days": 1968,
+        "worst_year": 2020,
+        "worst_year_return": -0.17809370909877387,
+        "total_return": 0.719898296194778,
+        "final_multiple": 1.719898296194778,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4447637888667243,
+        "ir_t": -1.9644233512024911,
+        "years_beating_benchmark": 0.3
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
+    },
+    {
       "trial_id": "b94c244d3c8f67ac",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -6874,6 +8018,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "bc446b4e4a0128bd",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "no_vol_target_long",
+      "params": {
+        "name": "no_vol_target_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.04213700769967521,
+        "vol": 0.04616652175281765,
+        "sharpe": 0.5915953758324669,
+        "sharpe_per_period": 0.037270796700846084,
+        "max_drawdown": -0.07826294389253097,
+        "maxdd_peak": "2008-05-21",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 456,
+        "worst_year": 2018,
+        "worst_year_return": -0.04208352941442184,
+        "total_return": 1.2370527365496864,
+        "final_multiple": 2.2370527365496864,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.44734361298848035,
+        "ir_t": -1.9758178641408897,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5772562758070183
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "bd85816f32ced3e5",
@@ -7149,6 +8329,42 @@
       "updated_at": "2026-10-25T06:58:51Z"
     },
     {
+      "trial_id": "c4a220d46527d05b",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "er_mv_long",
+      "params": {
+        "name": "er_mv_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.040300852304994805,
+        "vol": 0.045642328253919624,
+        "sharpe": 0.5591027385145022,
+        "sharpe_per_period": 0.03522374473048867,
+        "max_drawdown": -0.09294969141996201,
+        "maxdd_peak": "2020-02-20",
+        "maxdd_trough": "2020-03-20",
+        "longest_underwater_days": 671,
+        "worst_year": 2008,
+        "worst_year_return": -0.0508814244966187,
+        "total_return": 1.1614032045247797,
+        "final_multiple": 2.1614032045247797,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4914305963581618,
+        "ir_t": -2.170540325329001,
+        "years_beating_benchmark": 0.2,
+        "dsr": 0.5212575594675704
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
       "trial_id": "c63c1b3bb38296e3",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -7331,6 +8547,78 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "ceaf622af2ac54a6",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_pairs",
+      "params": {
+        "name": "loo_pairs"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.042646061365826826,
+        "vol": 0.04600182579768448,
+        "sharpe": 0.6041659522346353,
+        "sharpe_per_period": 0.03806274913427813,
+        "max_drawdown": -0.07826294389253097,
+        "maxdd_peak": "2008-05-21",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 415,
+        "worst_year": 2018,
+        "worst_year_return": -0.03491466391177256,
+        "total_return": 1.2584663818429433,
+        "final_multiple": 2.2584663818429433,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.44237691201521373,
+        "ir_t": -1.953881043710464,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.5984709652583086
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
+      "trial_id": "cfe00769a46b2125",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "no_turnover_long",
+      "params": {
+        "name": "no_turnover_long"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.041637123643464724,
+        "vol": 0.04891656722106094,
+        "sharpe": 0.5511625458767907,
+        "sharpe_per_period": 0.03472350872856037,
+        "max_drawdown": -0.08409324600512491,
+        "maxdd_peak": "2008-05-21",
+        "maxdd_trough": "2009-10-02",
+        "longest_underwater_days": 412,
+        "worst_year": 2018,
+        "worst_year_return": -0.04783068113047184,
+        "total_return": 1.2162123694854534,
+        "final_multiple": 2.2162123694854534,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.43676451977987646,
+        "ir_t": -1.9290923476898267,
+        "years_beating_benchmark": 0.2,
+        "dsr": 0.5075062533541902
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "d03746d9d0c2e078",
@@ -7707,6 +8995,41 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "d9a4d22e67c7ab3c",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_xsmom",
+      "params": {
+        "alpha": "xsmom"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.029613109500372214,
+        "vol": 0.08747838212874186,
+        "sharpe": 0.2055658735739031,
+        "sharpe_per_period": 0.012950750116705524,
+        "max_drawdown": -0.3028041378243801,
+        "maxdd_peak": "2009-03-09",
+        "maxdd_trough": "2012-03-19",
+        "longest_underwater_days": 1704,
+        "worst_year": 2016,
+        "worst_year_return": -0.10525280294295303,
+        "total_return": 0.7670336800516677,
+        "final_multiple": 1.7670336800516677,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4080247585446537,
+        "ir_t": -1.802155174539309,
+        "years_beating_benchmark": 0.25
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
     },
     {
       "trial_id": "dade21298cd79415",
@@ -8101,6 +9424,41 @@
       "updated_at": "2026-10-25T06:57:42Z"
     },
     {
+      "trial_id": "e122f66d51a2ebd4",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_lowvol",
+      "params": {
+        "alpha": "lowvol"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": -0.029596335231123483,
+        "vol": 0.09431545854591922,
+        "sharpe": -0.430856583051508,
+        "sharpe_per_period": -0.027144174498553737,
+        "max_drawdown": -0.626130782062182,
+        "maxdd_peak": "2009-03-09",
+        "maxdd_trough": "2026-10-06",
+        "longest_underwater_days": 4435,
+        "worst_year": 2009,
+        "worst_year_return": -0.1747386843750115,
+        "total_return": -0.4434953549190239,
+        "final_multiple": 0.5565046450809761,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.5194132201153867,
+        "ir_t": -2.294133389586033,
+        "years_beating_benchmark": 0.25
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
+    },
+    {
       "trial_id": "e571d70e8fa54fee",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -8358,6 +9716,41 @@
       "updated_at": "2026-10-25T06:58:50Z"
     },
     {
+      "trial_id": "e99c2cd53a6e1022",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_value",
+      "params": {
+        "alpha": "value"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": -0.021181480322420954,
+        "vol": 0.061227112576579285,
+        "sharpe": -0.5645839543814747,
+        "sharpe_per_period": -0.03556906399868598,
+        "max_drawdown": -0.40488933090583135,
+        "maxdd_peak": "2013-02-19",
+        "maxdd_trough": "2026-10-13",
+        "longest_underwater_days": 3441,
+        "worst_year": 2021,
+        "worst_year_return": -0.09931666081590129,
+        "total_return": -0.34140462754201406,
+        "final_multiple": 0.6585953724579859,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.6002888438074271,
+        "ir_t": -2.651343143843516,
+        "years_beating_benchmark": 0.2
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
+    },
+    {
       "trial_id": "e9bd19cd023b6be8",
       "study": "flagship",
       "family": "cta_long_flat",
@@ -8532,6 +9925,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "ef5d8e13ddccd39e",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "loo_residual",
+      "params": {
+        "name": "loo_residual"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.03779112831547593,
+        "vol": 0.04314044153384264,
+        "sharpe": 0.5330669785934984,
+        "sharpe_per_period": 0.03358347917972721,
+        "max_drawdown": -0.07826294389253097,
+        "maxdd_peak": "2008-05-21",
+        "maxdd_trough": "2008-10-27",
+        "longest_underwater_days": 456,
+        "worst_year": 2018,
+        "worst_year_return": -0.030785434640287046,
+        "total_return": 1.0619206828614765,
+        "final_multiple": 2.0619206828614765,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.4709332828482254,
+        "ir_t": -2.080008221988405,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.47603985291337125
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "ef5fc57d9462e4aa",
@@ -8743,6 +10172,41 @@
       "updated_at": "2026-10-25T06:58:51Z"
     },
     {
+      "trial_id": "f3672d46f43df7c4",
+      "study": "apex",
+      "family": "alpha_standalone",
+      "name": "standalone_macro",
+      "params": {
+        "alpha": "macro"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.0026932144806854907,
+        "vol": 0.08436591369095685,
+        "sharpe": -0.10416752538540715,
+        "sharpe_per_period": -0.006562604814154576,
+        "max_drawdown": -0.3020932916761203,
+        "maxdd_peak": "2011-10-03",
+        "maxdd_trough": "2021-01-04",
+        "longest_underwater_days": 3786,
+        "worst_year": 2019,
+        "worst_year_return": -0.0633378536012753,
+        "total_return": 0.05386929552607067,
+        "final_multiple": 1.0538692955260707,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.49996400024631915,
+        "ir_t": -2.2082304842015383,
+        "years_beating_benchmark": 0.25
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:07Z"
+    },
+    {
       "trial_id": "f44370eaac6945a6",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -8837,6 +10301,42 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-25T06:57:42Z"
+    },
+    {
+      "trial_id": "f48c5e30fb093976",
+      "study": "apex",
+      "family": "apex_book",
+      "name": "er_budget_ls",
+      "params": {
+        "name": "er_budget_ls"
+      },
+      "sample_start": "2007-04-12",
+      "sample_end": "2026-10-23",
+      "metrics": {
+        "n_days": 4916,
+        "years": 19.50793650793651,
+        "cagr": 0.010856885475647893,
+        "vol": 0.040546021656905615,
+        "sharpe": -0.08414360593176295,
+        "sharpe_per_period": -0.005301088139754073,
+        "max_drawdown": -0.1537669583059511,
+        "maxdd_peak": "2016-02-11",
+        "maxdd_trough": "2021-03-08",
+        "longest_underwater_days": 2674,
+        "worst_year": 2010,
+        "worst_year_return": -0.05597636774431358,
+        "total_return": 0.2344851092503688,
+        "final_multiple": 1.2344851092503688,
+        "start": "2007-04-12",
+        "end": "2026-10-23",
+        "ir_vs_benchmark": -0.5091297314676195,
+        "ir_t": -2.248713493143985,
+        "years_beating_benchmark": 0.25,
+        "dsr": 0.0026838039397533153
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-10-25T07:20:07Z",
+      "updated_at": "2026-10-25T07:20:14Z"
     },
     {
       "trial_id": "f4e605ae138ff7a8",
