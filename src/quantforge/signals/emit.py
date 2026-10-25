@@ -57,6 +57,12 @@ def write_signals_note(path, sections: list[tuple[str, str, dict]]) -> Path:
             diag = payload["diagnostics"]
             if "trend_on" in diag:
                 lines.append(f"- Trend on: `{diag['trend_on']}`")
+            if "hedge_on" in diag:
+                lines.append(f"- Credit hedge on: `{diag['hedge_on']}`")
+            if diag.get("hedge_rule"):
+                lines.append(f"- Credit hedge rule: `{diag['hedge_rule']}`")
+            if "dip_on" in diag:
+                lines.append(f"- Dip-buy on: `{diag['dip_on']}`")
             if "reference_close" in diag and diag.get("sma") is not None:
                 lines.append(
                     f"- SPY close {diag['reference_close']:.2f} versus SMA {diag['sma']:.2f}"

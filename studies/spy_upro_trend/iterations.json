@@ -1,0 +1,239 @@
+[
+  {
+    "id": "2026-10-25-credit-spread-sleeve-hedge",
+    "date": "2026-10-25",
+    "title": "Credit-spread sleeve hedge",
+    "hypothesis": "The live book keeps the 3x sleeve on until SPY closes through its 200-day band. That lag is the weakness in the refreshed subperiod table: the trend-core book trails SPY in 2020 and again in 2022. A widening credit spread is a faster stress signal. When the 20-session change in the spread exceeds a precommitted threshold, move only the leveraged sleeve to T-bills. The SPY core, the three-down-close dip, and the quarterly mix are unchanged. The sleeve goes back to UPRO when the trend is on and the 20-session widening is back at or below the threshold.",
+    "status": "tested",
+    "kept": true,
+    "decision": "kept",
+    "decision_note": "The stitched hedge beat the current book on out-of-sample excess Sharpe and on deflated Sharpe. The live book becomes this walk-forward rule. Deflation uses 240 counting trials and a daily-Sharpe dispersion of 0.012127. On the out-of-sample window the selected rule put the sleeve in T-bills on 90 sessions while the trend filter was on.",
+    "data": {
+      "series": "BAA10Y",
+      "start": "1986-01-02",
+      "end": "2026-10-22",
+      "n_obs": 10202,
+      "covers_sample": true,
+      "hy_oas": {
+        "series": "BAMLH0A0HYM2",
+        "used": false,
+        "start": "2023-10-24",
+        "end": "2026-10-22",
+        "n_obs": 786,
+        "covers_sample": false,
+        "reason": "The public CSV runs from 2023-10-24 to 2026-10-22 (786 observations). A walk-forward from 2006 needs observations by 1999-01-01, so this file is not the spread in the test."
+      },
+      "lookback": 20,
+      "thresholds": [
+        0.1,
+        0.2,
+        0.35,
+        0.5
+      ]
+    },
+    "recorded_weakness": [
+      {
+        "label": "2020",
+        "excess": -0.11593320448641076,
+        "cagr": 0.0665960704221733
+      },
+      {
+        "label": "2022",
+        "excess": -0.08504060885486786,
+        "cagr": -0.2674480676803579
+      }
+    ],
+    "refresh": {
+      "before": {
+        "cagr": 0.1289368862412108,
+        "sharpe": 0.5235209099566056,
+        "dsr": 0.9645330923274895,
+        "max_drawdown": -0.4682605322116089,
+        "n_trials": 142,
+        "sharpe_dispersion_daily": 0.0040608635279609255,
+        "sample_end": "2026-10-23"
+      },
+      "after": {
+        "cagr": 0.12893674218462392,
+        "sharpe": 0.5235203463814252,
+        "dsr": 0.4524096301008518,
+        "max_drawdown": -0.4682611688322482,
+        "n_trials": 236,
+        "sharpe_dispersion_daily": 0.012220510151241423,
+        "sample_end": "2026-10-23"
+      },
+      "note": "Before is the trend-core row in the previous results file. After is the same row from the study rerun on prices through the latest close. The path statistics are full-sample. The out-of-sample comparison of the hedge is the table below."
+    },
+    "variants": [
+      {
+        "name": "hedge_off",
+        "counts_for_deflation": false,
+        "cagr": 0.12893674218462392,
+        "sharpe": 0.5235203463814252,
+        "max_drawdown": -0.4682611688322482,
+        "years_selected": 0,
+        "note": "The current book. Already counted as dip_3_down_closes."
+      },
+      {
+        "name": "baa10y_d20_gt_10bp",
+        "counts_for_deflation": true,
+        "threshold": 0.1,
+        "cagr": 0.12476067354123654,
+        "sharpe": 0.5440639975001947,
+        "max_drawdown": -0.39356228176841357,
+        "dsr": 0.5006631651170239,
+        "years_selected": 1
+      },
+      {
+        "name": "baa10y_d20_gt_20bp",
+        "counts_for_deflation": true,
+        "threshold": 0.2,
+        "cagr": 0.12514028929916954,
+        "sharpe": 0.5229528265470782,
+        "max_drawdown": -0.4122086853115312,
+        "dsr": 0.4575556368091819,
+        "years_selected": 13
+      },
+      {
+        "name": "baa10y_d20_gt_35bp",
+        "counts_for_deflation": true,
+        "threshold": 0.35,
+        "cagr": 0.12305405844159134,
+        "sharpe": 0.508543526363833,
+        "max_drawdown": -0.4901242867635248,
+        "dsr": 0.42844949271418553,
+        "years_selected": 0
+      },
+      {
+        "name": "baa10y_d20_gt_50bp",
+        "counts_for_deflation": true,
+        "threshold": 0.5,
+        "cagr": 0.12893682781640314,
+        "sharpe": 0.5235206481443913,
+        "max_drawdown": -0.4682615834960857,
+        "dsr": 0.4587600408661272,
+        "years_selected": 7
+      }
+    ],
+    "walk_forward_picks": [
+      [
+        "2006-01-03",
+        "baa10y_d20_gt_50bp"
+      ],
+      [
+        "2007-01-03",
+        "baa10y_d20_gt_50bp"
+      ],
+      [
+        "2008-01-02",
+        "baa10y_d20_gt_50bp"
+      ],
+      [
+        "2009-01-02",
+        "baa10y_d20_gt_50bp"
+      ],
+      [
+        "2010-01-04",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2011-01-03",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2012-01-03",
+        "baa10y_d20_gt_50bp"
+      ],
+      [
+        "2013-01-02",
+        "baa10y_d20_gt_50bp"
+      ],
+      [
+        "2014-01-02",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2015-01-02",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2016-01-04",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2017-01-03",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2018-01-02",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2019-01-02",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2020-01-02",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2021-01-04",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2022-01-03",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2023-01-03",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2024-01-02",
+        "baa10y_d20_gt_20bp"
+      ],
+      [
+        "2025-01-02",
+        "baa10y_d20_gt_50bp"
+      ],
+      [
+        "2026-01-02",
+        "baa10y_d20_gt_10bp"
+      ]
+    ],
+    "oos_window": {
+      "start": "2006-01-03",
+      "end": "2026-10-23",
+      "n_days": 5235
+    },
+    "oos": {
+      "current": {
+        "cagr": 0.15763883601111583,
+        "vol": 0.2621120180350683,
+        "sharpe": 0.6257448527179886,
+        "dsr": 0.6437084435927258,
+        "psr": 0.9975277979728467,
+        "max_drawdown": -0.4682615834960858,
+        "n_days": 5235,
+        "start": "2006-01-03",
+        "end": "2026-10-23",
+        "ir_t": 1.801273719074698
+      },
+      "candidate": {
+        "cagr": 0.15799810171142004,
+        "vol": 0.25520601543656185,
+        "sharpe": 0.6366833200936323,
+        "dsr": 0.6620473796021813,
+        "psr": 0.9979046508644203,
+        "max_drawdown": -0.4682615834960858,
+        "n_days": 5235,
+        "start": "2006-01-03",
+        "end": "2026-10-23",
+        "ir_t": 1.7722547442285914
+      }
+    },
+    "n_trials": 240,
+    "sharpe_dispersion_daily": 0.012127393628184414,
+    "hedged_trend_on_days": 90
+  }
+]

@@ -46,6 +46,7 @@ from quantforge.eval.sharpe import (  # noqa: E402
 )
 from quantforge.eval.walkforward import walk_forward_select  # noqa: E402
 from quantforge.signals.emit import write_signal, write_signals_note  # noqa: E402
+from quantforge.strategies.credit import kept_hedge_stress  # noqa: E402
 from quantforge.strategies.dipbuy import DIP_RULES, dip_active  # noqa: E402
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal, trend_state  # noqa: E402
 
@@ -707,7 +708,11 @@ def main() -> None:
     ledger.save()
 
     as_of = spy.index[-1]
-    desk_signal = build_trend_signal(desk, spy["close"], as_of=as_of, strategy_id="trend_core")
+    hedge_stress, hedge_rule, hedge_info = kept_hedge_stress(HERE / "iterations.json", spy.index, as_of=as_of)
+    desk_signal = build_trend_signal(
+        desk, spy["close"], as_of=as_of, strategy_id="trend_core",
+        hedge_on=hedge_stress, hedge_rule=hedge_rule, hedge_info=hedge_info,
+    )
     write_signal(desk_signal, HERE / "signals.json")
     write_signals_note(
         HERE / "signals.md",
@@ -760,6 +765,9 @@ def main() -> None:
         "recommendation": recommendation,
         "variants": {name: metrics[name] for name in list(returns) + list(bh) + ["walk_forward", "desk_50_50_stitched"] + list(dip_returns)},
     }
+    iter_path = HERE / "iterations.json"
+    if iter_path.exists():
+        results["iterations"] = json.loads(iter_path.read_text())
     _write_json(HERE / "results.json", results)
     report = _load_report().render_report(results)
     (HERE / "RESULTS.md").write_text(report)

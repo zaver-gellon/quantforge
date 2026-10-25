@@ -17,6 +17,9 @@ mix rebalance is due. A bot that marks to `weights` on every session instead reb
 - Signal close: `2026-10-23`
 - Trade reason: `none`
 - Trend on: `True`
+- Credit hedge on: `False`
+- Credit hedge rule: `baa10y_d20_gt_10bp`
+- Dip-buy on: `False`
 - SPY close 759.97 versus SMA 724.00
 
 

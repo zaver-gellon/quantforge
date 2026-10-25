@@ -230,7 +230,138 @@ def render_report(results: dict) -> str:
     lines += ["", "## Verdict", "", _verdict(results), "", "## Caveats", ""]
     lines.extend(f"- {item}" for item in results["caveats"])
     lines.append("")
+    lines.extend(render_iteration_lines(results.get("iterations") or []))
     return "\n".join(lines)
+
+
+def render_iteration_lines(iterations: list) -> list[str]:
+    """Render the running iteration log. Every figure comes from the entry payload."""
+    if not iterations:
+        return []
+    lines = [
+        "## Iteration log",
+        "",
+        "Each entry is written by the iteration that produced it. "
+        "A candidate is kept only when its out-of-sample excess Sharpe and its deflated Sharpe "
+        "both exceed the current book's on the same sessions, after every variant from that "
+        "iteration has been recorded in the ledger.",
+        "",
+    ]
+    for entry in iterations:
+        lines.extend(_iteration_entry(entry))
+    return lines
+
+
+def _iteration_entry(entry: dict) -> list[str]:
+    lines = [
+        f"### {entry.get('date', 'n/a')} — {entry.get('title', 'iteration')}",
+        "",
+        entry.get("hypothesis", "").strip(),
+        "",
+    ]
+    data = entry.get("data") or {}
+    if data:
+        lines.append(
+            f"- Spread used: `{data.get('series', 'n/a')}` "
+            f"from {data.get('start', 'n/a')} to {data.get('end', 'n/a')} "
+            f"({data.get('n_obs', 'n/a')} observations)."
+        )
+        hy = data.get("hy_oas") or {}
+        if hy:
+            lines.append(
+                f"- High-yield OAS `{hy.get('series', 'n/a')}` covered "
+                f"{hy.get('start', 'n/a')} to {hy.get('end', 'n/a')} "
+                f"({hy.get('n_obs', 'n/a')} observations). Used: {hy.get('used')}."
+            )
+            if hy.get("reason"):
+                lines.append(f"- High-yield OAS note: {hy['reason']}")
+        lines.append("")
+    weakness = entry.get("recorded_weakness") or []
+    if weakness:
+        bits = [f"{row.get('label')} excess {pct(row.get('excess'))}" for row in weakness]
+        lines.append("Recorded trend-core excess versus SPY, from the refreshed study: " + "; ".join(bits) + ".")
+        lines.append("")
+    refresh = entry.get("refresh") or {}
+    if refresh:
+        lines += [
+            "Lead book, full sample, before and after the data refresh. "
+            "These are the pre-specified trend-core statistics, not a walk-forward path.",
+            "",
+            _row(["book", "CAGR", "Sharpe", "deflated Sharpe", "max DD", "trials", "daily-Sharpe dispersion"]),
+            _row(["---"] * 7),
+        ]
+        for label in ("before", "after"):
+            row = refresh.get(label) or {}
+            lines.append(_row([
+                label,
+                pct(row.get("cagr")),
+                num(row.get("sharpe")),
+                num(row.get("dsr")),
+                pct(row.get("max_drawdown")),
+                row.get("n_trials", "n/a"),
+                num(row.get("sharpe_dispersion_daily"), 4),
+            ]))
+        if refresh.get("note"):
+            lines += ["", refresh["note"]]
+        lines.append("")
+    variants = entry.get("variants") or []
+    if variants:
+        lines += [
+            "Variants tried. Counting rows increment the ledger. "
+            "The walk-forward stitch is a selection over those rows and is stored as an audit.",
+            "",
+            _row(["variant", "counts", "full-sample CAGR", "Sharpe", "max DD", "years selected"]),
+            _row(["---"] * 6),
+        ]
+        for row in variants:
+            lines.append(_row([
+                row.get("name"),
+                "yes" if row.get("counts_for_deflation") else "no",
+                pct(row.get("cagr")),
+                num(row.get("sharpe")),
+                pct(row.get("max_drawdown")),
+                row.get("years_selected", 0),
+            ]))
+        lines.append("")
+    picks = entry.get("walk_forward_picks") or []
+    if picks:
+        lines += [
+            "Walk-forward picks, using only returns strictly before each decision date.",
+            "",
+            _row(["year", "variant"]),
+            _row(["---", "---"]),
+        ]
+        for date, name in picks:
+            lines.append(_row([date, name]))
+        lines.append("")
+    window = entry.get("oos_window") or {}
+    if window:
+        lines.append(
+            f"Out-of-sample window: {window.get('start', 'n/a')} to {window.get('end', 'n/a')} "
+            f"({window.get('n_days', 'n/a')} sessions)."
+        )
+        lines.append("")
+        lines += [
+            _row(["book", "CAGR", "Sharpe", "deflated Sharpe", "max DD"]),
+            _row(["---"] * 5),
+        ]
+        for label in ("current", "candidate"):
+            row = (entry.get("oos") or {}).get(label) or {}
+            lines.append(_row([
+                label,
+                pct(row.get("cagr"), 2),
+                num(row.get("sharpe"), 3),
+                num(row.get("dsr"), 3),
+                pct(row.get("max_drawdown"), 2),
+            ]))
+        lines.append("")
+    decision = entry.get("decision") or ("kept" if entry.get("kept") else "rejected")
+    lines.append(f"Decision: {decision}.")
+    if entry.get("decision_note"):
+        lines.append("")
+        lines.append(entry["decision_note"])
+    lines.append("")
+    return lines
 
 
 def _verdict(results: dict) -> str:

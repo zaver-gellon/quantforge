@@ -147,6 +147,9 @@ def build_trend_signal(
     apply_dip: bool = True,
     dip_rule: str = "3_down_closes",
     dip_hold: int = 5,
+    hedge_on: pd.Series | None = None,
+    hedge_rule: str | None = None,
+    hedge_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -155,6 +158,7 @@ def build_trend_signal(
     between). The UPRO half is replaced by BIL when the trend is off. After
     three strictly down SPY closes, only the SPY half switches to SSO, for at
     most five sessions or until the first up close. The UPRO half is not resized.
+    ``hedge_on`` true at the signal close moves that sleeve to BIL instead.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -177,25 +181,44 @@ def build_trend_signal(
     dip_on = bool(dips.iloc[-1]) if len(dips) else False
     previous = bool(history.iloc[-2]) if len(history) > 1 else None
     previous_dip = bool(dips.iloc[-2]) if len(dips) > 1 else False
+    hedge_now = False
+    hedge_prev = False
+    if hedge_on is not None:
+        hedge = hedge_on.reindex(visible.index).fillna(False).astype(bool)
+        if len(hedge):
+            hedge_now = bool(hedge.iloc[-1])
+        if len(hedge) > 1:
+            hedge_prev = bool(hedge.iloc[-2])
+    sleeve_on = on and not hedge_now
     schedule = rebalance_mask(state.index, spec.rebalance)
     scheduled = bool(schedule.loc[as_of_ts])
     changed = previous is None or on != previous
     dip_changed = dip_on != previous_dip
+    hedge_changed = hedge_now != hedge_prev
     if spec.rebalance == "daily":
         trade = True
         reason = "trend_change" if changed else "daily_target"
     elif changed and dip_changed:
         trade = True
         reason = "trend_and_dip"
+    elif changed and hedge_changed:
+        trade = True
+        reason = "trend_and_credit_hedge"
     elif changed and scheduled:
         trade = True
         reason = "trend_change_and_schedule"
     elif changed:
         trade = True
         reason = "trend_change"
+    elif dip_changed and hedge_changed:
+        trade = True
+        reason = "dip_and_credit_hedge"
     elif dip_changed:
         trade = True
         reason = "dip_overlay"
+    elif hedge_changed:
+        trade = True
+        reason = "credit_hedge"
     elif scheduled:
         trade = True
         reason = "scheduled_rebalance"
@@ -205,7 +228,7 @@ def build_trend_signal(
     average = close.rolling(spec.window, min_periods=spec.window).mean().loc[as_of_ts]
     payload = {
         "date": next_nyse_session(as_of_ts).strftime("%Y-%m-%d"),
-        "weights": strategic_weights(spec, on, dip_on),
+        "weights": strategic_weights(spec, sleeve_on, dip_on),
         "strategy": strategy_id,
         "strategy_name": spec.name(),
         "generated_at": generated_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -215,6 +238,9 @@ def build_trend_signal(
         "rebalance_mix": scheduled,
         "diagnostics": {
             "trend_on": on,
+            "hedge_on": hedge_now,
+            "hedge_rule": hedge_rule,
+            "sleeve_on": sleeve_on,
             "dip_on": dip_on,
             "dip_rule": dip_rule if apply_dip else None,
             "reference_close": float(close.loc[as_of_ts]),
@@ -229,5 +255,7 @@ def build_trend_signal(
             "leverage": spec.leverage,
         },
     }
+    if hedge_info:
+        payload["diagnostics"].update(hedge_info)
     validate_signal(payload, allowed_tickers=ALLOWED_TREND_TICKERS)
     return payload
