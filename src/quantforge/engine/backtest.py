@@ -379,6 +379,174 @@ def run_trend_core(
     )
 
 
+def run_vol_sleeve(
+    spy_open: pd.Series,
+    spy_close: pd.Series,
+    sso_open: pd.Series,
+    sso_close: pd.Series,
+    upro_open: pd.Series,
+    upro_close: pd.Series,
+    trend_on: pd.Series,
+    dip_on: pd.Series,
+    mix_rebalance: pd.Series,
+    sleeve_scale: pd.Series,
+    core_weight: float,
+    sleeve_weight: float,
+    cash_yield: pd.Series,
+    spy_cost: float = 0.0,
+    sso_cost: float = 0.0,
+    upro_cost: float = 0.0,
+    execution: str = "next_open",
+) -> BacktestResult:
+    """Trend-core book with a time-varying invested fraction of the UPRO sleeve.
+
+    ``sleeve_scale[t]`` is the fraction of the sleeve budget held in UPRO on the
+    next session while the trend is on. The rest of that budget earns the cash
+    yield. A trend-off session holds none of the sleeve in UPRO. The core and
+    the dip overlay are unchanged. A scale of 1 on every session is the
+    unscaled trend-core book. The fraction is applied every session it changes;
+    there is no extra deadband.
+    """
+    if execution not in ("next_open", "next_close"):
+        raise ValueError(f"unknown execution {execution!r}")
+    if core_weight < 0 or sleeve_weight < 0 or core_weight + sleeve_weight > 1 + 1e-8:
+        raise ValueError("core and sleeve weights must be non-negative and sum to at most 1")
+    idx = spy_close.index
+    prices = {
+        "spy_o": spy_open.reindex(idx).to_numpy(dtype=float),
+        "spy_c": spy_close.reindex(idx).to_numpy(dtype=float),
+        "sso_o": sso_open.reindex(idx).to_numpy(dtype=float),
+        "sso_c": sso_close.reindex(idx).to_numpy(dtype=float),
+        "upro_o": upro_open.reindex(idx).to_numpy(dtype=float),
+        "upro_c": upro_close.reindex(idx).to_numpy(dtype=float),
+    }
+    stacked = np.column_stack(list(prices.values()))
+    if np.any(~np.isfinite(stacked)) or np.any(stacked <= 0):
+        raise ValueError("SPY, SSO, and UPRO prices must be finite and positive")
+    scale = sleeve_scale.reindex(idx).astype(float).to_numpy(dtype=float)
+    if np.any(~np.isfinite(scale)) or np.any(scale < -1e-12) or np.any(scale > 1 + 1e-12):
+        raise ValueError("sleeve_scale must be finite and in [0, 1] on every session")
+    scale = np.clip(scale, 0.0, 1.0)
+    trend = trend_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    dip = dip_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    mix = mix_rebalance.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    rf = cash_yield.reindex(idx).astype(float).fillna(0.0).to_numpy(dtype=float)
+    n = len(idx)
+    core = 0.0
+    upro = 0.0
+    sleeve_cash = 0.0
+    resid = 1.0
+    core_sso = False
+    held_frac = 0.0
+    rets = np.full(n, np.nan)
+    turn = np.zeros(n)
+    drag = np.zeros(n)
+    exposure = np.full(n, np.nan)
+    for i in range(1, n):
+        prev = core + upro + sleeve_cash + resid
+        if execution == "next_open":
+            core = _mark(core, prices["sso_o"][i], prices["sso_c"][i - 1], prices["spy_o"][i], prices["spy_c"][i - 1], core_sso)
+            if upro != 0.0:
+                upro *= prices["upro_o"][i] / prices["upro_c"][i - 1]
+            sleeve_cash *= 1.0 + rf[i]
+            resid *= 1.0 + rf[i]
+            core, upro, sleeve_cash, resid, core_sso, held_frac, turn[i], drag[i] = _allocate_scaled(
+                core + upro + sleeve_cash + resid, core, upro, sleeve_cash, resid,
+                core_sso, held_frac, bool(dip[i - 1]), bool(trend[i - 1]),
+                float(scale[i - 1]), bool(i == 1 or mix[i - 1]),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+            )
+            core = _mark(core, prices["sso_c"][i], prices["sso_o"][i], prices["spy_c"][i], prices["spy_o"][i], core_sso)
+            if upro != 0.0:
+                upro *= prices["upro_c"][i] / prices["upro_o"][i]
+        else:
+            core = _mark(core, prices["sso_c"][i], prices["sso_c"][i - 1], prices["spy_c"][i], prices["spy_c"][i - 1], core_sso)
+            if upro != 0.0:
+                upro *= prices["upro_c"][i] / prices["upro_c"][i - 1]
+            sleeve_cash *= 1.0 + rf[i]
+            resid *= 1.0 + rf[i]
+            core, upro, sleeve_cash, resid, core_sso, held_frac, turn[i], drag[i] = _allocate_scaled(
+                core + upro + sleeve_cash + resid, core, upro, sleeve_cash, resid,
+                core_sso, held_frac, bool(dip[i - 1]), bool(trend[i - 1]),
+                float(scale[i - 1]), bool(i == 1 or mix[i - 1]),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+            )
+        new = core + upro + sleeve_cash + resid
+        rets[i] = new / prev - 1.0
+        exposure[i] = (core + upro) / new if new else 0.0
+    return BacktestResult(
+        returns=pd.Series(rets, index=idx, name="return"),
+        turnover=pd.Series(turn, index=idx, name="turnover"),
+        cost_drag=pd.Series(drag, index=idx, name="cost_drag"),
+        exposure=pd.Series(exposure, index=idx, name="exposure"),
+    )
+
+
+def _allocate_scaled(
+    equity: float,
+    core: float,
+    upro: float,
+    sleeve_cash: float,
+    resid: float,
+    core_sso: bool,
+    held_frac: float,
+    want_dip: bool,
+    want_trend: bool,
+    scale: float,
+    do_mix: bool,
+    core_weight: float,
+    sleeve_weight: float,
+    spy_cost: float,
+    sso_cost: float,
+    upro_cost: float,
+):
+    if equity <= 0:
+        raise ValueError("equity is non-positive")
+    desired = float(scale) if want_trend else 0.0
+    desired = min(1.0, max(0.0, desired))
+    frac_same = abs(desired - held_frac) <= 1e-12
+    if not do_mix and want_dip == core_sso and frac_same:
+        return core, upro, sleeve_cash, resid, core_sso, held_frac, 0.0, 0.0
+    if do_mix:
+        tgt_core = core_weight * equity
+        budget = sleeve_weight * equity
+    else:
+        tgt_core = core
+        budget = upro + sleeve_cash
+    tgt_upro = budget * desired
+    tgt_sleeve_cash = budget * (1.0 - desired)
+    tgt_resid = equity - tgt_core - budget
+    cost = 0.0
+    traded = 0.0
+    if want_dip != core_sso:
+        old = sso_cost if core_sso else spy_cost
+        new = sso_cost if want_dip else spy_cost
+        cost += core * old + tgt_core * new
+        traded += core + tgt_core
+    else:
+        inst = sso_cost if want_dip else spy_cost
+        delta = abs(tgt_core - core)
+        cost += delta * inst
+        traded += delta
+    upro_delta = abs(tgt_upro - upro)
+    cost += upro_delta * upro_cost
+    traded += upro_delta
+    if cost >= equity:
+        raise ValueError("transaction costs consume the whole book")
+    shrink = (equity - cost) / equity
+    turnover = traded / 2.0 / equity
+    return (
+        tgt_core * shrink,
+        tgt_upro * shrink,
+        tgt_sleeve_cash * shrink,
+        tgt_resid * shrink,
+        bool(want_dip),
+        desired,
+        turnover,
+        cost / equity,
+    )
+
+
 def _mark(value: float, num_sso: float, den_sso: float, num_spy: float, den_spy: float, in_sso: bool) -> float:
     if value == 0.0:
         return 0.0

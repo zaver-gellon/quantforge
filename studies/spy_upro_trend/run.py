@@ -47,6 +47,7 @@ from quantforge.eval.sharpe import (  # noqa: E402
 from quantforge.eval.walkforward import walk_forward_select  # noqa: E402
 from quantforge.signals.emit import write_signal, write_signals_note  # noqa: E402
 from quantforge.strategies.credit import kept_hedge_stress  # noqa: E402
+from quantforge.strategies.volscale import kept_sleeve_scale  # noqa: E402
 from quantforge.strategies.dipbuy import DIP_RULES, dip_active  # noqa: E402
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal, trend_state  # noqa: E402
 
@@ -709,9 +710,11 @@ def main() -> None:
 
     as_of = spy.index[-1]
     hedge_stress, hedge_rule, hedge_info = kept_hedge_stress(HERE / "iterations.json", spy.index, as_of=as_of)
+    sleeve_scale, vol_info = kept_sleeve_scale(HERE / "iterations.json", spy["close"], as_of=as_of)
     desk_signal = build_trend_signal(
         desk, spy["close"], as_of=as_of, strategy_id="trend_core",
         hedge_on=hedge_stress, hedge_rule=hedge_rule, hedge_info=hedge_info,
+        sleeve_scale=sleeve_scale, vol_info=vol_info,
     )
     write_signal(desk_signal, HERE / "signals.json")
     write_signals_note(

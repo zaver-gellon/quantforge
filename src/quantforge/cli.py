@@ -15,6 +15,7 @@ from quantforge.signals.emit import write_signal
 from quantforge.strategies.dipbuy import build_dip_signal
 from quantforge.strategies.credit import kept_hedge_stress
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal
+from quantforge.strategies.volscale import kept_sleeve_scale
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -88,9 +89,11 @@ def _signals(args) -> int:
     study = Path(args.study_dir)
     if args.strategy == "trend-core":
         stress, rule, info = kept_hedge_stress(study / "iterations.json", close.index)
+        scale, vol_info = kept_sleeve_scale(study / "iterations.json", close, as_of=close.index[-1])
         payload = build_trend_signal(
             TrendCoreSpec(), close, strategy_id="trend_core",
             hedge_on=stress, hedge_rule=rule, hedge_info=info,
+            sleeve_scale=scale, vol_info=vol_info,
         )
         dest = Path(args.out) if args.out else study / "signals.json"
     else:

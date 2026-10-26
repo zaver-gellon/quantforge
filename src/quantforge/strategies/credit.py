@@ -97,7 +97,16 @@ def _kept_entry(iterations_path: Path) -> dict | None:
     if not path.exists():
         return None
     entries = json.loads(path.read_text())
-    kept = [row for row in entries if row.get("kept") and row.get("status") == "tested"]
+    kept = []
+    for row in entries:
+        if not (row.get("kept") and row.get("status") == "tested"):
+            continue
+        # A vol-sleeve keep, or a re-check that only records a decision, is not a spread gate.
+        if row.get("overlay") not in (None, "credit_hedge"):
+            continue
+        if not (row.get("data") or {}).get("series"):
+            continue
+        kept.append(row)
     if not kept:
         return None
     return kept[-1]
