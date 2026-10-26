@@ -242,9 +242,14 @@ def render_iteration_lines(iterations: list) -> list[str]:
         "## Iteration log",
         "",
         "Each entry is written by the iteration that produced it. "
-        "A candidate is kept only when its out-of-sample excess Sharpe and its deflated Sharpe "
-        "both exceed the current book's on the same sessions, after every variant from that "
-        "iteration has been recorded in the ledger.",
+        "From the 2026-10-26 re-check onward, a candidate is kept only when it clears the "
+        "materiality bar on the out-of-sample walk-forward window: excess Sharpe up by at least "
+        "0.05, or max drawdown better by at least 3 percentage points with CAGR no more than "
+        "0.5 points worse; the deflated Sharpe of the improvement is at least 0.75 after every "
+        "counting ledger trial; the same Sharpe or drawdown clause still holds with the single "
+        "best improvement year removed; and neighboring parameter settings are within 0.05 Sharpe "
+        "and 3 percentage points of drawdown. The 2026-10-25 credit-spread entry used a weaker "
+        "rule (any gain in excess Sharpe and in deflated Sharpe) and was then rejected under this bar.",
         "",
     ]
     for entry in iterations:
@@ -260,7 +265,7 @@ def _iteration_entry(entry: dict) -> list[str]:
         "",
     ]
     data = entry.get("data") or {}
-    if data:
+    if data.get("series"):
         lines.append(
             f"- Spread used: `{data.get('series', 'n/a')}` "
             f"from {data.get('start', 'n/a')} to {data.get('end', 'n/a')} "
@@ -352,6 +357,39 @@ def _iteration_entry(entry: dict) -> list[str]:
                 pct(row.get("cagr"), 2),
                 num(row.get("sharpe"), 3),
                 num(row.get("dsr"), 3),
+                pct(row.get("max_drawdown"), 2),
+            ]))
+        lines.append("")
+    materiality = entry.get("materiality") or {}
+    checks = materiality.get("checks") or []
+    if checks:
+        lines += [
+            "Materiality bar. Each line is produced by the scorer from the paths it just ran.",
+            "",
+            _row(["check", "pass", "detail"]),
+            _row(["---", "---", "---"]),
+        ]
+        for check in checks:
+            lines.append(_row([
+                check.get("name"),
+                "yes" if check.get("pass") else "no",
+                check.get("detail", ""),
+            ]))
+        lines.append("")
+    neighbors = ((materiality.get("criterion_c") or {}).get("neighbors")) or []
+    if neighbors:
+        lines += [
+            "Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample window.",
+            "",
+            _row(["neighbor", "similar", "CAGR", "Sharpe", "max DD"]),
+            _row(["---"] * 5),
+        ]
+        for row in neighbors:
+            lines.append(_row([
+                row.get("name"),
+                "yes" if row.get("similar") else "no",
+                pct(row.get("cagr"), 2),
+                num(row.get("sharpe"), 3),
                 pct(row.get("max_drawdown"), 2),
             ]))
         lines.append("")

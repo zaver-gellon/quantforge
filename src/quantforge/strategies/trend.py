@@ -115,19 +115,28 @@ def trend_state(close: pd.Series, window: int, band: float = 0.0, freq: str = "d
     return pd.Series(out, index=series.index, name="trend_on")
 
 
-def strategic_weights(spec: TrendCoreSpec, trend_on: bool, dip_on: bool = False) -> dict[str, float]:
-    """Strategic weights. A dip swaps the core from SPY to SSO and leaves the sleeve alone."""
+def strategic_weights(
+    spec: TrendCoreSpec,
+    trend_on: bool,
+    dip_on: bool = False,
+    sleeve_fraction: float = 1.0,
+) -> dict[str, float]:
+    """Strategic weights. A dip swaps the core from SPY to SSO and leaves the sleeve budget alone.
+
+    ``sleeve_fraction`` is the share of the sleeve budget kept in the leveraged
+    fund while the trend is on. The rest of that budget is cash. The fraction
+    is ignored when the trend is off.
+    """
     raw: dict[str, float] = {}
 
     def add(symbol: str, weight: float) -> None:
         if weight > 0:
             raw[symbol] = raw.get(symbol, 0.0) + float(weight)
 
+    fraction = min(1.0, max(0.0, float(sleeve_fraction))) if trend_on else 0.0
     add("SSO" if dip_on else spec.core_symbol, spec.core_weight)
-    if trend_on:
-        add(spec.sleeve_symbol, spec.sleeve_weight)
-    else:
-        add(spec.cash_symbol, spec.sleeve_weight)
+    add(spec.sleeve_symbol, spec.sleeve_weight * fraction)
+    add(spec.cash_symbol, spec.sleeve_weight * (1.0 - fraction))
     rounded = {symbol: round(weight, 6) for symbol, weight in raw.items() if round(weight, 6) > 0}
     total = sum(rounded.values())
     if total > 1.0:
@@ -150,6 +159,8 @@ def build_trend_signal(
     hedge_on: pd.Series | None = None,
     hedge_rule: str | None = None,
     hedge_info: dict | None = None,
+    sleeve_scale: pd.Series | None = None,
+    vol_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -159,6 +170,8 @@ def build_trend_signal(
     three strictly down SPY closes, only the SPY half switches to SSO, for at
     most five sessions or until the first up close. The UPRO half is not resized.
     ``hedge_on`` true at the signal close moves that sleeve to BIL instead.
+    ``sleeve_scale`` at the signal close is the fraction of the sleeve left in
+    the leveraged fund when the sleeve is on. A missing scale leaves it at 1.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -190,6 +203,16 @@ def build_trend_signal(
         if len(hedge) > 1:
             hedge_prev = bool(hedge.iloc[-2])
     sleeve_on = on and not hedge_now
+    fraction = 1.0 if sleeve_on else 0.0
+    scale_changed = False
+    if sleeve_scale is not None:
+        prev_fraction = 1.0 if (bool(previous) and not hedge_prev) else 0.0
+        aligned_scale = sleeve_scale.reindex(visible.index).astype(float)
+        if sleeve_on and len(aligned_scale) and np.isfinite(aligned_scale.iloc[-1]):
+            fraction = min(1.0, max(0.0, float(aligned_scale.iloc[-1])))
+        if len(aligned_scale) > 1 and bool(previous) and not hedge_prev and np.isfinite(aligned_scale.iloc[-2]):
+            prev_fraction = min(1.0, max(0.0, float(aligned_scale.iloc[-2])))
+        scale_changed = abs(fraction - prev_fraction) > 1e-8
     schedule = rebalance_mask(state.index, spec.rebalance)
     scheduled = bool(schedule.loc[as_of_ts])
     changed = previous is None or on != previous
@@ -204,6 +227,9 @@ def build_trend_signal(
     elif changed and hedge_changed:
         trade = True
         reason = "trend_and_credit_hedge"
+    elif changed and scale_changed:
+        trade = True
+        reason = "trend_and_vol_scale"
     elif changed and scheduled:
         trade = True
         reason = "trend_change_and_schedule"
@@ -213,12 +239,21 @@ def build_trend_signal(
     elif dip_changed and hedge_changed:
         trade = True
         reason = "dip_and_credit_hedge"
+    elif dip_changed and scale_changed:
+        trade = True
+        reason = "dip_and_vol_scale"
     elif dip_changed:
         trade = True
         reason = "dip_overlay"
+    elif hedge_changed and scale_changed:
+        trade = True
+        reason = "credit_hedge_and_vol_scale"
     elif hedge_changed:
         trade = True
         reason = "credit_hedge"
+    elif scale_changed:
+        trade = True
+        reason = "vol_scale"
     elif scheduled:
         trade = True
         reason = "scheduled_rebalance"
@@ -228,7 +263,7 @@ def build_trend_signal(
     average = close.rolling(spec.window, min_periods=spec.window).mean().loc[as_of_ts]
     payload = {
         "date": next_nyse_session(as_of_ts).strftime("%Y-%m-%d"),
-        "weights": strategic_weights(spec, sleeve_on, dip_on),
+        "weights": strategic_weights(spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0),
         "strategy": strategy_id,
         "strategy_name": spec.name(),
         "generated_at": generated_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -257,5 +292,8 @@ def build_trend_signal(
     }
     if hedge_info:
         payload["diagnostics"].update(hedge_info)
+    if vol_info:
+        payload["diagnostics"].update(vol_info)
+        payload["diagnostics"]["sleeve_scale"] = fraction
     validate_signal(payload, allowed_tickers=ALLOWED_TREND_TICKERS)
     return payload

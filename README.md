@@ -2,7 +2,7 @@
 
 Walk-forward backtests for systematic strategies. Decisions are fixed at the close and filled at the next open. Parameters that were chosen after seeing a result stay in a ledger, and later significance tests use that count.
 
-The trend-core book is half SPY and half UPRO while SPY is 2% above its 200-day average (enter above 1.02 times the average, exit below 0.98 times, hold the previous state in between). After three strictly down SPY closes, only the SPY half switches to SSO. The UPRO half is not resized by the dip. The kept credit-spread rule can move that UPRO half to BIL; the iteration log in [`studies/spy_upro_trend`](studies/spy_upro_trend) records the threshold the walk-forward rule is holding. The live signal reads the saved FRED file `studies/spy_upro_trend/BAA10Y.csv` and does not call FRED when that file is present.
+The trend-core book is half SPY and half UPRO while SPY is 2% above its 200-day average (enter above 1.02 times the average, exit below 0.98 times, hold the previous state in between). After three strictly down SPY closes, only the SPY half switches to SSO. The UPRO half is not resized by the dip. A Baa credit-spread hedge was walk-forward tested and then rejected under the materiality bar; the study code and the saved FRED file remain, and the live signal does not use the hedge. The iteration log in [`studies/spy_upro_trend`](studies/spy_upro_trend) records that decision and each later candidate.
 
 [`studies/flagship`](studies/flagship) is the return-max track: out-of-sample CAGR under 30%, 45%, and 60% drawdown budgets. A full-sample ranking in that write-up is not a recommendation.
 

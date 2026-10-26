@@ -1,6 +1,12 @@
 """Vectorized long-only backtest, costs, and daily-reset leverage."""
 
-from quantforge.engine.backtest import BacktestResult, run_backtest, run_core_satellite, run_trend_core
+from quantforge.engine.backtest import (
+    BacktestResult,
+    run_backtest,
+    run_core_satellite,
+    run_trend_core,
+    run_vol_sleeve,
+)
 from quantforge.engine.costs import CostModel, crypto_costs, equity_costs
 from quantforge.engine.leverage import (
     FINANCING_SPREAD,
@@ -24,6 +30,7 @@ __all__ = [
     "run_backtest",
     "run_core_satellite",
     "run_trend_core",
+    "run_vol_sleeve",
     "stitch_ohlc",
     "synthesize_leveraged",
     "tracking_stats",

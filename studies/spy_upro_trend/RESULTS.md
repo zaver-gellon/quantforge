@@ -19,10 +19,10 @@ Precommitted before this sample was scored:
 
 ## Sample
 
-- Sessions: 2000-01-03 to 2026-10-23 (6743 days, 26.8 years at 252 sessions/year).
+- Sessions: 2000-01-03 to 2026-10-26 (6744 days, 26.8 years at 252 sessions/year).
 - One-way cost on SPY, SSO, and UPRO: 5.0 bps. Cash is not charged.
 - Financing spread: 0.4% annual over the lagged 13-week T-bill. T-bill unit: percent.
-- Trials counted toward deflation: 240. Expected maximum |t| under an independent null: 2.82. Cross-trial dispersion of daily Sharpe: 0.0121.
+- Trials counted toward deflation: 252. Expected maximum |t| under an independent null: 2.84. Cross-trial dispersion of daily Sharpe: 0.0119.
 
 ## Leveraged ETF validation
 
@@ -30,10 +30,10 @@ The synthetic fund is not used where a listed total-return series exists in the 
 
 | ETF | overlap | years | actual CAGR | synth CAGR | corr | TE | trend synth | trend stitched |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| SSO | 2006-06-22 (5117d) | 20.3 | 15.6% | 15.9% | 0.9956 | 3.6% | 15.2% | 15.0% |
-| UPRO | 2009-06-26 (4359d) | 17.3 | 32.4% | 32.9% | 0.9983 | 3.0% | 24.9% | 24.5% |
-| QLD | 2006-06-22 (5117d) | 20.3 | 24.6% | 24.9% | 0.9960 | 3.9% | 19.1% | 19.2% |
-| TQQQ | 2010-02-12 (4200d) | 16.7 | 41.4% | 42.0% | 0.9990 | 2.9% | 27.4% | 27.9% |
+| SSO | 2006-06-22 (5118d) | 20.3 | 15.6% | 16.0% | 0.9956 | 3.6% | 15.3% | 15.1% |
+| UPRO | 2009-06-26 (4360d) | 17.3 | 32.5% | 33.1% | 0.9983 | 3.0% | 25.0% | 24.7% |
+| QLD | 2006-06-22 (5118d) | 20.3 | 24.8% | 25.1% | 0.9960 | 3.9% | 19.3% | 19.3% |
+| TQQQ | 2010-02-12 (4201d) | 16.7 | 41.7% | 42.2% | 0.9990 | 2.9% | 27.6% | 28.1% |
 
 `trend synth` / `trend stitched` are a 100% sleeve, SMA 200, 2% band, daily evaluation, measured on the overlap only. Stitched means listed returns after the fund exists.
 
@@ -41,19 +41,19 @@ The synthetic fund is not used where a listed total-return series exists in the 
 
 | strategy | CAGR | vol | Sharpe | max DD | worst year | turnover/yr | IR t vs SPY | PSR | DSR |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| BH_SPY | 8.2% | 19.2% | 0.41 | -55.2% | 2008 -36.8% | 0.0 | 0.00 | 0.98 | 0.24 |
-| BH_SPY_walk_window | 11.1% | 19.2% | 0.56 | -55.2% | 2008 -36.8% | n/a | n/a | 0.99 | 0.52 |
-| BH_SSO_synth | 9.3% | 38.5% | 0.37 | -88.2% | 2008 -67.2% | 0.0 | 1.76 | 0.97 | 0.19 |
-| BH_UPRO_synth | 7.2% | 57.7% | 0.38 | -98.1% | 2008 -85.6% | 0.0 | 1.87 | 0.97 | 0.19 |
-| pure_UPRO_sma200_band2 | 15.8% | 35.4% | 0.54 | -54.8% | 2022 -38.6% | 1.5 | 2.08 | 1.00 | 0.49 |
-| pure_SSO_sma200_band2 | 12.4% | 23.6% | 0.53 | -40.1% | 2022 -26.7% | 1.5 | 1.29 | 1.00 | 0.48 |
-| unlev_sma200_band2 | 8.3% | 11.8% | 0.57 | -22.0% | 2022 -13.1% | 1.5 | -0.37 | 1.00 | 0.56 |
-| desk_50_50 | 12.8% | 24.7% | 0.54 | -46.1% | 2022 -28.5% | 0.8 | 1.99 | 1.00 | 0.48 |
-| desk_50_50_stitched | 12.7% | 24.6% | 0.53 | -46.1% | 2022 -28.5% | 0.8 | 1.96 | 1.00 | 0.48 |
-| trend_core | 12.9% | 26.0% | 0.52 | -46.8% | 2022 -26.7% | 13.6 | 2.07 | 1.00 | 0.46 |
-| trend_core_stitched | 12.7% | 25.8% | 0.52 | -46.7% | 2022 -26.7% | 13.6 | 2.01 | 1.00 | 0.45 |
-| walk_forward | 9.1% | 12.5% | 0.63 | -24.4% | 2022 -20.7% | 1.4 | -0.89 | 1.00 | 0.65 |
-| dip_3_down_closes | 12.9% | 26.0% | 0.52 | -46.8% | 2022 -26.7% | 13.6 | 2.07 | 1.00 | 0.46 |
+| BH_SPY | 8.2% | 19.2% | 0.41 | -55.2% | 2008 -36.8% | 0.0 | 0.00 | 0.98 | 0.26 |
+| BH_SPY_walk_window | 11.1% | 19.2% | 0.56 | -55.2% | 2008 -36.8% | n/a | n/a | 0.99 | 0.54 |
+| BH_SSO_synth | 9.3% | 38.5% | 0.37 | -88.2% | 2008 -67.2% | 0.0 | 1.76 | 0.97 | 0.20 |
+| BH_UPRO_synth | 7.2% | 57.7% | 0.38 | -98.1% | 2008 -85.6% | 0.0 | 1.88 | 0.97 | 0.21 |
+| pure_UPRO_sma200_band2 | 15.9% | 35.4% | 0.54 | -54.8% | 2022 -38.6% | 1.5 | 2.09 | 1.00 | 0.52 |
+| pure_SSO_sma200_band2 | 12.5% | 23.6% | 0.54 | -40.1% | 2022 -26.7% | 1.5 | 1.29 | 1.00 | 0.50 |
+| unlev_sma200_band2 | 8.3% | 11.8% | 0.57 | -22.0% | 2022 -13.1% | 1.5 | -0.37 | 1.00 | 0.58 |
+| desk_50_50 | 12.9% | 24.7% | 0.54 | -46.1% | 2022 -28.5% | 0.8 | 2.00 | 1.00 | 0.51 |
+| desk_50_50_stitched | 12.8% | 24.6% | 0.53 | -46.1% | 2022 -28.5% | 0.8 | 1.97 | 1.00 | 0.50 |
+| trend_core | 12.9% | 26.0% | 0.53 | -46.8% | 2022 -26.7% | 13.6 | 2.08 | 1.00 | 0.48 |
+| trend_core_stitched | 12.8% | 25.8% | 0.52 | -46.7% | 2022 -26.7% | 13.6 | 2.02 | 1.00 | 0.47 |
+| walk_forward | 9.2% | 12.5% | 0.63 | -24.4% | 2022 -20.7% | 1.4 | -0.89 | 1.00 | 0.67 |
+| dip_3_down_closes | 12.9% | 26.0% | 0.53 | -46.8% | 2022 -26.7% | 13.6 | 2.08 | 1.00 | 0.48 |
 
 Sharpe is excess over the lagged T-bill. IR t is the t-stat of daily active return versus SPY. PSR is the probability the Sharpe exceeds 0. DSR is that probability versus the ledger's multiple-testing benchmark. The walk-forward row is the stitched path of variants chosen on past data only.
 
@@ -97,19 +97,19 @@ CAGR minus SPY CAGR, in percentage points per year.
 | --- | --- | --- | --- | --- | --- | --- |
 | BH_SPY | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
 | desk_50_50 | 3.8 | 5.5 | -10.3 | 1.6 | 19.0 | -5.4 |
-| desk_50_50_stitched | 3.8 | 5.2 | -10.3 | 1.6 | 19.2 | -5.5 |
-| trend_core | 4.5 | 4.8 | -8.5 | 3.9 | 19.5 | -11.6 |
-| trend_core_stitched | 4.5 | 4.5 | -8.5 | 3.9 | 19.4 | -11.9 |
+| desk_50_50_stitched | 3.8 | 5.3 | -10.3 | 1.6 | 19.2 | -5.5 |
+| trend_core | 4.5 | 4.9 | -8.5 | 3.9 | 19.5 | -11.6 |
+| trend_core_stitched | 4.5 | 4.6 | -8.5 | 3.9 | 19.4 | -11.9 |
 | walk_forward | 4.6 | -5.5 | -2.5 | n/a | 21.4 | -2.8 |
-| pure_UPRO_sma200_band2 | 6.0 | 9.3 | -20.4 | 2.2 | 38.7 | -15.4 |
-| dip_3_down_closes | 4.5 | 4.8 | -8.5 | 3.9 | 19.5 | -11.6 |
+| pure_UPRO_sma200_band2 | 6.0 | 9.4 | -20.4 | 2.2 | 38.7 | -15.4 |
+| dip_3_down_closes | 4.5 | 4.9 | -8.5 | 3.9 | 19.5 | -11.6 |
 
 SPY CAGR in each window:
 
 | window | SPY CAGR |
 | --- | --- |
 | 2000-2012 | 1.6% |
-| 2013-2026 | 14.8% |
+| 2013-2026 | 14.9% |
 | 2022 | -18.2% |
 | 2000-2002 | -14.6% |
 | 2008-2009 | -10.6% |
@@ -123,12 +123,12 @@ Sorted by full-sample excess Sharpe. This ranking sees the whole sample, so it i
 | --- | --- | --- | --- | --- | --- |
 | core0_slv100_L1_sma200_band2_daily_monthly | 8.3% | 0.57 | -22.0% | -0.37 | -3.9% |
 | core0_slv100_L1_sma200_band2_daily_quarterly | 8.3% | 0.57 | -22.0% | -0.37 | -3.9% |
-| core0_slv100_L1_sma200_band0_monthly_monthly | 8.4% | 0.57 | -24.4% | -0.31 | -5.5% |
-| core0_slv100_L1_sma200_band0_monthly_quarterly | 8.4% | 0.57 | -24.4% | -0.31 | -5.5% |
-| core30_slv70_L3_sma200_band2_daily_monthly | 14.2% | 0.54 | -47.2% | 2.03 | 7.2% |
-| core30_slv70_L3_sma200_band2_daily_quarterly | 14.2% | 0.54 | -46.9% | 2.03 | 7.2% |
-| core40_slv60_L3_sma200_band2_daily_monthly | 13.6% | 0.54 | -46.0% | 2.01 | 6.4% |
-| core40_slv60_L3_sma200_band2_daily_quarterly | 13.6% | 0.54 | -45.6% | 2.01 | 6.4% |
+| core0_slv100_L1_sma200_band0_monthly_monthly | 8.5% | 0.57 | -24.4% | -0.31 | -5.5% |
+| core0_slv100_L1_sma200_band0_monthly_quarterly | 8.5% | 0.57 | -24.4% | -0.31 | -5.5% |
+| core30_slv70_L3_sma200_band2_daily_monthly | 14.3% | 0.54 | -47.2% | 2.04 | 7.3% |
+| core30_slv70_L3_sma200_band2_daily_quarterly | 14.3% | 0.54 | -46.9% | 2.04 | 7.3% |
+| core40_slv60_L3_sma200_band2_daily_monthly | 13.6% | 0.54 | -46.0% | 2.02 | 6.5% |
+| core40_slv60_L3_sma200_band2_daily_quarterly | 13.6% | 0.54 | -45.6% | 2.02 | 6.4% |
 
 ## Block bootstrap, $5,000
 
@@ -136,12 +136,12 @@ Circular blocks of 63 sessions, 20000 paths, seed 7. The benchmark uses the same
 
 | strategy | 1y median | 1y p10 | 1y p90 | 1y P(loss) | 1y P(>SPY) | 5y median | 5y p10 | 5y p90 | 5y P(loss) | 5y P(>SPY) | 5y P(<-30%) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| BH_SPY | $5,498 | $4,443 | $6,512 | 0.27 | 0.00 | $7,551 | $4,752 | $11,381 | 0.13 | 0.00 | 0.02 |
-| desk_50_50 | $5,704 | $4,225 | $7,467 | 0.28 | 0.65 | $9,217 | $4,804 | $16,957 | 0.11 | 0.77 | 0.03 |
-| trend_core | $5,722 | $4,185 | $7,528 | 0.28 | 0.65 | $9,291 | $4,728 | $17,358 | 0.12 | 0.76 | 0.04 |
-| walk_forward | $5,497 | $4,734 | $6,252 | 0.20 | 0.36 | $7,782 | $5,643 | $10,567 | 0.04 | 0.33 | 0.00 |
-| pure_UPRO_sma200_band2 | $5,923 | $3,750 | $8,676 | 0.31 | 0.63 | $10,633 | $4,017 | $26,155 | 0.16 | 0.73 | 0.07 |
-| dip_3_down_closes | $5,722 | $4,185 | $7,528 | 0.28 | 0.65 | $9,291 | $4,728 | $17,358 | 0.12 | 0.76 | 0.04 |
+| BH_SPY | $5,502 | $4,446 | $6,516 | 0.27 | 0.00 | $7,582 | $4,732 | $11,421 | 0.13 | 0.00 | 0.02 |
+| desk_50_50 | $5,713 | $4,234 | $7,474 | 0.28 | 0.65 | $9,252 | $4,817 | $17,051 | 0.11 | 0.78 | 0.03 |
+| trend_core | $5,727 | $4,189 | $7,519 | 0.28 | 0.65 | $9,308 | $4,720 | $17,474 | 0.12 | 0.77 | 0.04 |
+| walk_forward | $5,501 | $4,732 | $6,258 | 0.20 | 0.34 | $7,800 | $5,655 | $10,596 | 0.04 | 0.33 | 0.00 |
+| pure_UPRO_sma200_band2 | $5,923 | $3,764 | $8,683 | 0.30 | 0.63 | $10,645 | $4,027 | $26,266 | 0.16 | 0.73 | 0.07 |
+| dip_3_down_closes | $5,727 | $4,189 | $7,519 | 0.28 | 0.65 | $9,308 | $4,720 | $17,474 | 0.12 | 0.77 | 0.04 |
 
 ## Costs and the next-close fill
 
@@ -149,10 +149,10 @@ Same decisions. Costs are one-way basis points on SPY and the leveraged fund. Ne
 
 | strategy | 0 bp | 3 bp | 5 bp | 10 bp | next open | next close |
 | --- | --- | --- | --- | --- | --- | --- |
-| desk_50_50 | 12.9% | 12.8% | 12.8% | 12.8% | 12.8% | 13.3% |
-| pure_UPRO_sma200_band2 | 15.9% | 15.9% | 15.8% | 15.7% | 15.8% | 17.0% |
-| live_walk_forward_cell | 8.5% | 8.5% | 8.4% | 8.4% | 8.4% | 8.3% |
-| walk_forward | n/a | n/a | 9.1% | 9.1% | 9.1% | 9.0% |
+| desk_50_50 | 12.9% | 12.9% | 12.9% | 12.8% | 12.9% | 13.4% |
+| pure_UPRO_sma200_band2 | 16.0% | 16.0% | 15.9% | 15.8% | 15.9% | 17.1% |
+| live_walk_forward_cell | 8.5% | 8.5% | 8.5% | 8.4% | 8.5% | 8.4% |
+| walk_forward | n/a | n/a | 9.2% | 9.1% | 9.2% | 9.0% |
 
 ## Dip-buy overlay
 
@@ -160,15 +160,15 @@ The 50/50 book with the 2% band. After the rule, only the SPY half switches to s
 
 | rule | CAGR | vol | Sharpe | max DD | worst year | IR t | DSR | trades/yr |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| dip_3_down_closes | 12.9% | 26.0% | 0.52 | -46.8% | 2022 -26.7% | 2.07 | 0.46 | 13.6 |
-| dip_2dlt2pct | 12.7% | 26.5% | 0.51 | -49.8% | 2022 -31.9% | 2.11 | 0.44 | 12.6 |
-| dip_2dlt3pct | 12.3% | 25.9% | 0.51 | -49.8% | 2022 -30.7% | 1.99 | 0.42 | 6.1 |
-| dip_3dlt3pct | 13.7% | 26.3% | 0.55 | -48.1% | 2022 -31.1% | 2.47 | 0.51 | 8.4 |
-| dip_3dlt4pct | 13.3% | 25.8% | 0.54 | -48.1% | 2022 -28.8% | 2.29 | 0.49 | 4.5 |
+| dip_3_down_closes | 12.9% | 26.0% | 0.53 | -46.8% | 2022 -26.7% | 2.08 | 0.48 | 13.6 |
+| dip_2dlt2pct | 12.8% | 26.5% | 0.51 | -49.8% | 2022 -31.9% | 2.12 | 0.46 | 12.6 |
+| dip_2dlt3pct | 12.4% | 25.9% | 0.51 | -49.8% | 2022 -30.7% | 2.00 | 0.45 | 6.1 |
+| dip_3dlt3pct | 13.8% | 26.3% | 0.55 | -48.1% | 2022 -31.1% | 2.48 | 0.53 | 8.4 |
+| dip_3dlt4pct | 13.3% | 25.8% | 0.54 | -48.1% | 2022 -28.8% | 2.30 | 0.51 | 4.5 |
 
 ## Verdict
 
-From 2000-01-03 to 2026-10-23, SPY compounded at 8.2% with a maximum drawdown of -55.2% and a worst year of 2008 (-36.8%). The desk's 50/50 mix, which is one pre-specified cell and not a walk-forward pick, compounded at 12.8% with volatility 24.7%, Sharpe 0.54, max drawdown -46.1% (2009-03-09), worst year 2022 (-28.5%), and an information-ratio t-stat of 1.99 against a multiple-testing bar of 2.82. Its deflated Sharpe is 0.48. The same mix on listed UPRO after inception (synthetic before) compounded at 12.7%. The walk-forward path, from 2006-01-03 to 2026-10-23, compounded at 9.1% against SPY at 11.1% over those same sessions, with max drawdown -24.4%, Sharpe 0.63, IR t -0.89, and deflated Sharpe 0.65. The rule's current selection is `core0_slv100_L1_sma200_band0_monthly_monthly`. The final spec adds the three-down-close overlay on the SPY half only. That book compounded at 12.9% with volatility 26.0%, Sharpe 0.52, max drawdown -46.8%, worst year 2022 (-26.7%), and an information-ratio t-stat of 2.07. On listed SSO and UPRO after each inception it compounded at 12.7%. This is a pre-specified book, not a walk-forward selection. The edge does not survive. The walk-forward path did not beat SPY, so the recommendation is 100% SPY. `signals.json` remains the fixed trend-core book; `signals_flagship.json` is SPY only.
+From 2000-01-03 to 2026-10-26, SPY compounded at 8.2% with a maximum drawdown of -55.2% and a worst year of 2008 (-36.8%). The desk's 50/50 mix, which is one pre-specified cell and not a walk-forward pick, compounded at 12.9% with volatility 24.7%, Sharpe 0.54, max drawdown -46.1% (2009-03-09), worst year 2022 (-28.5%), and an information-ratio t-stat of 2.00 against a multiple-testing bar of 2.84. Its deflated Sharpe is 0.51. The same mix on listed UPRO after inception (synthetic before) compounded at 12.8%. The walk-forward path, from 2006-01-03 to 2026-10-26, compounded at 9.2% against SPY at 11.1% over those same sessions, with max drawdown -24.4%, Sharpe 0.63, IR t -0.89, and deflated Sharpe 0.67. The rule's current selection is `core0_slv100_L1_sma200_band0_monthly_monthly`. The final spec adds the three-down-close overlay on the SPY half only. That book compounded at 12.9% with volatility 26.0%, Sharpe 0.53, max drawdown -46.8%, worst year 2022 (-26.7%), and an information-ratio t-stat of 2.08. On listed SSO and UPRO after each inception it compounded at 12.8%. This is a pre-specified book, not a walk-forward selection. The edge does not survive. The walk-forward path did not beat SPY, so the recommendation is 100% SPY. `signals.json` remains the fixed trend-core book; `signals_flagship.json` is SPY only.
 
 ## Caveats
 
@@ -181,7 +181,7 @@ From 2000-01-03 to 2026-10-23, SPY compounded at 8.2% with a maximum drawdown of
 
 ## Iteration log
 
-Each entry is written by the iteration that produced it. A candidate is kept only when its out-of-sample excess Sharpe and its deflated Sharpe both exceed the current book's on the same sessions, after every variant from that iteration has been recorded in the ledger.
+Each entry is written by the iteration that produced it. From the 2026-10-26 re-check onward, a candidate is kept only when it clears the materiality bar on the out-of-sample walk-forward window: excess Sharpe up by at least 0.05, or max drawdown better by at least 3 percentage points with CAGR no more than 0.5 points worse; the deflated Sharpe of the improvement is at least 0.75 after every counting ledger trial; the same Sharpe or drawdown clause still holds with the single best improvement year removed; and neighboring parameter settings are within 0.05 Sharpe and 3 percentage points of drawdown. The 2026-10-25 credit-spread entry used a weaker rule (any gain in excess Sharpe and in deflated Sharpe) and was then rejected under this bar.
 
 ### 2026-10-25 — Credit-spread sleeve hedge
 
@@ -245,6 +245,156 @@ Out-of-sample window: 2006-01-03 to 2026-10-23 (5235 sessions).
 | current | 15.76% | 0.626 | 0.644 | -46.83% |
 | candidate | 15.80% | 0.637 | 0.662 | -46.83% |
 
-Decision: kept.
+Decision: rejected.
 
-The stitched hedge beat the current book on out-of-sample excess Sharpe and on deflated Sharpe. The live book becomes this walk-forward rule. Deflation uses 240 counting trials and a daily-Sharpe dispersion of 0.012127. On the out-of-sample window the selected rule put the sleeve in T-bills on 90 sessions while the trend filter was on.
+The 2026-10-25 write-up had Sharpe 0.6257448527179886 -> 0.6366833200936323 (delta 0.010938467375643635), CAGR 0.15763883601111583 -> 0.15799810171142004, max drawdown -0.4682615834960858 -> -0.4682615834960858. Fresh run 2006-01-03 to 2026-10-26 (5236 sessions): Sharpe 0.628169 -> 0.639172 (delta 0.011003), CAGR 0.158375 -> 0.158735 (delta 0.000359), max drawdown -0.468260 -> -0.468260 (delta 0.000000). The fresh run does not clear the materiality bar. The live book reverts to the pre-hedge trend core. The hedge study and the BAA10Y snapshot stay for reference.
+
+### 2026-10-26 — Materiality re-check of the Baa credit-spread hedge
+
+The 2026-10-25 iteration kept a walk-forward Baa credit-spread hedge because out-of-sample excess Sharpe and deflated Sharpe were each higher. That keep is re-scored on the materiality bar, on paths rebuilt from the cached prices and the saved BAA10Y snapshot. The threshold grid is unchanged. The hedge stays in the live book only if the stitched path clears every clause. Otherwise the live book reverts to the pre-hedge trend core and the hedge code stays as a reference.
+
+- Spread used: `BAA10Y` from 1986-01-02 to 2026-10-22 (10202 observations).
+
+Variants tried. Counting rows increment the ledger. The walk-forward stitch is a selection over those rows and is stored as an audit.
+
+| variant | counts | full-sample CAGR | Sharpe | max DD | years selected |
+| --- | --- | --- | --- | --- | --- |
+| baa10y_d20_gt_10bp | yes | 12.5% | 0.55 | -39.4% | 1 |
+| baa10y_d20_gt_20bp | yes | 12.6% | 0.52 | -41.2% | 13 |
+| baa10y_d20_gt_35bp | yes | 12.4% | 0.51 | -49.0% | 0 |
+| baa10y_d20_gt_50bp | yes | 12.9% | 0.53 | -46.8% | 7 |
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2006-01-03 | baa10y_d20_gt_50bp |
+| 2007-01-03 | baa10y_d20_gt_50bp |
+| 2008-01-02 | baa10y_d20_gt_50bp |
+| 2009-01-02 | baa10y_d20_gt_50bp |
+| 2010-01-04 | baa10y_d20_gt_20bp |
+| 2011-01-03 | baa10y_d20_gt_20bp |
+| 2012-01-03 | baa10y_d20_gt_50bp |
+| 2013-01-02 | baa10y_d20_gt_50bp |
+| 2014-01-02 | baa10y_d20_gt_20bp |
+| 2015-01-02 | baa10y_d20_gt_20bp |
+| 2016-01-04 | baa10y_d20_gt_20bp |
+| 2017-01-03 | baa10y_d20_gt_20bp |
+| 2018-01-02 | baa10y_d20_gt_20bp |
+| 2019-01-02 | baa10y_d20_gt_20bp |
+| 2020-01-02 | baa10y_d20_gt_20bp |
+| 2021-01-04 | baa10y_d20_gt_20bp |
+| 2022-01-03 | baa10y_d20_gt_20bp |
+| 2023-01-03 | baa10y_d20_gt_20bp |
+| 2024-01-02 | baa10y_d20_gt_20bp |
+| 2025-01-02 | baa10y_d20_gt_50bp |
+| 2026-01-02 | baa10y_d20_gt_10bp |
+
+Out-of-sample window: 2006-01-03 to 2026-10-26 (5236 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.84% | 0.628 | n/a | -46.83% |
+| candidate | 15.87% | 0.639 | n/a | -46.83% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.628169 -> 0.639172 (delta 0.011003; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.468260 -> -0.468260 (delta 0.000000; need >= 0.03). CAGR 0.158375 -> 0.158735 (delta 0.000359; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe -0.034304, deflated Sharpe 0.004537 (need >= 0.75). Trials 240, daily-Sharpe dispersion 0.012128, daily multiple-testing benchmark 0.034257. |
+| b still helps with the best improvement year removed | no | Removed 2026 (summed daily improvement 0.086893). Remaining Sharpe delta -0.006754, CAGR delta -0.004793, max-drawdown delta 0.000000. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | yes | All 1 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell. |
+
+Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample window.
+
+| neighbor | similar | CAGR | Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| baa10y_d20_gt_20bp | yes | 16.09% | 0.650 | -39.39% |
+
+Decision: rejected.
+
+The 2026-10-25 write-up had Sharpe 0.6257448527179886 -> 0.6366833200936323 (delta 0.010938467375643635), CAGR 0.15763883601111583 -> 0.15799810171142004, max drawdown -0.4682615834960858 -> -0.4682615834960858. Fresh run 2006-01-03 to 2026-10-26 (5236 sessions): Sharpe 0.628169 -> 0.639172 (delta 0.011003), CAGR 0.158375 -> 0.158735 (delta 0.000359), max drawdown -0.468260 -> -0.468260 (delta 0.000000). The fresh run does not clear the materiality bar. The live book reverts to the pre-hedge trend core. The hedge study and the BAA10Y snapshot stay for reference.
+
+### 2026-10-26 — Volatility-scaled UPRO sleeve
+
+The trend core's maximum drawdown is about -46.8% because the 200-day band keeps the 3x sleeve invested through the first leg of a crash. Trailing realized volatility of SPY rises in that window, before the slow average turns. Scale only the UPRO sleeve to min(1, target_vol / trailing sample volatility), using a close-to-close window known at the signal close and filled at the next open. The rest of the sleeve budget earns T-bills. The SPY core, the three-down-close dip, and the quarterly mix are unchanged. The scale is capped at 1. The grid is lookbacks 10, 21, and 63 sessions and target volatilities 10%, 15%, 20%, and 25%, fixed before this sample is scored. The walk-forward may also select the unscaled book. The stitched path is kept only when it clears the materiality bar.
+
+Variants tried. Counting rows increment the ledger. The walk-forward stitch is a selection over those rows and is stored as an audit.
+
+| variant | counts | full-sample CAGR | Sharpe | max DD | years selected |
+| --- | --- | --- | --- | --- | --- |
+| vol_off | no | 12.9% | 0.53 | -46.8% | 1 |
+| vol_lb10_tv10 | yes | 11.1% | 0.51 | -40.0% | 0 |
+| vol_lb10_tv15 | yes | 12.3% | 0.52 | -43.3% | 0 |
+| vol_lb10_tv20 | yes | 13.0% | 0.53 | -45.6% | 0 |
+| vol_lb10_tv25 | yes | 13.2% | 0.54 | -46.7% | 1 |
+| vol_lb21_tv10 | yes | 11.3% | 0.51 | -41.4% | 0 |
+| vol_lb21_tv15 | yes | 12.7% | 0.53 | -44.2% | 5 |
+| vol_lb21_tv20 | yes | 13.2% | 0.54 | -46.0% | 14 |
+| vol_lb21_tv25 | yes | 13.1% | 0.53 | -46.8% | 0 |
+| vol_lb63_tv10 | yes | 10.5% | 0.48 | -42.2% | 0 |
+| vol_lb63_tv15 | yes | 12.2% | 0.52 | -45.7% | 0 |
+| vol_lb63_tv20 | yes | 12.6% | 0.52 | -46.8% | 0 |
+| vol_lb63_tv25 | yes | 12.8% | 0.52 | -46.8% | 0 |
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2006-01-03 | vol_off |
+| 2007-01-03 | vol_lb21_tv15 |
+| 2008-01-02 | vol_lb21_tv15 |
+| 2009-01-02 | vol_lb21_tv15 |
+| 2010-01-04 | vol_lb21_tv20 |
+| 2011-01-03 | vol_lb21_tv20 |
+| 2012-01-03 | vol_lb21_tv20 |
+| 2013-01-02 | vol_lb21_tv20 |
+| 2014-01-02 | vol_lb21_tv20 |
+| 2015-01-02 | vol_lb21_tv20 |
+| 2016-01-04 | vol_lb21_tv20 |
+| 2017-01-03 | vol_lb21_tv20 |
+| 2018-01-02 | vol_lb21_tv20 |
+| 2019-01-02 | vol_lb21_tv20 |
+| 2020-01-02 | vol_lb21_tv20 |
+| 2021-01-04 | vol_lb10_tv25 |
+| 2022-01-03 | vol_lb21_tv20 |
+| 2023-01-03 | vol_lb21_tv15 |
+| 2024-01-02 | vol_lb21_tv15 |
+| 2025-01-02 | vol_lb21_tv20 |
+| 2026-01-02 | vol_lb21_tv20 |
+
+Out-of-sample window: 2006-01-03 to 2026-10-26 (5236 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.84% | 0.628 | n/a | -46.83% |
+| candidate | 15.75% | 0.634 | n/a | -44.22% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.628169 -> 0.634448 (delta 0.006278; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.468261 -> -0.442163 (delta 0.026098; need >= 0.03). CAGR 0.158375 -> 0.157465 (delta -0.000911; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe -0.133228, deflated Sharpe 0.001638 (need >= 0.75). Trials 252, daily-Sharpe dispersion 0.011859, daily multiple-testing benchmark 0.033682. |
+| b still helps with the best improvement year removed | no | Removed 2007 (summed daily improvement 0.036332). Remaining Sharpe delta -0.001682, CAGR delta -0.003438, max-drawdown delta 0.030676. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | yes | All 4 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell. |
+
+Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample window.
+
+| neighbor | similar | CAGR | Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| vol_lb10_tv20 | yes | 16.15% | 0.648 | -45.56% |
+| vol_lb21_tv15 | yes | 15.46% | 0.636 | -44.22% |
+| vol_lb21_tv25 | yes | 16.08% | 0.638 | -46.77% |
+| vol_lb63_tv20 | yes | 15.46% | 0.621 | -46.81% |
+
+Decision: rejected.
+
+Out-of-sample 2006-01-03 to 2026-10-26 (5236 sessions). Sharpe 0.628169 -> 0.634448 (delta 0.006278), CAGR 0.158375 -> 0.157465 (delta -0.000911), max drawdown -0.468261 -> -0.442163 (delta 0.026098). Last walk-forward pick: vol_lb21_tv20. The stitched vol sleeve does not clear the materiality bar. The live book stays the pre-hedge trend core.
