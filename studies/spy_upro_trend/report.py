@@ -309,6 +309,25 @@ def _iteration_entry(entry: dict) -> list[str]:
         if refresh.get("note"):
             lines += ["", refresh["note"]]
         lines.append("")
+    lead = entry.get("lead_refresh") or {}
+    if lead.get("refreshed"):
+        fresh = lead.get("refreshed") or {}
+        prior = lead.get("prior") or {}
+        lines.append(
+            "Refreshed lead book, out of sample, before the candidate is judged. "
+            f"Window {fresh.get('start', 'n/a')} to {fresh.get('end', 'n/a')} "
+            f"({fresh.get('n_days', 'n/a')} sessions): "
+            f"CAGR {pct(fresh.get('cagr'), 2)}, Sharpe {num(fresh.get('sharpe'), 3)}, "
+            f"max drawdown {pct(fresh.get('max_drawdown'), 2)}. "
+            f"Prior write-up `{lead.get('prior_id', 'n/a')}` through {prior.get('end', 'n/a')}: "
+            f"CAGR {pct(prior.get('cagr'), 2)}, Sharpe {num(prior.get('sharpe'), 3)}, "
+            f"max drawdown {pct(prior.get('max_drawdown'), 2)}. "
+            f"Deltas versus that row: CAGR {pct(lead.get('cagr_delta'), 2)}, "
+            f"Sharpe {num(lead.get('sharpe_delta'), 3)}, "
+            f"max drawdown {pct(lead.get('max_drawdown_delta'), 2)}. "
+            f"{lead.get('note', '')}"
+        )
+        lines.append("")
     variants = entry.get("variants") or []
     if variants:
         lines += [
