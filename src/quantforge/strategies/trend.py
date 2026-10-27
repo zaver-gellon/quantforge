@@ -161,6 +161,8 @@ def build_trend_signal(
     hedge_info: dict | None = None,
     sleeve_scale: pd.Series | None = None,
     vol_info: dict | None = None,
+    trend_override: pd.Series | None = None,
+    vote_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -172,13 +174,19 @@ def build_trend_signal(
     ``hedge_on`` true at the signal close moves that sleeve to BIL instead.
     ``sleeve_scale`` at the signal close is the fraction of the sleeve left in
     the leveraged fund when the sleeve is on. A missing scale leaves it at 1.
+    ``trend_override`` replaces the single-average state. It is used only when
+    a walk-forward vote cleared the materiality bar. Dates after ``as_of`` are
+    ignored. A missing value on or before ``as_of`` is an error.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
         raise ValueError("SPY close series is empty")
-    state = trend_state(close, spec.window, spec.band, spec.freq)
+    if trend_override is None:
+        state = trend_state(close, spec.window, spec.band, spec.freq)
+    else:
+        state = trend_override.reindex(close.index)
     if as_of is None:
-        as_of_ts = state.index[-1]
+        as_of_ts = close.index[-1]
     else:
         as_of_ts = pd.Timestamp(as_of)
         if as_of_ts.tzinfo is not None:
@@ -188,6 +196,10 @@ def build_trend_signal(
     if history.empty:
         raise ValueError("as_of is before the price history")
     as_of_ts = history.index[-1]
+    history = state.loc[:as_of_ts]
+    if history.isna().any():
+        raise ValueError("trend override is missing sessions at or before as_of")
+    history = history.astype(bool)
     visible = close.loc[:as_of_ts]
     dips = dip_active(visible, dip_rule, dip_hold) if apply_dip else pd.Series(False, index=visible.index)
     on = bool(history.iloc[-1])
@@ -295,5 +307,7 @@ def build_trend_signal(
     if vol_info:
         payload["diagnostics"].update(vol_info)
         payload["diagnostics"]["sleeve_scale"] = fraction
+    if vote_info:
+        payload["diagnostics"].update(vote_info)
     validate_signal(payload, allowed_tickers=ALLOWED_TREND_TICKERS)
     return payload
