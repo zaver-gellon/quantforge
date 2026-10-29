@@ -163,6 +163,7 @@ def build_trend_signal(
     vol_info: dict | None = None,
     trend_override: pd.Series | None = None,
     vote_info: dict | None = None,
+    dd_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -175,7 +176,8 @@ def build_trend_signal(
     ``sleeve_scale`` at the signal close is the fraction of the sleeve left in
     the leveraged fund when the sleeve is on. A missing scale leaves it at 1.
     ``trend_override`` replaces the single-average state. It is used only when
-    a walk-forward vote cleared the materiality bar. Dates after ``as_of`` are
+    a walk-forward vote cleared the materiality bar. ``dd_info`` marks a scale
+    that came from a kept trailing-peak stop. Dates after ``as_of`` are
     ignored. A missing value on or before ``as_of`` is an error.
     """
     close = spy_close.dropna().astype(float).sort_index()
@@ -230,6 +232,7 @@ def build_trend_signal(
     changed = previous is None or on != previous
     dip_changed = dip_on != previous_dip
     hedge_changed = hedge_now != hedge_prev
+    scale_label = "drawdown_stop" if dd_info else "vol_scale"
     if spec.rebalance == "daily":
         trade = True
         reason = "trend_change" if changed else "daily_target"
@@ -241,7 +244,7 @@ def build_trend_signal(
         reason = "trend_and_credit_hedge"
     elif changed and scale_changed:
         trade = True
-        reason = "trend_and_vol_scale"
+        reason = f"trend_and_{scale_label}"
     elif changed and scheduled:
         trade = True
         reason = "trend_change_and_schedule"
@@ -253,19 +256,19 @@ def build_trend_signal(
         reason = "dip_and_credit_hedge"
     elif dip_changed and scale_changed:
         trade = True
-        reason = "dip_and_vol_scale"
+        reason = f"dip_and_{scale_label}"
     elif dip_changed:
         trade = True
         reason = "dip_overlay"
     elif hedge_changed and scale_changed:
         trade = True
-        reason = "credit_hedge_and_vol_scale"
+        reason = f"credit_hedge_and_{scale_label}"
     elif hedge_changed:
         trade = True
         reason = "credit_hedge"
     elif scale_changed:
         trade = True
-        reason = "vol_scale"
+        reason = scale_label
     elif scheduled:
         trade = True
         reason = "scheduled_rebalance"
@@ -306,6 +309,9 @@ def build_trend_signal(
         payload["diagnostics"].update(hedge_info)
     if vol_info:
         payload["diagnostics"].update(vol_info)
+        payload["diagnostics"]["sleeve_scale"] = fraction
+    if dd_info:
+        payload["diagnostics"].update(dd_info)
         payload["diagnostics"]["sleeve_scale"] = fraction
     if vote_info:
         payload["diagnostics"].update(vote_info)
