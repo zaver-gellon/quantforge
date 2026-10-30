@@ -1,13 +1,13 @@
 {
-  "date": "2026-10-30",
+  "date": "2026-11-02",
   "weights": {
     "SPY": 0.5,
     "UPRO": 0.5
   },
   "strategy": "trend_core",
   "strategy_name": "core50_slv50_L3_sma200_band2_daily_quarterly",
-  "generated_at": "2026-10-29T21:15:45Z",
-  "signal_date": "2026-10-29",
+  "generated_at": "2026-10-30T21:18:17Z",
+  "signal_date": "2026-10-30",
   "trade": false,
   "trade_reason": "none",
   "rebalance_mix": false,
@@ -18,8 +18,8 @@
     "sleeve_on": true,
     "dip_on": false,
     "dip_rule": "3_down_closes",
-    "reference_close": 769.3599853515625,
-    "sma": 725.6306793212891,
+    "reference_close": 755.719970703125,
+    "sma": 725.9842343139649,
     "sma_window": 200,
     "band": 0.02,
     "freq": "daily",

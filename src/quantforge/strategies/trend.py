@@ -164,6 +164,10 @@ def build_trend_signal(
     trend_override: pd.Series | None = None,
     vote_info: dict | None = None,
     dd_info: dict | None = None,
+    idle_on: pd.Series | None = None,
+    idle_ready: pd.Series | None = None,
+    idle_symbol: str | None = None,
+    idle_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -177,7 +181,10 @@ def build_trend_signal(
     the leveraged fund when the sleeve is on. A missing scale leaves it at 1.
     ``trend_override`` replaces the single-average state. It is used only when
     a walk-forward vote cleared the materiality bar. ``dd_info`` marks a scale
-    that came from a kept trailing-peak stop. Dates after ``as_of`` are
+    that came from a kept trailing-peak stop. ``idle_symbol`` is set only when
+    a walk-forward diversifier cleared the materiality bar. While the equity
+    trend is off and ``idle_ready`` is true, the whole book holds that asset
+    if ``idle_on`` is true and BIL if it is false. Dates after ``as_of`` are
     ignored. A missing value on or before ``as_of`` is an error.
     """
     close = spy_close.dropna().astype(float).sort_index()
@@ -216,6 +223,24 @@ def build_trend_signal(
             hedge_now = bool(hedge.iloc[-1])
         if len(hedge) > 1:
             hedge_prev = bool(hedge.iloc[-2])
+    idle_now = False
+    idle_prev = False
+    ready_now = False
+    ready_prev = False
+    if idle_symbol is not None:
+        if idle_on is None or idle_ready is None:
+            raise ValueError("idle symbol requires idle_on and idle_ready")
+        aligned_idle = idle_on.reindex(visible.index)
+        aligned_ready = idle_ready.reindex(visible.index)
+        if aligned_idle.isna().any() or aligned_ready.isna().any():
+            raise ValueError("idle state is missing sessions at or before as_of")
+        aligned_idle = aligned_idle.astype(bool)
+        aligned_ready = aligned_ready.astype(bool)
+        idle_now = bool(aligned_idle.iloc[-1])
+        ready_now = bool(aligned_ready.iloc[-1])
+        if len(aligned_idle) > 1:
+            idle_prev = bool(aligned_idle.iloc[-2])
+            ready_prev = bool(aligned_ready.iloc[-2])
     sleeve_on = on and not hedge_now
     fraction = 1.0 if sleeve_on else 0.0
     scale_changed = False
@@ -275,10 +300,35 @@ def build_trend_signal(
     else:
         trade = False
         reason = "none"
+
+    def _book_mode(trend_flag: bool, hedge_flag: bool, ready_flag: bool, idle_flag: bool) -> str:
+        if trend_flag and not hedge_flag:
+            return "equity"
+        # The diversifier replaces the book only after the equity trend is off.
+        # A credit hedge, when one is kept, still only moves the sleeve.
+        if not trend_flag and idle_symbol is not None and ready_flag and idle_flag:
+            return "div"
+        if not trend_flag and idle_symbol is not None and ready_flag and not idle_flag:
+            return "cash"
+        return "baseline"
+
+    mode = _book_mode(on, hedge_now, ready_now, idle_now)
+    prev_trend = False if previous is None else bool(previous)
+    prev_mode = _book_mode(prev_trend, hedge_prev, ready_prev, idle_prev)
+    if idle_symbol is not None and mode != prev_mode and not {mode, prev_mode} <= {"equity", "baseline"}:
+        trade = True
+        reason = "idle_diversifier"
+    invested = float(spec.core_weight) + float(spec.sleeve_weight)
+    if mode == "div":
+        weights = {idle_symbol: round(invested, 6)}
+    elif mode == "cash":
+        weights = {spec.cash_symbol: round(invested, 6)}
+    else:
+        weights = strategic_weights(spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0)
     average = close.rolling(spec.window, min_periods=spec.window).mean().loc[as_of_ts]
     payload = {
         "date": next_nyse_session(as_of_ts).strftime("%Y-%m-%d"),
-        "weights": strategic_weights(spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0),
+        "weights": weights,
         "strategy": strategy_id,
         "strategy_name": spec.name(),
         "generated_at": generated_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -315,5 +365,14 @@ def build_trend_signal(
         payload["diagnostics"]["sleeve_scale"] = fraction
     if vote_info:
         payload["diagnostics"].update(vote_info)
-    validate_signal(payload, allowed_tickers=ALLOWED_TREND_TICKERS)
+    if idle_info:
+        payload["diagnostics"].update(idle_info)
+    if idle_symbol is not None:
+        payload["diagnostics"]["idle_symbol"] = idle_symbol
+        payload["diagnostics"]["idle_on"] = bool(idle_now)
+        payload["diagnostics"]["idle_ready"] = bool(ready_now)
+    allowed = set(ALLOWED_TREND_TICKERS)
+    if idle_symbol is not None:
+        allowed.add(idle_symbol)
+    validate_signal(payload, allowed_tickers=frozenset(allowed))
     return payload

@@ -281,6 +281,14 @@ def _iteration_entry(entry: dict) -> list[str]:
             if hy.get("reason"):
                 lines.append(f"- High-yield OAS note: {hy['reason']}")
         lines.append("")
+    coverage = data.get("coverage") or []
+    if coverage:
+        for row in coverage:
+            lines.append(
+                f"- `{row.get('symbol', 'n/a')}` from {row.get('start', 'n/a')} "
+                f"to {row.get('end', 'n/a')} ({row.get('n_obs', 'n/a')} sessions)."
+            )
+        lines.append("")
     weakness = entry.get("recorded_weakness") or []
     if weakness:
         bits = [f"{row.get('label')} excess {pct(row.get('excess'))}" for row in weakness]

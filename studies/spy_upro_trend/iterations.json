@@ -2000,5 +2000,653 @@
       "dip_on": false,
       "trade_reason": "none"
     }
+  },
+  {
+    "id": "2026-10-30-idle-diversifier",
+    "date": "2026-10-30",
+    "title": "Risk-off bond or gold trend",
+    "hypothesis": "The live book leaves the SPY half invested after the 200-day band has moved the UPRO sleeve to cash. That is why the credit-spread hedge, the volatility scale, the multi-lookback vote, and the trailing-peak stop left the out-of-sample max drawdown near -46.8%: the trough is the equity bear after the sleeve is already in cash. This test does not try another faster exit for UPRO. Once a diversifier's own average exists, a day when SPY's 200-day 2% band is off moves the whole book, core and sleeve, out of equities. The book holds the diversifier while that asset's filter is on, and T-bills while it is off. While SPY's band is on, the book is the unchanged trend core, including the three-down-close dip on the SPY half. Until the diversifier's average exists, the book stays that trend core, so the years before the ETF lists are not a separate cash-timing rule. Assets are GLD, IEF, and TLT, alphabetical, so a neighbor is one step on that list. Windows are 100 and 200 sessions. Bands are 0 and 2%, the same hysteresis as the equity filter, evaluated daily. A variant's walk-forward history starts the session after its filter first becomes ready. Earlier sessions are the trend core and do not count toward the 756-session minimum. Full-sample rows still include them. The walk-forward may also select the current book. The stitched path is kept only when it clears the materiality bar.",
+    "status": "tested",
+    "kept": false,
+    "overlay": "idle_diversifier",
+    "decision": "rejected",
+    "decision_note": "Refreshed lead out-of-sample 2006-01-03 to 2026-10-30 (5240 sessions): CAGR 0.156771, Sharpe 0.622757, max drawdown -0.468262. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-10-29 (5239 sessions) has CAGR 0.158818, Sharpe 0.629654, max drawdown -0.468262, against the stored row CAGR 0.158818, Sharpe 0.629655, max drawdown -0.468261. Candidate versus that refreshed book: Sharpe 0.622757 -> 0.613707 (delta -0.009050), CAGR 0.156771 -> 0.152401 (delta -0.004371), max drawdown -0.468262 -> -0.482816 (delta -0.014554). Last walk-forward pick: idle_ief_w100_b0. The stitched bond or gold risk-off rule does not clear the materiality bar. The live book stays the plain trend core. Previous signal 2026-10-30 (close 2026-10-29): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-02 (close 2026-10-30): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.",
+    "data": {
+      "assets": [
+        "GLD",
+        "IEF",
+        "TLT"
+      ],
+      "windows": [
+        100,
+        200
+      ],
+      "bands": [
+        0.0,
+        0.02
+      ],
+      "coverage": [
+        {
+          "symbol": "GLD",
+          "start": "2004-11-18",
+          "end": "2026-10-30",
+          "n_obs": 5522
+        },
+        {
+          "symbol": "IEF",
+          "start": "2002-07-30",
+          "end": "2026-10-30",
+          "n_obs": 6104
+        },
+        {
+          "symbol": "TLT",
+          "start": "2002-07-30",
+          "end": "2026-10-30",
+          "n_obs": 6104
+        }
+      ],
+      "price_sample_end": "2026-10-30",
+      "history_start": {
+        "idle_gld_w100_b0": "2005-04-14",
+        "idle_gld_w100_b2": "2005-04-14",
+        "idle_gld_w200_b0": "2005-09-06",
+        "idle_gld_w200_b2": "2005-09-06",
+        "idle_ief_w100_b0": "2002-12-19",
+        "idle_ief_w100_b2": "2002-12-19",
+        "idle_ief_w200_b0": "2003-05-15",
+        "idle_ief_w200_b2": "2003-05-15",
+        "idle_tlt_w100_b0": "2002-12-19",
+        "idle_tlt_w100_b2": "2002-12-19",
+        "idle_tlt_w200_b0": "2003-05-15",
+        "idle_tlt_w200_b2": "2003-05-15"
+      },
+      "shares": {
+        "idle_gld_w100_b0": {
+          "share_equity_off_and_ready": 0.16434499110847658,
+          "share_in_diversifier": 0.10803200948429165
+        },
+        "idle_gld_w100_b2": {
+          "share_equity_off_and_ready": 0.16434499110847658,
+          "share_in_diversifier": 0.10610551274451689
+        },
+        "idle_gld_w200_b0": {
+          "share_equity_off_and_ready": 0.16434499110847658,
+          "share_in_diversifier": 0.11277415530527564
+        },
+        "idle_gld_w200_b2": {
+          "share_equity_off_and_ready": 0.16434499110847658,
+          "share_in_diversifier": 0.11247777119146414
+        },
+        "idle_ief_w100_b0": {
+          "share_equity_off_and_ready": 0.18212803793716656,
+          "share_in_diversifier": 0.13678126852400713
+        },
+        "idle_ief_w100_b2": {
+          "share_equity_off_and_ready": 0.18212803793716656,
+          "share_in_diversifier": 0.12803793716656786
+        },
+        "idle_ief_w200_b0": {
+          "share_equity_off_and_ready": 0.17027267338470659,
+          "share_in_diversifier": 0.13174273858921162
+        },
+        "idle_ief_w200_b2": {
+          "share_equity_off_and_ready": 0.17027267338470659,
+          "share_in_diversifier": 0.1281861292234736
+        },
+        "idle_tlt_w100_b0": {
+          "share_equity_off_and_ready": 0.18212803793716656,
+          "share_in_diversifier": 0.12240663900414937
+        },
+        "idle_tlt_w100_b2": {
+          "share_equity_off_and_ready": 0.18212803793716656,
+          "share_in_diversifier": 0.12537048014226437
+        },
+        "idle_tlt_w200_b0": {
+          "share_equity_off_and_ready": 0.17027267338470659,
+          "share_in_diversifier": 0.11099585062240663
+        },
+        "idle_tlt_w200_b2": {
+          "share_equity_off_and_ready": 0.17027267338470659,
+          "share_in_diversifier": 0.11277415530527564
+        }
+      }
+    },
+    "variants": [
+      {
+        "name": "idle_off",
+        "counts_for_deflation": false,
+        "cagr": 0.12830074480302334,
+        "sharpe": 0.5212642950711457,
+        "max_drawdown": -0.4682618738293579,
+        "years_selected": 0,
+        "note": "The current book. Already counted as dip_3_down_closes."
+      },
+      {
+        "name": "idle_gld_w100_b0",
+        "counts_for_deflation": true,
+        "symbol": "GLD",
+        "window": 100,
+        "band": 0.0,
+        "cagr": 0.1241647801154162,
+        "sharpe": 0.5084921966670917,
+        "max_drawdown": -0.47627245215220393,
+        "dsr": 0.48799864698213963,
+        "years_selected": 0,
+        "history_start": "2005-04-14",
+        "share_equity_off_and_ready": 0.16434499110847658,
+        "share_in_diversifier": 0.10803200948429165
+      },
+      {
+        "name": "idle_gld_w100_b2",
+        "counts_for_deflation": true,
+        "symbol": "GLD",
+        "window": 100,
+        "band": 0.02,
+        "cagr": 0.1272532081256612,
+        "sharpe": 0.5190664717259958,
+        "max_drawdown": -0.46730078319418267,
+        "dsr": 0.509564866555404,
+        "years_selected": 0,
+        "history_start": "2005-04-14",
+        "share_equity_off_and_ready": 0.16434499110847658,
+        "share_in_diversifier": 0.10610551274451689
+      },
+      {
+        "name": "idle_gld_w200_b0",
+        "counts_for_deflation": true,
+        "symbol": "GLD",
+        "window": 200,
+        "band": 0.0,
+        "cagr": 0.13005601546217882,
+        "sharpe": 0.5276976912581358,
+        "max_drawdown": -0.4704928083851363,
+        "dsr": 0.5271476520999204,
+        "years_selected": 0,
+        "history_start": "2005-09-06",
+        "share_equity_off_and_ready": 0.16434499110847658,
+        "share_in_diversifier": 0.11277415530527564
+      },
+      {
+        "name": "idle_gld_w200_b2",
+        "counts_for_deflation": true,
+        "symbol": "GLD",
+        "window": 200,
+        "band": 0.02,
+        "cagr": 0.1311118033412455,
+        "sharpe": 0.5319503109186323,
+        "max_drawdown": -0.4642864373608443,
+        "dsr": 0.5357921897152597,
+        "years_selected": 0,
+        "history_start": "2005-09-06",
+        "share_equity_off_and_ready": 0.16434499110847658,
+        "share_in_diversifier": 0.11247777119146414
+      },
+      {
+        "name": "idle_ief_w100_b0",
+        "counts_for_deflation": true,
+        "symbol": "IEF",
+        "window": 100,
+        "band": 0.0,
+        "cagr": 0.12536105432019107,
+        "sharpe": 0.5213481893165647,
+        "max_drawdown": -0.4281628480357422,
+        "dsr": 0.5142007965934928,
+        "years_selected": 6,
+        "history_start": "2002-12-19",
+        "share_equity_off_and_ready": 0.18212803793716656,
+        "share_in_diversifier": 0.13678126852400713
+      },
+      {
+        "name": "idle_ief_w100_b2",
+        "counts_for_deflation": true,
+        "symbol": "IEF",
+        "window": 100,
+        "band": 0.02,
+        "cagr": 0.12340531388477949,
+        "sharpe": 0.5145640622214731,
+        "max_drawdown": -0.4281628480357418,
+        "dsr": 0.5003830631929773,
+        "years_selected": 0,
+        "history_start": "2002-12-19",
+        "share_equity_off_and_ready": 0.18212803793716656,
+        "share_in_diversifier": 0.12803793716656786
+      },
+      {
+        "name": "idle_ief_w200_b0",
+        "counts_for_deflation": true,
+        "symbol": "IEF",
+        "window": 200,
+        "band": 0.0,
+        "cagr": 0.12474058504136809,
+        "sharpe": 0.5189583539784347,
+        "max_drawdown": -0.4281628480357421,
+        "dsr": 0.5093352521850584,
+        "years_selected": 0,
+        "history_start": "2003-05-15",
+        "share_equity_off_and_ready": 0.17027267338470659,
+        "share_in_diversifier": 0.13174273858921162
+      },
+      {
+        "name": "idle_ief_w200_b2",
+        "counts_for_deflation": true,
+        "symbol": "IEF",
+        "window": 200,
+        "band": 0.02,
+        "cagr": 0.12508488085194935,
+        "sharpe": 0.5201718466894357,
+        "max_drawdown": -0.4281628480357422,
+        "dsr": 0.5118063902075559,
+        "years_selected": 0,
+        "history_start": "2003-05-15",
+        "share_equity_off_and_ready": 0.17027267338470659,
+        "share_in_diversifier": 0.1281861292234736
+      },
+      {
+        "name": "idle_tlt_w100_b0",
+        "counts_for_deflation": true,
+        "symbol": "TLT",
+        "window": 100,
+        "band": 0.0,
+        "cagr": 0.11834063843144205,
+        "sharpe": 0.48965485910663603,
+        "max_drawdown": -0.48281561235517656,
+        "dsr": 0.4496865079126038,
+        "years_selected": 3,
+        "history_start": "2002-12-19",
+        "share_equity_off_and_ready": 0.18212803793716656,
+        "share_in_diversifier": 0.12240663900414937
+      },
+      {
+        "name": "idle_tlt_w100_b2",
+        "counts_for_deflation": true,
+        "symbol": "TLT",
+        "window": 100,
+        "band": 0.02,
+        "cagr": 0.12396741382682452,
+        "sharpe": 0.5090512917849264,
+        "max_drawdown": -0.48281561235517634,
+        "dsr": 0.48914079295189605,
+        "years_selected": 12,
+        "history_start": "2002-12-19",
+        "share_equity_off_and_ready": 0.18212803793716656,
+        "share_in_diversifier": 0.12537048014226437
+      },
+      {
+        "name": "idle_tlt_w200_b0",
+        "counts_for_deflation": true,
+        "symbol": "TLT",
+        "window": 200,
+        "band": 0.0,
+        "cagr": 0.12305114223517077,
+        "sharpe": 0.5060155534665851,
+        "max_drawdown": -0.482815612355176,
+        "dsr": 0.4829506270948416,
+        "years_selected": 0,
+        "history_start": "2003-05-15",
+        "share_equity_off_and_ready": 0.17027267338470659,
+        "share_in_diversifier": 0.11099585062240663
+      },
+      {
+        "name": "idle_tlt_w200_b2",
+        "counts_for_deflation": true,
+        "symbol": "TLT",
+        "window": 200,
+        "band": 0.02,
+        "cagr": 0.12481882871668071,
+        "sharpe": 0.5120946711420911,
+        "max_drawdown": -0.4828156123551762,
+        "dsr": 0.49534698165486957,
+        "years_selected": 0,
+        "history_start": "2003-05-15",
+        "share_equity_off_and_ready": 0.17027267338470659,
+        "share_in_diversifier": 0.11277415530527564
+      }
+    ],
+    "walk_forward_picks": [
+      [
+        "2006-01-03",
+        "idle_tlt_w100_b0"
+      ],
+      [
+        "2007-01-03",
+        "idle_tlt_w100_b0"
+      ],
+      [
+        "2008-01-02",
+        "idle_tlt_w100_b0"
+      ],
+      [
+        "2009-01-02",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2010-01-04",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2011-01-03",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2012-01-03",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2013-01-02",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2014-01-02",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2015-01-02",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2016-01-04",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2017-01-03",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2018-01-02",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2019-01-02",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2020-01-02",
+        "idle_tlt_w100_b2"
+      ],
+      [
+        "2021-01-04",
+        "idle_ief_w100_b0"
+      ],
+      [
+        "2022-01-03",
+        "idle_ief_w100_b0"
+      ],
+      [
+        "2023-01-03",
+        "idle_ief_w100_b0"
+      ],
+      [
+        "2024-01-02",
+        "idle_ief_w100_b0"
+      ],
+      [
+        "2025-01-02",
+        "idle_ief_w100_b0"
+      ],
+      [
+        "2026-01-02",
+        "idle_ief_w100_b0"
+      ]
+    ],
+    "oos_window": {
+      "start": "2006-01-03",
+      "end": "2026-10-30",
+      "n_days": 5240
+    },
+    "oos": {
+      "current": {
+        "cagr": 0.15677126969113564,
+        "vol": 0.26214307907034845,
+        "sharpe": 0.6227567426659815,
+        "sharpe_per_period": 0.039233731197717,
+        "max_drawdown": -0.46826187382935747,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      },
+      "candidate": {
+        "cagr": 0.15240051309616076,
+        "vol": 0.25831964467096974,
+        "sharpe": 0.6137069692160528,
+        "sharpe_per_period": 0.03866359465063642,
+        "max_drawdown": -0.48281561235517667,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      }
+    },
+    "lead_oos": {
+      "before": {
+        "cagr": 0.15677126969113564,
+        "vol": 0.26214307907034845,
+        "sharpe": 0.6227567426659815,
+        "sharpe_per_period": 0.039233731197717,
+        "max_drawdown": -0.46826187382935747,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      },
+      "after": {
+        "cagr": 0.15677126969113564,
+        "vol": 0.26214307907034845,
+        "sharpe": 0.6227567426659815,
+        "sharpe_per_period": 0.039233731197717,
+        "max_drawdown": -0.46826187382935747,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      }
+    },
+    "lead_refresh": {
+      "prior_id": "2026-10-29-trailing-drawdown-stop",
+      "prior": {
+        "cagr": 0.1588181060900402,
+        "vol": 0.2620473596734026,
+        "sharpe": 0.6296549400013759,
+        "sharpe_per_period": 0.039668318977322314,
+        "max_drawdown": -0.4682605670577086,
+        "n_days": 5239,
+        "start": "2006-01-03",
+        "end": "2026-10-29"
+      },
+      "refreshed": {
+        "cagr": 0.15677126969113564,
+        "vol": 0.26214307907034845,
+        "sharpe": 0.6227567426659815,
+        "sharpe_per_period": 0.039233731197717,
+        "max_drawdown": -0.46826187382935747,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      },
+      "cagr_delta": -0.0020468363989045724,
+      "sharpe_delta": -0.006898197335394429,
+      "max_drawdown_delta": -1.3067716488901482e-06,
+      "display_unchanged": false,
+      "through_prior_end": {
+        "cagr": 0.15881780650463817,
+        "sharpe": 0.6296536913088597,
+        "max_drawdown": -0.46826187382935747,
+        "n_days": 5239,
+        "start": "2006-01-03",
+        "end": "2026-10-29"
+      },
+      "note": "On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-10-29 (5239 sessions) has CAGR 0.158818, Sharpe 0.629654, max drawdown -0.468262, against the stored row CAGR 0.158818, Sharpe 0.629655, max drawdown -0.468261."
+    },
+    "materiality": {
+      "pass": false,
+      "bar": {
+        "sharpe_improvement": 0.05,
+        "drawdown_improvement": 0.03,
+        "cagr_slack": 0.005,
+        "improvement_dsr_min": 0.75,
+        "neighbor_sharpe_tol": 0.05,
+        "neighbor_drawdown_tol": 0.03
+      },
+      "checks": [
+        {
+          "name": "a Sharpe +0.05",
+          "pass": false,
+          "detail": "Sharpe 0.622757 -> 0.613707 (delta -0.009050; need >= 0.05)."
+        },
+        {
+          "name": "a drawdown +3pp and CAGR within 0.5pp",
+          "pass": false,
+          "detail": "Max drawdown -0.468262 -> -0.482816 (delta -0.014554; need >= 0.03). CAGR 0.156771 -> 0.152401 (delta -0.004371; floor -0.0050)."
+        },
+        {
+          "name": "a overall",
+          "pass": false,
+          "detail": "Either the Sharpe clause or the drawdown clause is enough."
+        },
+        {
+          "name": "b deflated Sharpe of the improvement >= 0.75",
+          "pass": false,
+          "detail": "Improvement Sharpe -0.034068, deflated Sharpe 0.006201 (need >= 0.75). Trials 281, daily-Sharpe dispersion 0.011272, daily multiple-testing benchmark 0.032405."
+        },
+        {
+          "name": "b still helps with the best improvement year removed",
+          "pass": false,
+          "detail": "Removed 2008 (summed daily improvement 0.362403). Remaining Sharpe delta -0.085909, CAGR delta -0.026813, max-drawdown delta -0.040987."
+        },
+        {
+          "name": "b overall",
+          "pass": false,
+          "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+        },
+        {
+          "name": "c neighboring parameters",
+          "pass": false,
+          "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell."
+        }
+      ],
+      "oos": {
+        "current": {
+          "cagr": 0.15677126969113564,
+          "vol": 0.26214307907034845,
+          "sharpe": 0.6227567426659815,
+          "sharpe_per_period": 0.039233731197717,
+          "max_drawdown": -0.46826187382935747,
+          "n_days": 5240,
+          "start": "2006-01-03",
+          "end": "2026-10-30"
+        },
+        "candidate": {
+          "cagr": 0.15240051309616076,
+          "vol": 0.25831964467096974,
+          "sharpe": 0.6137069692160528,
+          "sharpe_per_period": 0.03866359465063642,
+          "max_drawdown": -0.48281561235517667,
+          "n_days": 5240,
+          "start": "2006-01-03",
+          "end": "2026-10-30"
+        }
+      },
+      "criterion_a": {
+        "sharpe_delta": -0.009049773449928633,
+        "cagr_delta": -0.004370756594974878,
+        "max_drawdown_delta": -0.014553738525819204,
+        "sharpe_pass": false,
+        "drawdown_pass": false,
+        "pass": false
+      },
+      "criterion_b": {
+        "pass": false,
+        "dsr_pass": false,
+        "still_helps": false,
+        "improvement_sharpe": -0.034068112242337065,
+        "improvement_sharpe_per_period": -0.002146294157181702,
+        "improvement_dsr": 0.006200717496568253,
+        "sr0_daily": 0.032405049978057425,
+        "n_trials": 281,
+        "sharpe_dispersion_daily": 0.011271855446491357,
+        "best_year": 2008,
+        "best_year_improvement_sum": 0.36240338086673185,
+        "without_best_year": {
+          "sharpe_delta": -0.08590914203273414,
+          "cagr_delta": -0.02681328829779117,
+          "max_drawdown_delta": -0.04098740130620404,
+          "sharpe_pass": false,
+          "drawdown_pass": false,
+          "pass": false
+        }
+      },
+      "criterion_c": {
+        "pass": false,
+        "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell.",
+        "cell": {
+          "cagr": 0.1534174291275987,
+          "vol": 0.24991920040535168,
+          "sharpe": 0.629303325889467,
+          "sharpe_per_period": 0.0396461665337909,
+          "max_drawdown": -0.428162848035742,
+          "n_days": 5240,
+          "start": "2006-01-03",
+          "end": "2026-10-30"
+        },
+        "neighbors": [
+          {
+            "name": "idle_gld_w100_b0",
+            "similar": false,
+            "cagr": 0.15131351648489955,
+            "sharpe": 0.6070191619940357,
+            "max_drawdown": -0.47627245215220404,
+            "sharpe_gap": 0.022284163895431308,
+            "max_drawdown_gap": 0.048109604116462035
+          },
+          {
+            "name": "idle_ief_w100_b2",
+            "similar": true,
+            "cagr": 0.15132333867699366,
+            "sharpe": 0.6223564529743721,
+            "max_drawdown": -0.4281628480357418,
+            "sharpe_gap": 0.006946872915094882,
+            "max_drawdown_gap": 2.220446049250313e-16
+          },
+          {
+            "name": "idle_ief_w200_b0",
+            "similar": true,
+            "cagr": 0.1536558206865397,
+            "sharpe": 0.6301253023003694,
+            "max_drawdown": -0.4281628480357422,
+            "sharpe_gap": 0.0008219764109024252,
+            "max_drawdown_gap": 2.220446049250313e-16
+          },
+          {
+            "name": "idle_tlt_w100_b0",
+            "similar": false,
+            "cagr": 0.14338793252908721,
+            "sharpe": 0.5827849149821855,
+            "max_drawdown": -0.48281561235517667,
+            "sharpe_gap": 0.04651841090728148,
+            "max_drawdown_gap": 0.054652764319434666
+          }
+        ]
+      }
+    },
+    "n_trials": 281,
+    "sharpe_dispersion_daily": 0.011271855446491357,
+    "last_pick": "idle_ief_w100_b0",
+    "previous_signal": {
+      "date": "2026-10-30",
+      "weights": {
+        "SPY": 0.5,
+        "UPRO": 0.5
+      },
+      "trend_on": true,
+      "dip_on": false,
+      "signal_date": "2026-10-29"
+    },
+    "signal": {
+      "date": "2026-11-02",
+      "signal_date": "2026-10-30",
+      "weights": {
+        "SPY": 0.5,
+        "UPRO": 0.5
+      },
+      "trend_on": true,
+      "dip_on": false,
+      "trade_reason": "none"
+    }
   }
 ]

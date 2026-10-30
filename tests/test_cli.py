@@ -29,6 +29,7 @@ def test_trend_core_cli_writes_a_valid_signal(tmp_path):
     code = main([
         "signals", "--strategy", "trend-core",
         "--cache", str(tmp_path),
+        "--study-dir", str(tmp_path / "study"),
         "--start", "2015-01-02",
         "--end", "2016-06-01",
         "--out", str(out),
