@@ -12,9 +12,11 @@ from quantforge.data import get_source, load_bars
 from quantforge.data.base import DataError
 from quantforge.eval.ledger import TrialLedger
 from quantforge.signals.emit import write_signal
+from quantforge.signals.schema import ALLOWED_TREND_TICKERS
 from quantforge.strategies.dipbuy import build_dip_signal
 from quantforge.strategies.credit import kept_hedge_stress
 from quantforge.strategies.drawdown import kept_drawdown_scale
+from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend
@@ -96,14 +98,32 @@ def _signals(args) -> int:
         if dd_scale is not None:
             scale, vol_info = dd_scale, None
         vote_trend, vote_info = kept_vote_trend(study / "iterations.json", close, as_of=close.index[-1])
+        idle_choice = kept_idle_choice(study / "iterations.json", close.index[-1])
+        idle_closes = {}
+        if idle_choice is not None:
+            idle_frames = load_bars(
+                get_source("yahoo"), [idle_choice["symbol"]],
+                start=args.start, end=args.end, cache_dir=cache,
+            )
+            idle_closes[idle_choice["symbol"]] = idle_frames[idle_choice["symbol"]]["close"]
+        idle_kwargs = idle_signal_kwargs(
+            study / "iterations.json", close, close.index[-1], idle_closes,
+        )
         payload = build_trend_signal(
             TrendCoreSpec(), close, strategy_id="trend_core",
             hedge_on=stress, hedge_rule=rule, hedge_info=info,
             sleeve_scale=scale, vol_info=vol_info,
             trend_override=vote_trend, vote_info=vote_info,
             dd_info=dd_info,
+            **idle_kwargs,
         )
         dest = Path(args.out) if args.out else study / "signals.json"
+        allowed = ALLOWED_TREND_TICKERS
+        if idle_kwargs.get("idle_symbol"):
+            allowed = allowed | frozenset({idle_kwargs["idle_symbol"]})
+        write_signal(payload, dest, allowed_tickers=allowed)
+        print(f"wrote {dest} for {payload['date']} {payload['weights']}")
+        return 0
     else:
         payload = build_dip_signal(close, strategy_id="dip_buy")
         dest = Path(args.out) if args.out else study / "signals_dipbuy.json"

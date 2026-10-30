@@ -547,6 +547,236 @@ def _allocate_scaled(
     )
 
 
+def run_idle_diversifier(
+    spy_open: pd.Series,
+    spy_close: pd.Series,
+    sso_open: pd.Series,
+    sso_close: pd.Series,
+    upro_open: pd.Series,
+    upro_close: pd.Series,
+    div_open: pd.Series,
+    div_close: pd.Series,
+    trend_on: pd.Series,
+    div_on: pd.Series,
+    div_ready: pd.Series,
+    dip_on: pd.Series,
+    mix_rebalance: pd.Series,
+    core_weight: float,
+    sleeve_weight: float,
+    cash_yield: pd.Series,
+    spy_cost: float = 0.0,
+    sso_cost: float = 0.0,
+    upro_cost: float = 0.0,
+    div_cost: float = 0.0,
+    execution: str = "next_open",
+) -> BacktestResult:
+    """Trend-core book that can leave equities for one diversifier.
+
+    While ``trend_on`` is true the book is the trend-core book, dip included.
+    While it is false and ``div_ready`` is false, it is still that book, with
+    the sleeve in cash, so the years before the diversifier's average exists
+    are not a separate timing rule. While the equity trend is false and the
+    diversifier's filter is ready, the whole invested book holds the
+    diversifier if ``div_on`` is true and T-bills otherwise. A decision at the
+    close of t is filled at the next open. Diversifier prices may be missing
+    before the fund lists; they are read only when the book holds that fund.
+    """
+    if execution not in ("next_open", "next_close"):
+        raise ValueError(f"unknown execution {execution!r}")
+    if core_weight < 0 or sleeve_weight < 0 or core_weight + sleeve_weight > 1 + 1e-8:
+        raise ValueError("core and sleeve weights must be non-negative and sum to at most 1")
+    idx = spy_close.index
+    prices = {
+        "spy_o": spy_open.reindex(idx).to_numpy(dtype=float),
+        "spy_c": spy_close.reindex(idx).to_numpy(dtype=float),
+        "sso_o": sso_open.reindex(idx).to_numpy(dtype=float),
+        "sso_c": sso_close.reindex(idx).to_numpy(dtype=float),
+        "upro_o": upro_open.reindex(idx).to_numpy(dtype=float),
+        "upro_c": upro_close.reindex(idx).to_numpy(dtype=float),
+    }
+    stacked = np.column_stack(list(prices.values()))
+    if np.any(~np.isfinite(stacked)) or np.any(stacked <= 0):
+        raise ValueError("SPY, SSO, and UPRO prices must be finite and positive")
+    div_o = div_open.reindex(idx).to_numpy(dtype=float)
+    div_c = div_close.reindex(idx).to_numpy(dtype=float)
+    trend = trend_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    diversify = div_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    ready = div_ready.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    dip = dip_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    mix = mix_rebalance.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    rf = cash_yield.reindex(idx).astype(float).fillna(0.0).to_numpy(dtype=float)
+    n = len(idx)
+    core = 0.0
+    sleeve = 0.0
+    div_pos = 0.0
+    resid = 1.0
+    core_sso = False
+    sleeve_upro = False
+    book = "baseline"
+    rets = np.full(n, np.nan)
+    turn = np.zeros(n)
+    drag = np.zeros(n)
+    exposure = np.full(n, np.nan)
+
+    def desired_at(j: int) -> str:
+        if trend[j]:
+            return "equity"
+        if ready[j] and diversify[j]:
+            return "div"
+        if ready[j]:
+            return "cash"
+        return "baseline"
+
+    def _require_div(j: int, *extra: int) -> None:
+        for k in (j, *extra):
+            if k < 0 or not np.isfinite(div_o[k]) or not np.isfinite(div_c[k]) or div_o[k] <= 0 or div_c[k] <= 0:
+                raise ValueError(f"diversifier prices are missing on {idx[k].date()}")
+
+    for i in range(1, n):
+        prev = core + sleeve + div_pos + resid
+        desired = desired_at(i - 1)
+        if execution == "next_open":
+            if book in ("equity", "baseline"):
+                core = _mark(core, prices["sso_o"][i], prices["sso_c"][i - 1], prices["spy_o"][i], prices["spy_c"][i - 1], core_sso)
+                if sleeve_upro and sleeve != 0.0:
+                    sleeve *= prices["upro_o"][i] / prices["upro_c"][i - 1]
+                elif sleeve != 0.0:
+                    sleeve *= 1.0 + rf[i]
+            elif book == "div" and div_pos != 0.0:
+                _require_div(i, i - 1)
+                div_pos *= div_o[i] / div_c[i - 1]
+            resid *= 1.0 + rf[i]
+            core, sleeve, div_pos, resid, core_sso, sleeve_upro, book, turn[i], drag[i] = _step_idle(
+                core + sleeve + div_pos + resid, core, sleeve, div_pos, resid,
+                core_sso, sleeve_upro, book, desired, bool(dip[i - 1]),
+                bool(i == 1 or mix[i - 1]),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost, div_cost,
+            )
+            if book == "div" and div_pos != 0.0:
+                _require_div(i)
+                div_pos *= div_c[i] / div_o[i]
+            elif book in ("equity", "baseline"):
+                core = _mark(core, prices["sso_c"][i], prices["sso_o"][i], prices["spy_c"][i], prices["spy_o"][i], core_sso)
+                if sleeve_upro and sleeve != 0.0:
+                    sleeve *= prices["upro_c"][i] / prices["upro_o"][i]
+        else:
+            if book in ("equity", "baseline"):
+                core = _mark(core, prices["sso_c"][i], prices["sso_c"][i - 1], prices["spy_c"][i], prices["spy_c"][i - 1], core_sso)
+                if sleeve_upro and sleeve != 0.0:
+                    sleeve *= prices["upro_c"][i] / prices["upro_c"][i - 1]
+                elif sleeve != 0.0:
+                    sleeve *= 1.0 + rf[i]
+            elif book == "div" and div_pos != 0.0:
+                _require_div(i, i - 1)
+                div_pos *= div_c[i] / div_c[i - 1]
+            resid *= 1.0 + rf[i]
+            core, sleeve, div_pos, resid, core_sso, sleeve_upro, book, turn[i], drag[i] = _step_idle(
+                core + sleeve + div_pos + resid, core, sleeve, div_pos, resid,
+                core_sso, sleeve_upro, book, desired, bool(dip[i - 1]),
+                bool(i == 1 or mix[i - 1]),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost, div_cost,
+            )
+        new = core + sleeve + div_pos + resid
+        rets[i] = new / prev - 1.0
+        if book == "div":
+            invested = div_pos
+        elif book == "cash":
+            invested = 0.0
+        else:
+            invested = core + (sleeve if sleeve_upro else 0.0)
+        exposure[i] = invested / new if new else 0.0
+    return BacktestResult(
+        returns=pd.Series(rets, index=idx, name="return"),
+        turnover=pd.Series(turn, index=idx, name="turnover"),
+        cost_drag=pd.Series(drag, index=idx, name="cost_drag"),
+        exposure=pd.Series(exposure, index=idx, name="exposure"),
+    )
+
+
+def _step_idle(
+    equity, core, sleeve, div_pos, resid,
+    core_sso, sleeve_upro, book, desired, want_dip, do_mix,
+    core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost, div_cost,
+):
+    """One rebalance. Core-book states delegate to the trend-core allocator."""
+    if desired in ("equity", "baseline") and book in ("equity", "baseline"):
+        core, sleeve, resid, core_sso, sleeve_upro, traded, cost = _allocate_trend(
+            equity, core, sleeve, resid, core_sso, sleeve_upro,
+            bool(want_dip), desired == "equity", do_mix,
+            core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+        )
+        return core, sleeve, 0.0, resid, core_sso, sleeve_upro, desired, traded, cost
+    if desired == book and book in ("div", "cash"):
+        return core, sleeve, div_pos, resid, core_sso, sleeve_upro, book, 0.0, 0.0
+    core, sleeve, div_pos, resid, core_sso, sleeve_upro, traded, cost = _switch_idle(
+        equity, core, sleeve, div_pos, resid, core_sso, sleeve_upro, desired, bool(want_dip),
+        core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost, div_cost,
+    )
+    return core, sleeve, div_pos, resid, core_sso, sleeve_upro, desired, traded, cost
+
+
+def _switch_idle(
+    equity, core, sleeve, div_pos, resid, core_sso, sleeve_upro, desired, want_dip,
+    core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost, div_cost,
+):
+    """Sell whatever is held and buy the target book. Cash pays no spread."""
+    if equity <= 0:
+        raise ValueError("equity is non-positive")
+    cost = 0.0
+    traded = 0.0
+    if core > 0.0:
+        cost += core * (sso_cost if core_sso else spy_cost)
+        traded += core
+    if sleeve_upro and sleeve > 0.0:
+        cost += sleeve * upro_cost
+        traded += sleeve
+    if div_pos > 0.0:
+        cost += div_pos * div_cost
+        traded += div_pos
+    hold_div = desired == "div"
+    hold_equity = desired in ("equity", "baseline")
+    new_sso = bool(want_dip) if hold_equity else False
+    want_upro = desired == "equity"
+    if hold_equity:
+        tgt_core = core_weight * equity
+        tgt_sleeve = sleeve_weight * equity
+        tgt_div = 0.0
+    elif hold_div:
+        tgt_core = 0.0
+        tgt_sleeve = 0.0
+        tgt_div = (core_weight + sleeve_weight) * equity
+    else:
+        tgt_core = 0.0
+        tgt_sleeve = 0.0
+        tgt_div = 0.0
+    if tgt_core > 0.0:
+        cost += tgt_core * (sso_cost if new_sso else spy_cost)
+        traded += tgt_core
+    if want_upro and tgt_sleeve > 0.0:
+        cost += tgt_sleeve * upro_cost
+        traded += tgt_sleeve
+    if tgt_div > 0.0:
+        cost += tgt_div * div_cost
+        traded += tgt_div
+    if cost >= equity:
+        raise ValueError("transaction costs consume the whole book")
+    scale = (equity - cost) / equity
+    turnover = traded / 2.0 / equity
+    tgt_resid = equity - tgt_core - tgt_sleeve - tgt_div
+    if tgt_resid < -1e-6:
+        raise ValueError("idle targets exceed equity")
+    return (
+        tgt_core * scale,
+        tgt_sleeve * scale,
+        tgt_div * scale,
+        max(0.0, tgt_resid) * scale,
+        new_sso,
+        want_upro,
+        turnover,
+        cost / equity,
+    )
+
+
 def _mark(value: float, num_sso: float, den_sso: float, num_spy: float, den_spy: float, in_sso: bool) -> float:
     if value == 0.0:
         return 0.0

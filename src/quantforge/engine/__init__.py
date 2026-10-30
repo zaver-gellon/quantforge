@@ -4,6 +4,7 @@ from quantforge.engine.backtest import (
     BacktestResult,
     run_backtest,
     run_core_satellite,
+    run_idle_diversifier,
     run_trend_core,
     run_vol_sleeve,
 )
@@ -29,6 +30,7 @@ __all__ = [
     "rebalance_mask",
     "run_backtest",
     "run_core_satellite",
+    "run_idle_diversifier",
     "run_trend_core",
     "run_vol_sleeve",
     "stitch_ohlc",
