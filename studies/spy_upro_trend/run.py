@@ -47,6 +47,7 @@ from quantforge.eval.sharpe import (  # noqa: E402
 from quantforge.eval.walkforward import walk_forward_select  # noqa: E402
 from quantforge.signals.emit import write_signal, write_signals_note  # noqa: E402
 from quantforge.signals.schema import ALLOWED_TREND_TICKERS  # noqa: E402
+from quantforge.strategies.confirm import kept_confirm_trend
 from quantforge.strategies.credit import kept_hedge_stress  # noqa: E402
 from quantforge.strategies.drawdown import kept_drawdown_scale  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
@@ -719,6 +720,11 @@ def main() -> None:
     if dd_scale is not None:
         sleeve_scale, vol_info = dd_scale, None
     vote_trend, vote_info = kept_vote_trend(HERE / "iterations.json", spy["close"], as_of=as_of)
+    confirm_trend, confirm_info = kept_confirm_trend(HERE / "iterations.json", spy["close"], as_of=as_of)
+    if confirm_trend is not None and vote_trend is not None:
+        raise RuntimeError("the iteration log kept both a vote and a confirmation rule")
+    if confirm_trend is not None:
+        vote_trend, vote_info = confirm_trend, None
     idle_choice = kept_idle_choice(HERE / "iterations.json", as_of)
     idle_closes = {}
     if idle_choice is not None:
@@ -730,6 +736,7 @@ def main() -> None:
         hedge_on=hedge_stress, hedge_rule=hedge_rule, hedge_info=hedge_info,
         sleeve_scale=sleeve_scale, vol_info=vol_info,
         trend_override=vote_trend, vote_info=vote_info,
+        confirm_info=confirm_info,
         dd_info=dd_info,
         **idle_kwargs,
     )
@@ -738,7 +745,9 @@ def main() -> None:
         allowed = allowed | frozenset({idle_kwargs["idle_symbol"]})
     write_signal(desk_signal, HERE / "signals.json", allowed_tickers=allowed)
     signal_title = "Trend-core (2% band, dip overlay on the SPY half)"
-    if idle_kwargs.get("idle_info"):
+    if confirm_info:
+        signal_title = "Trend-core with the kept N-day confirmation of the trend band"
+    elif idle_kwargs.get("idle_info"):
         signal_title = "Trend-core that leaves equities for the kept bond or gold trend"
     elif dd_info:
         signal_title = "Trend-core with the kept trailing-peak stop on the UPRO sleeve"

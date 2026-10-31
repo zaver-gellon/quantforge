@@ -14,6 +14,7 @@ from quantforge.eval.ledger import TrialLedger
 from quantforge.signals.emit import write_signal
 from quantforge.signals.schema import ALLOWED_TREND_TICKERS
 from quantforge.strategies.dipbuy import build_dip_signal
+from quantforge.strategies.confirm import kept_confirm_trend
 from quantforge.strategies.credit import kept_hedge_stress
 from quantforge.strategies.drawdown import kept_drawdown_scale
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs
@@ -98,6 +99,11 @@ def _signals(args) -> int:
         if dd_scale is not None:
             scale, vol_info = dd_scale, None
         vote_trend, vote_info = kept_vote_trend(study / "iterations.json", close, as_of=close.index[-1])
+        confirm_trend, confirm_info = kept_confirm_trend(study / "iterations.json", close, as_of=close.index[-1])
+        if confirm_trend is not None and vote_trend is not None:
+            raise DataError("the iteration log kept both a vote and a confirmation rule")
+        if confirm_trend is not None:
+            vote_trend, vote_info = confirm_trend, None
         idle_choice = kept_idle_choice(study / "iterations.json", close.index[-1])
         idle_closes = {}
         if idle_choice is not None:
@@ -114,6 +120,7 @@ def _signals(args) -> int:
             hedge_on=stress, hedge_rule=rule, hedge_info=info,
             sleeve_scale=scale, vol_info=vol_info,
             trend_override=vote_trend, vote_info=vote_info,
+            confirm_info=confirm_info,
             dd_info=dd_info,
             **idle_kwargs,
         )

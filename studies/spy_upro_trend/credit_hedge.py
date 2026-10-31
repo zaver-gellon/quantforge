@@ -236,6 +236,7 @@ def _write_outputs(entry: dict) -> None:
     ITERATIONS_PATH.write_text(json.dumps(payload, indent=2, default=_plain) + "\n")
     results = json.loads(RESULTS_PATH.read_text())
     results["iterations"] = payload
+    RESULTS_PATH.write_text(json.dumps(results, indent=2, default=_plain) + "\n")
     spec = importlib.util.spec_from_file_location("spy_upro_report", HERE / "report.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
