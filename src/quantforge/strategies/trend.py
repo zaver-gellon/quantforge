@@ -163,6 +163,7 @@ def build_trend_signal(
     vol_info: dict | None = None,
     trend_override: pd.Series | None = None,
     vote_info: dict | None = None,
+    confirm_info: dict | None = None,
     dd_info: dict | None = None,
     idle_on: pd.Series | None = None,
     idle_ready: pd.Series | None = None,
@@ -180,7 +181,8 @@ def build_trend_signal(
     ``sleeve_scale`` at the signal close is the fraction of the sleeve left in
     the leveraged fund when the sleeve is on. A missing scale leaves it at 1.
     ``trend_override`` replaces the single-average state. It is used only when
-    a walk-forward vote cleared the materiality bar. ``dd_info`` marks a scale
+    a walk-forward vote or confirmation rule cleared the materiality bar.
+    ``confirm_info`` marks a kept N-day confirmation of the band. ``dd_info`` marks a scale
     that came from a kept trailing-peak stop. ``idle_symbol`` is set only when
     a walk-forward diversifier cleared the materiality bar. While the equity
     trend is off and ``idle_ready`` is true, the whole book holds that asset
@@ -365,6 +367,10 @@ def build_trend_signal(
         payload["diagnostics"]["sleeve_scale"] = fraction
     if vote_info:
         payload["diagnostics"].update(vote_info)
+    if confirm_info:
+        payload["diagnostics"].update(confirm_info)
+        if confirm_info.get("confirm_band") is not None:
+            payload["diagnostics"]["band"] = float(confirm_info["confirm_band"])
     if idle_info:
         payload["diagnostics"].update(idle_info)
     if idle_symbol is not None:

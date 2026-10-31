@@ -2648,5 +2648,660 @@
       "dip_on": false,
       "trade_reason": "none"
     }
+  },
+  {
+    "id": "2026-10-31-trend-confirmation",
+    "date": "2026-10-31",
+    "title": "N-day confirmation of the 200-day band",
+    "hypothesis": "The live sleeve already uses a 2% hysteresis band: it turns on only when SPY closes above 1.02 times its 200-day average and turns off only when the close is below 0.98 times that average. That rule, and a 0% band, are already in the original grid. A single close through the band still flips the sleeve, and the new state then sticks until the other side of the band. Those one-session pierces are the whipsaw: the book pays the 5 bp UPRO cost and the leveraged overnight gap, then often sits in the new state through a reversal. This test does not rescore the 2% band by itself. It requires N consecutive closes beyond the band before the state changes. A close that is not beyond the band in the flip direction resets the count, and the previous state is kept until the count is met. Bands are 0.5%, 1%, 2%, and 3%. Confirmation counts are 1, 2, 3, 4, and 5 sessions. The cell with a 2% band and 1 day is the live filter, already counted, and is the walk-forward's option to keep the current book. Every other cell is a new trial. The SPY core, the three-down-close dip, and the quarterly mix are unchanged. Fills stay next-open with 5 bp one-way costs. The stitched path is kept only when it clears the materiality bar.",
+    "status": "tested",
+    "kept": false,
+    "overlay": "trend_confirm",
+    "decision": "rejected",
+    "decision_note": "Refreshed lead out-of-sample 2006-01-03 to 2026-10-30 (5240 sessions): CAGR 0.156772, Sharpe 0.622758, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-10-30 (8497 sessions). SSO ends 2026-10-30, UPRO ends 2026-10-30, ^IRX ends 2026-10-30. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book matches the prior row. On these prices, the lead book cut at the prior end 2026-10-30 (5240 sessions) has CAGR 0.156772, Sharpe 0.622758, max drawdown -0.468261, against the stored row CAGR 0.156771, Sharpe 0.622757, max drawdown -0.468262. Candidate versus that refreshed book: Sharpe 0.622758 -> 0.583227 (delta -0.039531), CAGR 0.156772 -> 0.148309 (delta -0.008463), max drawdown -0.468261 -> -0.442187 (delta 0.026073). Last walk-forward pick: confirm_b0300_n1. Out-of-sample turnover per year 13.14 -> 13.04. Trend-state flips on that window 34 -> 22. The stitched confirmation rule does not clear the materiality bar. The live book stays the plain trend core. Previous signal 2026-11-02 (close 2026-10-30): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-02 (close 2026-10-30): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.",
+    "data": {
+      "bands": [
+        0.005,
+        0.01,
+        0.02,
+        0.03
+      ],
+      "confirms": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "window": 200,
+      "price_sample_end": "2026-10-30",
+      "spy_close_end": "2026-10-30",
+      "coverage": [
+        {
+          "symbol": "SPY",
+          "start": "1993-01-29",
+          "end": "2026-10-30",
+          "n_obs": 8497
+        }
+      ],
+      "oos_turnover_per_year": {
+        "current": 13.135897142517438,
+        "candidate": 13.043502945142574
+      },
+      "oos_trend_flips": {
+        "current": 34,
+        "candidate": 22
+      }
+    },
+    "variants": [
+      {
+        "name": "confirm_b0050_n1",
+        "counts_for_deflation": true,
+        "band": 0.005,
+        "confirm": 1,
+        "cagr": 0.11075791456859596,
+        "sharpe": 0.46453490602968045,
+        "max_drawdown": -0.48430558594947926,
+        "turnover_per_year": 14.3044145875526,
+        "dsr": 0.42300739499725376,
+        "years_selected": 0,
+        "trend_flips": 120,
+        "note": null
+      },
+      {
+        "name": "confirm_b0050_n2",
+        "counts_for_deflation": true,
+        "band": 0.005,
+        "confirm": 2,
+        "cagr": 0.11749855471046677,
+        "sharpe": 0.48820205369433994,
+        "max_drawdown": -0.5043515742378462,
+        "turnover_per_year": 13.932004719208313,
+        "dsr": 0.47097095911281833,
+        "years_selected": 0,
+        "trend_flips": 76,
+        "note": null
+      },
+      {
+        "name": "confirm_b0050_n3",
+        "counts_for_deflation": true,
+        "band": 0.005,
+        "confirm": 3,
+        "cagr": 0.12316140652223795,
+        "sharpe": 0.5021235225973821,
+        "max_drawdown": -0.47299564869170885,
+        "turnover_per_year": 13.751811580294731,
+        "dsr": 0.49945908632138614,
+        "years_selected": 0,
+        "trend_flips": 56,
+        "note": null
+      },
+      {
+        "name": "confirm_b0050_n4",
+        "counts_for_deflation": true,
+        "band": 0.005,
+        "confirm": 4,
+        "cagr": 0.11875400857969742,
+        "sharpe": 0.4843318790645814,
+        "max_drawdown": -0.4971962124528756,
+        "turnover_per_year": 13.634484140545162,
+        "dsr": 0.4631243121565015,
+        "years_selected": 0,
+        "trend_flips": 42,
+        "note": null
+      },
+      {
+        "name": "confirm_b0050_n5",
+        "counts_for_deflation": true,
+        "band": 0.005,
+        "confirm": 5,
+        "cagr": 0.12469649396381888,
+        "sharpe": 0.5009017129404338,
+        "max_drawdown": -0.4877234869904089,
+        "turnover_per_year": 13.563642116614325,
+        "dsr": 0.4969639667444756,
+        "years_selected": 0,
+        "trend_flips": 34,
+        "note": null
+      },
+      {
+        "name": "confirm_b0100_n1",
+        "counts_for_deflation": true,
+        "band": 0.01,
+        "confirm": 1,
+        "cagr": 0.11466737154239426,
+        "sharpe": 0.4779565527153075,
+        "max_drawdown": -0.4877902663694599,
+        "turnover_per_year": 13.982510684567792,
+        "dsr": 0.4501270074861973,
+        "years_selected": 0,
+        "trend_flips": 82,
+        "note": null
+      },
+      {
+        "name": "confirm_b0100_n2",
+        "counts_for_deflation": true,
+        "band": 0.01,
+        "confirm": 2,
+        "cagr": 0.12248098755444681,
+        "sharpe": 0.5052168810569674,
+        "max_drawdown": -0.4832862203360949,
+        "turnover_per_year": 13.822234175795666,
+        "dsr": 0.5057924548135417,
+        "years_selected": 0,
+        "trend_flips": 64,
+        "note": null
+      },
+      {
+        "name": "confirm_b0100_n3",
+        "counts_for_deflation": true,
+        "band": 0.01,
+        "confirm": 3,
+        "cagr": 0.12316802849150843,
+        "sharpe": 0.5012844137410731,
+        "max_drawdown": -0.4457827111410072,
+        "turnover_per_year": 13.68027908002912,
+        "dsr": 0.4977413873915565,
+        "years_selected": 0,
+        "trend_flips": 48,
+        "note": null
+      },
+      {
+        "name": "confirm_b0100_n4",
+        "counts_for_deflation": true,
+        "band": 0.01,
+        "confirm": 4,
+        "cagr": 0.11820256180132538,
+        "sharpe": 0.4808882320580373,
+        "max_drawdown": -0.4971962124528756,
+        "turnover_per_year": 13.5673641487696,
+        "dsr": 0.4561089977065176,
+        "years_selected": 0,
+        "trend_flips": 34,
+        "note": null
+      },
+      {
+        "name": "confirm_b0100_n5",
+        "counts_for_deflation": true,
+        "band": 0.01,
+        "confirm": 5,
+        "cagr": 0.12497161357380437,
+        "sharpe": 0.5002657268664475,
+        "max_drawdown": -0.4877234869904089,
+        "turnover_per_year": 13.532073079448278,
+        "dsr": 0.4956643323153242,
+        "years_selected": 0,
+        "trend_flips": 30,
+        "note": null
+      },
+      {
+        "name": "confirm_b0200_n1",
+        "counts_for_deflation": false,
+        "band": 0.02,
+        "confirm": 1,
+        "cagr": 0.12830106373228234,
+        "sharpe": 0.5212656263122147,
+        "max_drawdown": -0.4682607380314484,
+        "turnover_per_year": 13.591253889077466,
+        "dsr": null,
+        "years_selected": 0,
+        "trend_flips": 40,
+        "note": "The current book. Already counted."
+      },
+      {
+        "name": "confirm_b0200_n2",
+        "counts_for_deflation": true,
+        "band": 0.02,
+        "confirm": 2,
+        "cagr": 0.12788861628989934,
+        "sharpe": 0.5145379782066583,
+        "max_drawdown": -0.4562190301242107,
+        "turnover_per_year": 13.549684987506433,
+        "dsr": 0.5248550050395443,
+        "years_selected": 0,
+        "trend_flips": 32,
+        "note": null
+      },
+      {
+        "name": "confirm_b0200_n3",
+        "counts_for_deflation": true,
+        "band": 0.02,
+        "confirm": 3,
+        "cagr": 0.11937315292397344,
+        "sharpe": 0.4822552191670073,
+        "max_drawdown": -0.4971962124528756,
+        "turnover_per_year": 13.531711339984753,
+        "dsr": 0.45894465506996535,
+        "years_selected": 0,
+        "trend_flips": 28,
+        "note": null
+      },
+      {
+        "name": "confirm_b0200_n4",
+        "counts_for_deflation": true,
+        "band": 0.02,
+        "confirm": 4,
+        "cagr": 0.12443722691870307,
+        "sharpe": 0.4972659661084908,
+        "max_drawdown": -0.487723486990409,
+        "turnover_per_year": 13.471197397542747,
+        "dsr": 0.48953982898503573,
+        "years_selected": 0,
+        "trend_flips": 24,
+        "note": null
+      },
+      {
+        "name": "confirm_b0200_n5",
+        "counts_for_deflation": true,
+        "band": 0.02,
+        "confirm": 5,
+        "cagr": 0.12285678894080365,
+        "sharpe": 0.4856089984223343,
+        "max_drawdown": -0.5446188703301407,
+        "turnover_per_year": 13.455778359015628,
+        "dsr": 0.4656355304450213,
+        "years_selected": 0,
+        "trend_flips": 22,
+        "note": null
+      },
+      {
+        "name": "confirm_b0300_n1",
+        "counts_for_deflation": true,
+        "band": 0.03,
+        "confirm": 1,
+        "cagr": 0.1327882256084829,
+        "sharpe": 0.5352782845154408,
+        "max_drawdown": -0.41220476873881806,
+        "turnover_per_year": 13.466803537978418,
+        "dsr": 0.5669558832341671,
+        "years_selected": 5,
+        "trend_flips": 26,
+        "note": null
+      },
+      {
+        "name": "confirm_b0300_n2",
+        "counts_for_deflation": true,
+        "band": 0.03,
+        "confirm": 2,
+        "cagr": 0.1286564043504279,
+        "sharpe": 0.5190878149614554,
+        "max_drawdown": -0.4256511674504052,
+        "turnover_per_year": 13.462840848520488,
+        "dsr": 0.5341070900112366,
+        "years_selected": 9,
+        "trend_flips": 24,
+        "note": null
+      },
+      {
+        "name": "confirm_b0300_n3",
+        "counts_for_deflation": true,
+        "band": 0.03,
+        "confirm": 3,
+        "cagr": 0.13372763464222315,
+        "sharpe": 0.5310730577071964,
+        "max_drawdown": -0.49719621245287504,
+        "turnover_per_year": 13.413538100257604,
+        "dsr": 0.5583298523904869,
+        "years_selected": 7,
+        "trend_flips": 18,
+        "note": null
+      },
+      {
+        "name": "confirm_b0300_n4",
+        "counts_for_deflation": true,
+        "band": 0.03,
+        "confirm": 4,
+        "cagr": 0.13168156210748494,
+        "sharpe": 0.5212034000603628,
+        "max_drawdown": -0.487723486990409,
+        "turnover_per_year": 13.423889896680773,
+        "dsr": 0.5383442459347025,
+        "years_selected": 0,
+        "trend_flips": 18,
+        "note": null
+      },
+      {
+        "name": "confirm_b0300_n5",
+        "counts_for_deflation": true,
+        "band": 0.03,
+        "confirm": 5,
+        "cagr": 0.12526433299967854,
+        "sharpe": 0.4937411201477689,
+        "max_drawdown": -0.5446188703301407,
+        "turnover_per_year": 13.417401128911118,
+        "dsr": 0.48227595226651065,
+        "years_selected": 0,
+        "trend_flips": 18,
+        "note": null
+      }
+    ],
+    "walk_forward_picks": [
+      [
+        "2006-01-03",
+        "confirm_b0300_n3"
+      ],
+      [
+        "2007-01-03",
+        "confirm_b0300_n3"
+      ],
+      [
+        "2008-01-02",
+        "confirm_b0300_n3"
+      ],
+      [
+        "2009-01-02",
+        "confirm_b0300_n3"
+      ],
+      [
+        "2010-01-04",
+        "confirm_b0300_n3"
+      ],
+      [
+        "2011-01-03",
+        "confirm_b0300_n3"
+      ],
+      [
+        "2012-01-03",
+        "confirm_b0300_n1"
+      ],
+      [
+        "2013-01-02",
+        "confirm_b0300_n1"
+      ],
+      [
+        "2014-01-02",
+        "confirm_b0300_n1"
+      ],
+      [
+        "2015-01-02",
+        "confirm_b0300_n1"
+      ],
+      [
+        "2016-01-04",
+        "confirm_b0300_n3"
+      ],
+      [
+        "2017-01-03",
+        "confirm_b0300_n2"
+      ],
+      [
+        "2018-01-02",
+        "confirm_b0300_n2"
+      ],
+      [
+        "2019-01-02",
+        "confirm_b0300_n2"
+      ],
+      [
+        "2020-01-02",
+        "confirm_b0300_n2"
+      ],
+      [
+        "2021-01-04",
+        "confirm_b0300_n2"
+      ],
+      [
+        "2022-01-03",
+        "confirm_b0300_n2"
+      ],
+      [
+        "2023-01-03",
+        "confirm_b0300_n2"
+      ],
+      [
+        "2024-01-02",
+        "confirm_b0300_n2"
+      ],
+      [
+        "2025-01-02",
+        "confirm_b0300_n2"
+      ],
+      [
+        "2026-01-02",
+        "confirm_b0300_n1"
+      ]
+    ],
+    "oos_window": {
+      "start": "2006-01-03",
+      "end": "2026-10-30",
+      "n_days": 5240
+    },
+    "oos": {
+      "current": {
+        "cagr": 0.15677164384236808,
+        "vol": 0.26214292815272994,
+        "sharpe": 0.6227581673469087,
+        "sharpe_per_period": 0.03923382095274448,
+        "max_drawdown": -0.4682607380314493,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      },
+      "candidate": {
+        "cagr": 0.14830856490432076,
+        "vol": 0.27182816022770434,
+        "sharpe": 0.5832268552725022,
+        "sharpe_per_period": 0.03674334471128177,
+        "max_drawdown": -0.4421873097018548,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      }
+    },
+    "lead_oos": {
+      "before": {
+        "cagr": 0.15677164384236808,
+        "vol": 0.26214292815272994,
+        "sharpe": 0.6227581673469087,
+        "sharpe_per_period": 0.03923382095274448,
+        "max_drawdown": -0.4682607380314493,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      },
+      "after": {
+        "cagr": 0.15677164384236808,
+        "vol": 0.26214292815272994,
+        "sharpe": 0.6227581673469087,
+        "sharpe_per_period": 0.03923382095274448,
+        "max_drawdown": -0.4682607380314493,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      }
+    },
+    "lead_refresh": {
+      "prior_id": "2026-10-30-idle-diversifier",
+      "prior": {
+        "cagr": 0.15677126969113564,
+        "vol": 0.26214307907034845,
+        "sharpe": 0.6227567426659815,
+        "sharpe_per_period": 0.039233731197717,
+        "max_drawdown": -0.46826187382935747,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      },
+      "refreshed": {
+        "cagr": 0.15677164384236808,
+        "vol": 0.26214292815272994,
+        "sharpe": 0.6227581673469087,
+        "sharpe_per_period": 0.03923382095274448,
+        "max_drawdown": -0.4682607380314493,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      },
+      "cagr_delta": 3.7415123244066706e-07,
+      "sharpe_delta": 1.4246809272311367e-06,
+      "max_drawdown_delta": 1.1357979081694225e-06,
+      "display_unchanged": true,
+      "through_prior_end": {
+        "cagr": 0.15677164384236808,
+        "sharpe": 0.6227581673469087,
+        "max_drawdown": -0.4682607380314493,
+        "n_days": 5240,
+        "start": "2006-01-03",
+        "end": "2026-10-30"
+      },
+      "note": "After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-10-30 (8497 sessions). SSO ends 2026-10-30, UPRO ends 2026-10-30, ^IRX ends 2026-10-30. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book matches the prior row. On these prices, the lead book cut at the prior end 2026-10-30 (5240 sessions) has CAGR 0.156772, Sharpe 0.622758, max drawdown -0.468261, against the stored row CAGR 0.156771, Sharpe 0.622757, max drawdown -0.468262."
+    },
+    "materiality": {
+      "pass": false,
+      "bar": {
+        "sharpe_improvement": 0.05,
+        "drawdown_improvement": 0.03,
+        "cagr_slack": 0.005,
+        "improvement_dsr_min": 0.75,
+        "neighbor_sharpe_tol": 0.05,
+        "neighbor_drawdown_tol": 0.03
+      },
+      "checks": [
+        {
+          "name": "a Sharpe +0.05",
+          "pass": false,
+          "detail": "Sharpe 0.622758 -> 0.583227 (delta -0.039531; need >= 0.05)."
+        },
+        {
+          "name": "a drawdown +3pp and CAGR within 0.5pp",
+          "pass": false,
+          "detail": "Max drawdown -0.468261 -> -0.442187 (delta 0.026073; need >= 0.03). CAGR 0.156772 -> 0.148309 (delta -0.008463; floor -0.0050)."
+        },
+        {
+          "name": "a overall",
+          "pass": false,
+          "detail": "Either the Sharpe clause or the drawdown clause is enough."
+        },
+        {
+          "name": "b deflated Sharpe of the improvement >= 0.75",
+          "pass": false,
+          "detail": "Improvement Sharpe -0.078911, deflated Sharpe 0.003607 (need >= 0.75). Trials 300, daily-Sharpe dispersion 0.010931, daily multiple-testing benchmark 0.031650."
+        },
+        {
+          "name": "b still helps with the best improvement year removed",
+          "pass": false,
+          "detail": "Removed 2007 (summed daily improvement 0.140371). Remaining Sharpe delta -0.065929, CAGR delta -0.016643, max-drawdown delta 0.016177."
+        },
+        {
+          "name": "b overall",
+          "pass": false,
+          "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+        },
+        {
+          "name": "c neighboring parameters",
+          "pass": false,
+          "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell."
+        }
+      ],
+      "oos": {
+        "current": {
+          "cagr": 0.15677164384236808,
+          "vol": 0.26214292815272994,
+          "sharpe": 0.6227581673469087,
+          "sharpe_per_period": 0.03923382095274448,
+          "max_drawdown": -0.4682607380314493,
+          "n_days": 5240,
+          "start": "2006-01-03",
+          "end": "2026-10-30"
+        },
+        "candidate": {
+          "cagr": 0.14830856490432076,
+          "vol": 0.27182816022770434,
+          "sharpe": 0.5832268552725022,
+          "sharpe_per_period": 0.03674334471128177,
+          "max_drawdown": -0.4421873097018548,
+          "n_days": 5240,
+          "start": "2006-01-03",
+          "end": "2026-10-30"
+        }
+      },
+      "criterion_a": {
+        "sharpe_delta": -0.03953131207440652,
+        "cagr_delta": -0.00846307893804732,
+        "max_drawdown_delta": 0.026073428329594472,
+        "sharpe_pass": false,
+        "drawdown_pass": false,
+        "pass": false
+      },
+      "criterion_b": {
+        "pass": false,
+        "dsr_pass": false,
+        "still_helps": false,
+        "improvement_sharpe": -0.07891109416471881,
+        "improvement_sharpe_per_period": -0.004971406080201776,
+        "improvement_dsr": 0.003606957290557433,
+        "sr0_daily": 0.03164980064437411,
+        "n_trials": 300,
+        "sharpe_dispersion_daily": 0.010930680084474719,
+        "best_year": 2007,
+        "best_year_improvement_sum": 0.14037079815598208,
+        "without_best_year": {
+          "sharpe_delta": -0.06592916853993802,
+          "cagr_delta": -0.016642879973998603,
+          "max_drawdown_delta": 0.0161769558000443,
+          "sharpe_pass": false,
+          "drawdown_pass": false,
+          "pass": false
+        }
+      },
+      "criterion_c": {
+        "pass": false,
+        "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell.",
+        "cell": {
+          "cagr": 0.16314955151953447,
+          "vol": 0.2650490096824881,
+          "sharpe": 0.6395096234521759,
+          "sharpe_per_period": 0.040289164204735425,
+          "max_drawdown": -0.41220476873881795,
+          "n_days": 5240,
+          "start": "2006-01-03",
+          "end": "2026-10-30"
+        },
+        "neighbors": [
+          {
+            "name": "confirm_b0200_n1",
+            "similar": false,
+            "cagr": 0.15677164384236808,
+            "sharpe": 0.6227581673469087,
+            "max_drawdown": -0.4682607380314493,
+            "sharpe_gap": 0.016751456105267182,
+            "max_drawdown_gap": 0.05605596929263135
+          },
+          {
+            "name": "confirm_b0300_n2",
+            "similar": true,
+            "cagr": 0.15883933719862897,
+            "sharpe": 0.6218461703775066,
+            "max_drawdown": -0.42565116745040543,
+            "sharpe_gap": 0.017663453074669322,
+            "max_drawdown_gap": 0.013446398711587482
+          }
+        ]
+      }
+    },
+    "n_trials": 300,
+    "sharpe_dispersion_daily": 0.010930680084474719,
+    "last_pick": "confirm_b0300_n1",
+    "previous_signal": {
+      "date": "2026-11-02",
+      "weights": {
+        "SPY": 0.5,
+        "UPRO": 0.5
+      },
+      "trend_on": true,
+      "dip_on": false,
+      "signal_date": "2026-10-30"
+    },
+    "signal": {
+      "date": "2026-11-02",
+      "signal_date": "2026-10-30",
+      "weights": {
+        "SPY": 0.5,
+        "UPRO": 0.5
+      },
+      "trend_on": true,
+      "dip_on": false,
+      "trade_reason": "none"
+    }
   }
 ]
