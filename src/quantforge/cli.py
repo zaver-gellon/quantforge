@@ -15,6 +15,7 @@ from quantforge.signals.emit import write_signal
 from quantforge.signals.schema import ALLOWED_TREND_TICKERS
 from quantforge.strategies.dipbuy import build_dip_signal
 from quantforge.strategies.confirm import kept_confirm_trend
+from quantforge.strategies.corehold import kept_core_hold
 from quantforge.strategies.credit import kept_hedge_stress
 from quantforge.strategies.drawdown import kept_drawdown_scale
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs
@@ -115,6 +116,7 @@ def _signals(args) -> int:
         idle_kwargs = idle_signal_kwargs(
             study / "iterations.json", close, close.index[-1], idle_closes,
         )
+        core_hold, core_hold_info = kept_core_hold(study / "iterations.json", close, as_of=close.index[-1])
         payload = build_trend_signal(
             TrendCoreSpec(), close, strategy_id="trend_core",
             hedge_on=stress, hedge_rule=rule, hedge_info=info,
@@ -122,6 +124,7 @@ def _signals(args) -> int:
             trend_override=vote_trend, vote_info=vote_info,
             confirm_info=confirm_info,
             dd_info=dd_info,
+            core_hold=core_hold, core_hold_info=core_hold_info,
             **idle_kwargs,
         )
         dest = Path(args.out) if args.out else study / "signals.json"

@@ -120,12 +120,18 @@ def strategic_weights(
     trend_on: bool,
     dip_on: bool = False,
     sleeve_fraction: float = 1.0,
+    core_hold: float = 1.0,
+    trend_is_on: bool | None = None,
 ) -> dict[str, float]:
     """Strategic weights. A dip swaps the core from SPY to SSO and leaves the sleeve budget alone.
 
     ``sleeve_fraction`` is the share of the sleeve budget kept in the leveraged
     fund while the trend is on. The rest of that budget is cash. The fraction
-    is ignored when the trend is off.
+    is ignored when the trend is off. ``core_hold`` is the share of the core
+    budget left in SPY or SSO while the equity trend is off. The rest of that
+    budget is cash. It is ignored while the equity trend is on. ``trend_is_on``
+    is that equity trend when a credit hedge has already turned ``trend_on``
+    into the sleeve flag. When it is omitted, the sleeve flag is the equity trend.
     """
     raw: dict[str, float] = {}
 
@@ -133,10 +139,12 @@ def strategic_weights(
         if weight > 0:
             raw[symbol] = raw.get(symbol, 0.0) + float(weight)
 
+    equity_trend = bool(trend_on) if trend_is_on is None else bool(trend_is_on)
+    hold = 1.0 if equity_trend else min(1.0, max(0.0, float(core_hold)))
     fraction = min(1.0, max(0.0, float(sleeve_fraction))) if trend_on else 0.0
-    add("SSO" if dip_on else spec.core_symbol, spec.core_weight)
+    add("SSO" if dip_on else spec.core_symbol, spec.core_weight * hold)
     add(spec.sleeve_symbol, spec.sleeve_weight * fraction)
-    add(spec.cash_symbol, spec.sleeve_weight * (1.0 - fraction))
+    add(spec.cash_symbol, spec.sleeve_weight * (1.0 - fraction) + spec.core_weight * (1.0 - hold))
     rounded = {symbol: round(weight, 6) for symbol, weight in raw.items() if round(weight, 6) > 0}
     total = sum(rounded.values())
     if total > 1.0:
@@ -169,6 +177,8 @@ def build_trend_signal(
     idle_ready: pd.Series | None = None,
     idle_symbol: str | None = None,
     idle_info: dict | None = None,
+    core_hold: pd.Series | None = None,
+    core_hold_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -183,11 +193,13 @@ def build_trend_signal(
     ``trend_override`` replaces the single-average state. It is used only when
     a walk-forward vote or confirmation rule cleared the materiality bar.
     ``confirm_info`` marks a kept N-day confirmation of the band. ``dd_info`` marks a scale
-    that came from a kept trailing-peak stop. ``idle_symbol`` is set only when
+    that came from a kept trailing-peak stop.     ``idle_symbol`` is set only when
     a walk-forward diversifier cleared the materiality bar. While the equity
     trend is off and ``idle_ready`` is true, the whole book holds that asset
-    if ``idle_on`` is true and BIL if it is false. Dates after ``as_of`` are
-    ignored. A missing value on or before ``as_of`` is an error.
+    if ``idle_on`` is true and BIL if it is false. ``core_hold`` is the share
+    of the core budget left in equities while the equity trend is off, and only
+    when a walk-forward core-hold rule cleared the materiality bar. Dates after
+    ``as_of`` are ignored. A missing value on or before ``as_of`` is an error.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -245,6 +257,19 @@ def build_trend_signal(
             ready_prev = bool(aligned_ready.iloc[-2])
     sleeve_on = on and not hedge_now
     fraction = 1.0 if sleeve_on else 0.0
+    hold_now = 1.0
+    hold_prev = 1.0
+    if core_hold is not None:
+        aligned_hold = core_hold.reindex(visible.index).astype(float)
+        if aligned_hold.isna().any() or not np.isfinite(aligned_hold.to_numpy()).all():
+            raise ValueError("core hold is missing sessions at or before as_of")
+        if (aligned_hold < -1e-12).any() or (aligned_hold > 1.0 + 1e-12).any():
+            raise ValueError("core hold must be in [0, 1]")
+        hold_now = min(1.0, max(0.0, float(aligned_hold.iloc[-1])))
+        if len(aligned_hold) > 1:
+            hold_prev = min(1.0, max(0.0, float(aligned_hold.iloc[-2])))
+    prev_on = False if previous is None else bool(previous)
+    hold_changed = abs((1.0 if on else hold_now) - (1.0 if prev_on else hold_prev)) > 1e-8
     scale_changed = False
     if sleeve_scale is not None:
         prev_fraction = 1.0 if (bool(previous) and not hedge_prev) else 0.0
@@ -296,6 +321,9 @@ def build_trend_signal(
     elif scale_changed:
         trade = True
         reason = scale_label
+    elif hold_changed:
+        trade = True
+        reason = "core_hold"
     elif scheduled:
         trade = True
         reason = "scheduled_rebalance"
@@ -326,7 +354,10 @@ def build_trend_signal(
     elif mode == "cash":
         weights = {spec.cash_symbol: round(invested, 6)}
     else:
-        weights = strategic_weights(spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0)
+        weights = strategic_weights(
+            spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0,
+            core_hold=hold_now, trend_is_on=on,
+        )
     average = close.rolling(spec.window, min_periods=spec.window).mean().loc[as_of_ts]
     payload = {
         "date": next_nyse_session(as_of_ts).strftime("%Y-%m-%d"),
@@ -371,6 +402,10 @@ def build_trend_signal(
         payload["diagnostics"].update(confirm_info)
         if confirm_info.get("confirm_band") is not None:
             payload["diagnostics"]["band"] = float(confirm_info["confirm_band"])
+    if core_hold_info:
+        payload["diagnostics"].update(core_hold_info)
+        payload["diagnostics"]["core_hold"] = hold_now
+        payload["diagnostics"]["core_hold_applied"] = 1.0 if on else hold_now
     if idle_info:
         payload["diagnostics"].update(idle_info)
     if idle_symbol is not None:
