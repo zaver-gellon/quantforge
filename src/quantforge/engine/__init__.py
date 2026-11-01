@@ -3,6 +3,7 @@
 from quantforge.engine.backtest import (
     BacktestResult,
     run_backtest,
+    run_core_hold,
     run_core_satellite,
     run_idle_diversifier,
     run_trend_core,
@@ -29,6 +30,7 @@ __all__ = [
     "quarter_ends",
     "rebalance_mask",
     "run_backtest",
+    "run_core_hold",
     "run_core_satellite",
     "run_idle_diversifier",
     "run_trend_core",
