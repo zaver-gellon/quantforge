@@ -49,6 +49,7 @@ from quantforge.signals.emit import write_signal, write_signals_note  # noqa: E4
 from quantforge.signals.schema import ALLOWED_TREND_TICKERS  # noqa: E402
 from quantforge.strategies.confirm import kept_confirm_trend
 from quantforge.strategies.corehold import kept_core_hold
+from quantforge.strategies.curve import has_kept_curve, kept_curve_clock, treasury_spread
 from quantforge.strategies.credit import kept_hedge_stress  # noqa: E402
 from quantforge.strategies.drawdown import kept_drawdown_scale  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
@@ -733,6 +734,11 @@ def main() -> None:
         idle_closes[idle_choice["symbol"]] = idle_frames[idle_choice["symbol"]]["close"]
     idle_kwargs = idle_signal_kwargs(HERE / "iterations.json", spy["close"], as_of, idle_closes)
     core_hold, core_hold_info = kept_core_hold(HERE / "iterations.json", spy["close"], as_of=as_of)
+    curve_on, curve_info = None, None
+    if has_kept_curve(HERE / "iterations.json"):
+        tnx_frames = load_bars(source, ["^TNX"], start="1990-01-01")
+        curve_spread = treasury_spread(tnx_frames["^TNX"]["close"], frames["^IRX"]["close"], spy.index)
+        curve_on, curve_info = kept_curve_clock(HERE / "iterations.json", curve_spread, as_of=as_of)
     desk_signal = build_trend_signal(
         desk, spy["close"], as_of=as_of, strategy_id="trend_core",
         hedge_on=hedge_stress, hedge_rule=hedge_rule, hedge_info=hedge_info,
@@ -740,6 +746,7 @@ def main() -> None:
         trend_override=vote_trend, vote_info=vote_info,
         confirm_info=confirm_info,
         core_hold=core_hold, core_hold_info=core_hold_info,
+        curve_on=curve_on, curve_info=curve_info,
         dd_info=dd_info,
         **idle_kwargs,
     )
@@ -748,7 +755,9 @@ def main() -> None:
         allowed = allowed | frozenset({idle_kwargs["idle_symbol"]})
     write_signal(desk_signal, HERE / "signals.json", allowed_tickers=allowed)
     signal_title = "Trend-core (2% band, dip overlay on the SPY half)"
-    if core_hold_info:
+    if curve_info:
+        signal_title = "Trend-core that sits in T-bills on the kept yield-curve recession clock"
+    elif core_hold_info:
         signal_title = "Trend-core with the kept off-trend core hold"
     elif confirm_info:
         signal_title = "Trend-core with the kept N-day confirmation of the trend band"

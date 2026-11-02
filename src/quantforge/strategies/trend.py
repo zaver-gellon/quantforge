@@ -179,6 +179,8 @@ def build_trend_signal(
     idle_info: dict | None = None,
     core_hold: pd.Series | None = None,
     core_hold_info: dict | None = None,
+    curve_on: pd.Series | None = None,
+    curve_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -198,8 +200,11 @@ def build_trend_signal(
     trend is off and ``idle_ready`` is true, the whole book holds that asset
     if ``idle_on`` is true and BIL if it is false. ``core_hold`` is the share
     of the core budget left in equities while the equity trend is off, and only
-    when a walk-forward core-hold rule cleared the materiality bar. Dates after
-    ``as_of`` are ignored. A missing value on or before ``as_of`` is an error.
+    when a walk-forward core-hold rule cleared the materiality bar.
+    ``curve_on`` true at the signal close parks the whole book in BIL. It is
+    set only when a walk-forward yield-curve clock cleared the materiality bar.
+    Dates after ``as_of`` are ignored. A missing value on or before ``as_of``
+    is an error.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -268,6 +273,16 @@ def build_trend_signal(
         hold_now = min(1.0, max(0.0, float(aligned_hold.iloc[-1])))
         if len(aligned_hold) > 1:
             hold_prev = min(1.0, max(0.0, float(aligned_hold.iloc[-2])))
+    curve_now = False
+    curve_prev = False
+    if curve_on is not None:
+        aligned_curve = curve_on.reindex(visible.index)
+        if aligned_curve.isna().any():
+            raise ValueError("yield-curve clock is missing sessions at or before as_of")
+        aligned_curve = aligned_curve.astype(bool)
+        curve_now = bool(aligned_curve.iloc[-1])
+        if len(aligned_curve) > 1:
+            curve_prev = bool(aligned_curve.iloc[-2])
     prev_on = False if previous is None else bool(previous)
     hold_changed = abs((1.0 if on else hold_now) - (1.0 if prev_on else hold_prev)) > 1e-8
     scale_changed = False
@@ -348,8 +363,16 @@ def build_trend_signal(
     if idle_symbol is not None and mode != prev_mode and not {mode, prev_mode} <= {"equity", "baseline"}:
         trade = True
         reason = "idle_diversifier"
+    if curve_now != curve_prev:
+        trade = True
+        reason = "curve_clock"
+    elif curve_now:
+        trade = False
+        reason = "none"
     invested = float(spec.core_weight) + float(spec.sleeve_weight)
-    if mode == "div":
+    if curve_now:
+        weights = {spec.cash_symbol: round(invested, 6)}
+    elif mode == "div":
         weights = {idle_symbol: round(invested, 6)}
     elif mode == "cash":
         weights = {spec.cash_symbol: round(invested, 6)}
@@ -406,6 +429,10 @@ def build_trend_signal(
         payload["diagnostics"].update(core_hold_info)
         payload["diagnostics"]["core_hold"] = hold_now
         payload["diagnostics"]["core_hold_applied"] = 1.0 if on else hold_now
+    if curve_info or curve_on is not None:
+        if curve_info:
+            payload["diagnostics"].update(curve_info)
+        payload["diagnostics"]["curve_on"] = bool(curve_now)
     if idle_info:
         payload["diagnostics"].update(idle_info)
     if idle_symbol is not None:
