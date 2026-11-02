@@ -8501,6 +8501,514 @@
         "trade_reason": "none",
         "core_hold": null
       }
+    },
+    {
+      "id": "2026-11-02-yield-curve-clock",
+      "date": "2026-11-02",
+      "title": "Yield-curve recession clock",
+      "hypothesis": "The live book's maximum drawdown is still about -46.8%, with the trough on 2009-03-09. Sleeve-exit rules (the credit-spread hedge, the volatility scale, the multi-lookback vote, the trailing-peak stop, and the N-day band confirmation) left that trough in place, because by then the UPRO sleeve is already in T-bills and the loss that remains is the SPY half. Parking part of that half in T-bills whenever the 200-day band is off did cut the drawdown, and it was rejected: the cash stake ran through every off-trend episode, including the rebounds that are not recessions, and the CAGR give-up was larger than the bar allows. This test does not key off the equity trend. The trigger is the Treasury curve. The spread is the 10-year yield minus the 13-week bill yield, both in percent as Yahoo quotes ^TNX and ^IRX. Equity damage after an inversion has historically arrived as the curve later re-steepens, so the rule is not cash while the spread is negative. A session starts the clock when the spread crosses from at or above a depth to strictly below it. From that close, for a fixed number of sessions including that close, the whole book, core and sleeve and the three-down-close dip, earns T-bills. A crossing while the clock is already running does not extend it. After the clock the book returns to the unchanged 50/50 trend core, including the dip. Depths are 0, 0.25, and 0.50 percentage points. Lengths are 126, 252, and 504 sessions. The off cell is the live book, already counted, and is the walk-forward's option to keep the current book. The first yield print, and a print that is already through the depth, is not a crossing. Fills stay next-open with 5 bp one-way costs. Cash pays no spread. The stitched path is kept only when it clears the materiality bar.",
+      "status": "tested",
+      "kept": false,
+      "overlay": "yield_curve",
+      "decision": "rejected",
+      "decision_note": "Refreshed lead out-of-sample 2006-01-03 to 2026-11-02 (5241 sessions): CAGR 0.156201, Sharpe 0.620877, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-02 (8498 sessions). SSO ends 2026-11-02, UPRO ends 2026-11-02, ^IRX ends 2026-11-02, ^TNX ends 2026-11-02. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-10-30 (5240 sessions) has CAGR 0.156772, Sharpe 0.622758, max drawdown -0.468261, against the stored row CAGR 0.156771, Sharpe 0.622757, max drawdown -0.468261. Candidate versus that refreshed book: Sharpe 0.620877 -> 0.641821 (delta 0.020944), CAGR 0.156201 -> 0.140648 (delta -0.015552), max drawdown -0.468261 -> -0.327752 (delta 0.140509). Last walk-forward pick: curve_d000_k126. Out-of-sample turnover per year 13.13 -> 9.79. The stitched yield-curve clock does not clear the materiality bar. The live book stays the plain trend core. Previous signal 2026-11-02 (close 2026-10-30): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-03 (close 2026-11-02): UPRO 0.5000, SSO 0.5000; trend on True; dip on True. Weights changed: True. Trend state changed: False. Dip state changed: True.",
+      "data": {
+        "depths_pct": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "lengths": [
+          126,
+          252,
+          504
+        ],
+        "spread": "tnx_minus_irx_percent",
+        "price_sample_end": "2026-11-02",
+        "spy_close_end": "2026-11-02",
+        "coverage": [
+          {
+            "symbol": "SPY",
+            "start": "1993-01-29",
+            "end": "2026-11-02",
+            "n_obs": 8498
+          },
+          {
+            "symbol": "^TNX",
+            "start": "1990-01-02",
+            "end": "2026-11-02",
+            "n_obs": 9246
+          },
+          {
+            "symbol": "^IRX",
+            "start": "1990-01-02",
+            "end": "2026-11-02",
+            "n_obs": 9246
+          }
+        ],
+        "spread_finite": {
+          "start": "1993-01-29",
+          "end": "2026-11-02",
+          "n_obs": 8498
+        },
+        "oos_turnover_per_year": {
+          "current": 13.133390858946637,
+          "candidate": 9.792183427726608
+        }
+      },
+      "variants": [
+        {
+          "name": "curve_d000_k126",
+          "counts_for_deflation": true,
+          "depth": 0.0,
+          "length": 126,
+          "cagr": 0.14319765435346743,
+          "sharpe": 0.6050680649921735,
+          "max_drawdown": -0.3483876408585783,
+          "turnover_per_year": 12.290570429792513,
+          "dsr": 0.7129588933512214,
+          "years_selected": 1
+        },
+        {
+          "name": "curve_d000_k252",
+          "counts_for_deflation": true,
+          "depth": 0.0,
+          "length": 252,
+          "cagr": 0.13824282054053527,
+          "sharpe": 0.5970607241013642,
+          "max_drawdown": -0.3277522163305153,
+          "turnover_per_year": 10.658682183563984,
+          "dsr": 0.6986843062110599,
+          "years_selected": 5
+        },
+        {
+          "name": "curve_d000_k504",
+          "counts_for_deflation": true,
+          "depth": 0.0,
+          "length": 504,
+          "cagr": 0.09597387793541334,
+          "sharpe": 0.4544419661980731,
+          "max_drawdown": -0.32775221633051566,
+          "turnover_per_year": 8.47795840178357,
+          "dsr": 0.41636259748530796,
+          "years_selected": 1
+        },
+        {
+          "name": "curve_d025_k126",
+          "counts_for_deflation": true,
+          "depth": 0.25,
+          "length": 126,
+          "cagr": 0.11627021836189932,
+          "sharpe": 0.48717861160956016,
+          "max_drawdown": -0.5631925268398883,
+          "turnover_per_year": 12.763116847125378,
+          "dsr": 0.4829509997653908,
+          "years_selected": 0
+        },
+        {
+          "name": "curve_d025_k252",
+          "counts_for_deflation": true,
+          "depth": 0.25,
+          "length": 252,
+          "cagr": 0.12890130190860094,
+          "sharpe": 0.5510724244006894,
+          "max_drawdown": -0.4100195348301078,
+          "turnover_per_year": 11.756960216227293,
+          "dsr": 0.612349424848793,
+          "years_selected": 0
+        },
+        {
+          "name": "curve_d025_k504",
+          "counts_for_deflation": true,
+          "depth": 0.25,
+          "length": 504,
+          "cagr": 0.10548435552444091,
+          "sharpe": 0.4838238532457544,
+          "max_drawdown": -0.39580555380120364,
+          "turnover_per_year": 9.517438063334016,
+          "dsr": 0.476059782612941,
+          "years_selected": 14
+        },
+        {
+          "name": "curve_d050_k126",
+          "counts_for_deflation": true,
+          "depth": 0.5,
+          "length": 126,
+          "cagr": 0.11441779546500164,
+          "sharpe": 0.4780074018457353,
+          "max_drawdown": -0.46826124912595213,
+          "turnover_per_year": 12.848823086757346,
+          "dsr": 0.46424562301880384,
+          "years_selected": 0
+        },
+        {
+          "name": "curve_d050_k252",
+          "counts_for_deflation": true,
+          "depth": 0.5,
+          "length": 252,
+          "cagr": 0.12864259904311925,
+          "sharpe": 0.5284753128518613,
+          "max_drawdown": -0.468261249125953,
+          "turnover_per_year": 12.318339543007967,
+          "dsr": 0.5670045408329107,
+          "years_selected": 0
+        },
+        {
+          "name": "curve_d050_k504",
+          "counts_for_deflation": true,
+          "depth": 0.5,
+          "length": 504,
+          "cagr": 0.11447376542301901,
+          "sharpe": 0.48493226078388946,
+          "max_drawdown": -0.4682612491259508,
+          "turnover_per_year": 11.21748009502337,
+          "dsr": 0.47838661801969923,
+          "years_selected": 0
+        },
+        {
+          "name": "curve_off",
+          "counts_for_deflation": false,
+          "depth": null,
+          "length": null,
+          "cagr": 0.12787260034164172,
+          "sharpe": 0.5198020448979588,
+          "max_drawdown": -0.46826124912595035,
+          "turnover_per_year": 13.589240586980885,
+          "dsr": null,
+          "years_selected": 0,
+          "note": "The current book. Already counted."
+        }
+      ],
+      "walk_forward_picks": [
+        [
+          "2006-01-03",
+          "curve_d000_k504"
+        ],
+        [
+          "2007-01-03",
+          "curve_d025_k504"
+        ],
+        [
+          "2008-01-02",
+          "curve_d025_k504"
+        ],
+        [
+          "2009-01-02",
+          "curve_d025_k504"
+        ],
+        [
+          "2010-01-04",
+          "curve_d025_k504"
+        ],
+        [
+          "2011-01-03",
+          "curve_d025_k504"
+        ],
+        [
+          "2012-01-03",
+          "curve_d025_k504"
+        ],
+        [
+          "2013-01-02",
+          "curve_d025_k504"
+        ],
+        [
+          "2014-01-02",
+          "curve_d025_k504"
+        ],
+        [
+          "2015-01-02",
+          "curve_d025_k504"
+        ],
+        [
+          "2016-01-04",
+          "curve_d025_k504"
+        ],
+        [
+          "2017-01-03",
+          "curve_d025_k504"
+        ],
+        [
+          "2018-01-02",
+          "curve_d025_k504"
+        ],
+        [
+          "2019-01-02",
+          "curve_d025_k504"
+        ],
+        [
+          "2020-01-02",
+          "curve_d025_k504"
+        ],
+        [
+          "2021-01-04",
+          "curve_d000_k252"
+        ],
+        [
+          "2022-01-03",
+          "curve_d000_k252"
+        ],
+        [
+          "2023-01-03",
+          "curve_d000_k252"
+        ],
+        [
+          "2024-01-02",
+          "curve_d000_k252"
+        ],
+        [
+          "2025-01-02",
+          "curve_d000_k252"
+        ],
+        [
+          "2026-01-02",
+          "curve_d000_k126"
+        ]
+      ],
+      "oos_window": {
+        "start": "2006-01-03",
+        "end": "2026-11-02",
+        "n_days": 5241
+      },
+      "oos": {
+        "current": {
+          "cagr": 0.15620059894270577,
+          "vol": 0.26212768472496284,
+          "sharpe": 0.620877100977621,
+          "sharpe_per_period": 0.039115312888805244,
+          "max_drawdown": -0.4682612491259508,
+          "n_days": 5241,
+          "start": "2006-01-03",
+          "end": "2026-11-02"
+        },
+        "candidate": {
+          "cagr": 0.1406481246422655,
+          "vol": 0.21457917347011626,
+          "sharpe": 0.6418213443542781,
+          "sharpe_per_period": 0.04043480209465172,
+          "max_drawdown": -0.3277522163305149,
+          "n_days": 5241,
+          "start": "2006-01-03",
+          "end": "2026-11-02"
+        }
+      },
+      "lead_oos": {
+        "before": {
+          "cagr": 0.15620059894270577,
+          "vol": 0.26212768472496284,
+          "sharpe": 0.620877100977621,
+          "sharpe_per_period": 0.039115312888805244,
+          "max_drawdown": -0.4682612491259508,
+          "n_days": 5241,
+          "start": "2006-01-03",
+          "end": "2026-11-02"
+        },
+        "after": {
+          "cagr": 0.15620059894270577,
+          "vol": 0.26212768472496284,
+          "sharpe": 0.620877100977621,
+          "sharpe_per_period": 0.039115312888805244,
+          "max_drawdown": -0.4682612491259508,
+          "n_days": 5241,
+          "start": "2006-01-03",
+          "end": "2026-11-02"
+        }
+      },
+      "lead_refresh": {
+        "prior_id": "2026-11-01-core-hold",
+        "prior": {
+          "cagr": 0.15677140671140655,
+          "vol": 0.26214297247418045,
+          "sharpe": 0.6227573411328067,
+          "sharpe_per_period": 0.03923376890118121,
+          "max_drawdown": -0.4682612580654797,
+          "n_days": 5240,
+          "start": "2006-01-03",
+          "end": "2026-10-30"
+        },
+        "refreshed": {
+          "cagr": 0.15620059894270577,
+          "vol": 0.26212768472496284,
+          "sharpe": 0.620877100977621,
+          "sharpe_per_period": 0.039115312888805244,
+          "max_drawdown": -0.4682612491259508,
+          "n_days": 5241,
+          "start": "2006-01-03",
+          "end": "2026-11-02"
+        },
+        "cagr_delta": -0.0005708077687007762,
+        "sharpe_delta": -0.0018802401551856196,
+        "max_drawdown_delta": 8.939528894913451e-09,
+        "display_unchanged": false,
+        "through_prior_end": {
+          "cagr": 0.1567716110899442,
+          "sharpe": 0.6227581703194309,
+          "max_drawdown": -0.4682612491259508,
+          "n_days": 5240,
+          "start": "2006-01-03",
+          "end": "2026-10-30"
+        },
+        "note": "After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-02 (8498 sessions). SSO ends 2026-11-02, UPRO ends 2026-11-02, ^IRX ends 2026-11-02, ^TNX ends 2026-11-02. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-10-30 (5240 sessions) has CAGR 0.156772, Sharpe 0.622758, max drawdown -0.468261, against the stored row CAGR 0.156771, Sharpe 0.622757, max drawdown -0.468261."
+      },
+      "materiality": {
+        "pass": false,
+        "bar": {
+          "sharpe_improvement": 0.05,
+          "drawdown_improvement": 0.03,
+          "cagr_slack": 0.005,
+          "improvement_dsr_min": 0.75,
+          "neighbor_sharpe_tol": 0.05,
+          "neighbor_drawdown_tol": 0.03
+        },
+        "checks": [
+          {
+            "name": "a Sharpe +0.05",
+            "pass": false,
+            "detail": "Sharpe 0.620877 -> 0.641821 (delta 0.020944; need >= 0.05)."
+          },
+          {
+            "name": "a drawdown +3pp and CAGR within 0.5pp",
+            "pass": false,
+            "detail": "Max drawdown -0.468261 -> -0.327752 (delta 0.140509; need >= 0.03). CAGR 0.156201 -> 0.140648 (delta -0.015552; floor -0.0050)."
+          },
+          {
+            "name": "a overall",
+            "pass": false,
+            "detail": "Either the Sharpe clause or the drawdown clause is enough."
+          },
+          {
+            "name": "b deflated Sharpe of the improvement >= 0.75",
+            "pass": false,
+            "detail": "Improvement Sharpe -0.165262, deflated Sharpe 0.001410 (need >= 0.75). Trials 313, daily-Sharpe dispersion 0.010732, daily multiple-testing benchmark 0.031217."
+          },
+          {
+            "name": "b still helps with the best improvement year removed",
+            "pass": false,
+            "detail": "Removed 2008 (summed daily improvement 0.194192). Remaining Sharpe delta -0.023018, CAGR delta -0.029097, max-drawdown delta 0.114076."
+          },
+          {
+            "name": "b overall",
+            "pass": false,
+            "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+          },
+          {
+            "name": "c neighboring parameters",
+            "pass": false,
+            "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell."
+          }
+        ],
+        "oos": {
+          "current": {
+            "cagr": 0.15620059894270577,
+            "vol": 0.26212768472496284,
+            "sharpe": 0.620877100977621,
+            "sharpe_per_period": 0.039115312888805244,
+            "max_drawdown": -0.4682612491259508,
+            "n_days": 5241,
+            "start": "2006-01-03",
+            "end": "2026-11-02"
+          },
+          "candidate": {
+            "cagr": 0.1406481246422655,
+            "vol": 0.21457917347011626,
+            "sharpe": 0.6418213443542781,
+            "sharpe_per_period": 0.04043480209465172,
+            "max_drawdown": -0.3277522163305149,
+            "n_days": 5241,
+            "start": "2006-01-03",
+            "end": "2026-11-02"
+          }
+        },
+        "criterion_a": {
+          "sharpe_delta": 0.020944243376657012,
+          "cagr_delta": -0.015552474300440267,
+          "max_drawdown_delta": 0.14050903279543592,
+          "sharpe_pass": false,
+          "drawdown_pass": false,
+          "pass": false
+        },
+        "criterion_b": {
+          "pass": false,
+          "dsr_pass": false,
+          "still_helps": false,
+          "improvement_sharpe": -0.16526163925094137,
+          "improvement_sharpe_per_period": -0.010411498052736895,
+          "improvement_dsr": 0.0014096340773904203,
+          "sr0_daily": 0.03121681722614918,
+          "n_trials": 313,
+          "sharpe_dispersion_daily": 0.010731796035197945,
+          "best_year": 2008,
+          "best_year_improvement_sum": 0.19419224641512,
+          "without_best_year": {
+            "sharpe_delta": -0.02301756621397788,
+            "cagr_delta": -0.02909697114992471,
+            "max_drawdown_delta": 0.11407611492256997,
+            "sharpe_pass": false,
+            "drawdown_pass": false,
+            "pass": false
+          }
+        },
+        "criterion_c": {
+          "pass": false,
+          "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell.",
+          "cell": {
+            "cagr": 0.1698577075564911,
+            "vol": 0.2331651552539797,
+            "sharpe": 0.7170563553230797,
+            "sharpe_per_period": 0.04517461451421693,
+            "max_drawdown": -0.34838764085857776,
+            "n_days": 5241,
+            "start": "2006-01-03",
+            "end": "2026-11-02"
+          },
+          "neighbors": [
+            {
+              "name": "curve_d000_k252",
+              "similar": true,
+              "cagr": 0.15988460033871466,
+              "sharpe": 0.6963699604311401,
+              "max_drawdown": -0.3277522163305151,
+              "sharpe_gap": 0.020686394891939575,
+              "max_drawdown_gap": 0.020635424528062662
+            },
+            {
+              "name": "curve_d025_k126",
+              "similar": false,
+              "cagr": 0.1329821951539245,
+              "sharpe": 0.5527293537514635,
+              "max_drawdown": -0.5631925268398883,
+              "sharpe_gap": 0.16432700157161617,
+              "max_drawdown_gap": 0.21480488598131053
+            }
+          ]
+        }
+      },
+      "n_trials": 313,
+      "sharpe_dispersion_daily": 0.010731796035197945,
+      "last_pick": "curve_d000_k126",
+      "previous_signal": {
+        "date": "2026-11-02",
+        "weights": {
+          "SPY": 0.5,
+          "UPRO": 0.5
+        },
+        "trend_on": true,
+        "dip_on": false,
+        "signal_date": "2026-10-30"
+      },
+      "signal": {
+        "date": "2026-11-03",
+        "signal_date": "2026-11-02",
+        "weights": {
+          "SSO": 0.5,
+          "UPRO": 0.5
+        },
+        "trend_on": true,
+        "dip_on": true,
+        "trade_reason": "dip_overlay",
+        "curve_on": null,
+        "curve_rule": null
+      }
     }
   ]
 }

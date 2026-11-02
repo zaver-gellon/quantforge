@@ -488,6 +488,154 @@ def run_core_hold(
     )
 
 
+def run_curve_clock(
+    spy_open: pd.Series,
+    spy_close: pd.Series,
+    sso_open: pd.Series,
+    sso_close: pd.Series,
+    upro_open: pd.Series,
+    upro_close: pd.Series,
+    trend_on: pd.Series,
+    dip_on: pd.Series,
+    mix_rebalance: pd.Series,
+    cash_on: pd.Series,
+    core_weight: float,
+    sleeve_weight: float,
+    cash_yield: pd.Series,
+    spy_cost: float = 0.0,
+    sso_cost: float = 0.0,
+    upro_cost: float = 0.0,
+    execution: str = "next_open",
+) -> BacktestResult:
+    """Trend-core book that can park the whole book in T-bills.
+
+    ``cash_on[t]`` is known at the close of t and is filled at the next open.
+    While it is true, the core and the sleeve are both sold and earn the cash
+    yield. The dip and the trend are ignored until the clock is off. Coming
+    back out of cash resets both piles to ``core_weight`` / ``sleeve_weight``
+    under the trend and dip state at that close. A cash flag that is false on
+    every session is the unscaled trend-core book. Cash pays no spread.
+    """
+    if execution not in ("next_open", "next_close"):
+        raise ValueError(f"unknown execution {execution!r}")
+    if core_weight < 0 or sleeve_weight < 0 or core_weight + sleeve_weight > 1 + 1e-8:
+        raise ValueError("core and sleeve weights must be non-negative and sum to at most 1")
+    idx = spy_close.index
+    prices = {
+        "spy_o": spy_open.reindex(idx).to_numpy(dtype=float),
+        "spy_c": spy_close.reindex(idx).to_numpy(dtype=float),
+        "sso_o": sso_open.reindex(idx).to_numpy(dtype=float),
+        "sso_c": sso_close.reindex(idx).to_numpy(dtype=float),
+        "upro_o": upro_open.reindex(idx).to_numpy(dtype=float),
+        "upro_c": upro_close.reindex(idx).to_numpy(dtype=float),
+    }
+    stacked = np.column_stack(list(prices.values()))
+    if np.any(~np.isfinite(stacked)) or np.any(stacked <= 0):
+        raise ValueError("SPY, SSO, and UPRO prices must be finite and positive")
+    trend = trend_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    dip = dip_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    mix = mix_rebalance.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    clock = cash_on.reindex(idx)
+    if clock.isna().any():
+        raise ValueError("cash_on is missing sessions")
+    clock = clock.astype(bool).to_numpy(dtype=bool)
+    rf = cash_yield.reindex(idx).astype(float).fillna(0.0).to_numpy(dtype=float)
+    n = len(idx)
+    core = 0.0
+    sleeve = 0.0
+    resid = 1.0
+    core_sso = False
+    sleeve_upro = False
+    in_cash = False
+    rets = np.full(n, np.nan)
+    turn = np.zeros(n)
+    drag = np.zeros(n)
+    exposure = np.full(n, np.nan)
+    for i in range(1, n):
+        prev = core + sleeve + resid
+        want_cash = bool(clock[i - 1])
+        if execution == "next_open":
+            core = _mark(core, prices["sso_o"][i], prices["sso_c"][i - 1], prices["spy_o"][i], prices["spy_c"][i - 1], core_sso)
+            if sleeve_upro:
+                sleeve *= prices["upro_o"][i] / prices["upro_c"][i - 1]
+            else:
+                sleeve *= 1.0 + rf[i]
+            resid *= 1.0 + rf[i]
+        else:
+            core = _mark(core, prices["sso_c"][i], prices["sso_c"][i - 1], prices["spy_c"][i], prices["spy_c"][i - 1], core_sso)
+            if sleeve_upro:
+                sleeve *= prices["upro_c"][i] / prices["upro_c"][i - 1]
+            else:
+                sleeve *= 1.0 + rf[i]
+            resid *= 1.0 + rf[i]
+        equity = core + sleeve + resid
+        if want_cash:
+            core, sleeve, resid, core_sso, sleeve_upro, in_cash, turn[i], drag[i] = _allocate_flat_cash(
+                equity, core, sleeve, resid, core_sso, sleeve_upro, in_cash,
+                spy_cost, sso_cost, upro_cost,
+            )
+        else:
+            core, sleeve, resid, core_sso, sleeve_upro, turn[i], drag[i] = _allocate_trend(
+                equity, core, sleeve, resid, core_sso, sleeve_upro,
+                bool(dip[i - 1]), bool(trend[i - 1]), bool(i == 1 or mix[i - 1] or in_cash),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+            )
+            in_cash = False
+            if execution == "next_open":
+                core = _mark(core, prices["sso_c"][i], prices["sso_o"][i], prices["spy_c"][i], prices["spy_o"][i], core_sso)
+                if sleeve_upro:
+                    sleeve *= prices["upro_c"][i] / prices["upro_o"][i]
+        new = core + sleeve + resid
+        rets[i] = new / prev - 1.0
+        invested = 0.0 if in_cash else core + (sleeve if sleeve_upro else 0.0)
+        exposure[i] = invested / new if new else 0.0
+    return BacktestResult(
+        returns=pd.Series(rets, index=idx, name="return"),
+        turnover=pd.Series(turn, index=idx, name="turnover"),
+        cost_drag=pd.Series(drag, index=idx, name="cost_drag"),
+        exposure=pd.Series(exposure, index=idx, name="exposure"),
+    )
+
+
+def _allocate_flat_cash(
+    equity: float,
+    core: float,
+    sleeve: float,
+    resid: float,
+    core_sso: bool,
+    sleeve_upro: bool,
+    already_cash: bool,
+    spy_cost: float,
+    sso_cost: float,
+    upro_cost: float,
+):
+    """Sell the core and the sleeve. A book that is already cash does not trade."""
+    if equity <= 0:
+        raise ValueError("equity is non-positive")
+    if already_cash and core == 0.0 and sleeve == 0.0:
+        return 0.0, 0.0, equity, False, False, True, 0.0, 0.0
+    cost = 0.0
+    traded = 0.0
+    if core > 0.0:
+        cost += core * (sso_cost if core_sso else spy_cost)
+        traded += core
+    if sleeve > 0.0 and sleeve_upro:
+        cost += sleeve * upro_cost
+        traded += sleeve
+    if cost >= equity:
+        raise ValueError("transaction costs consume the whole book")
+    return (
+        0.0,
+        0.0,
+        equity - cost,
+        False,
+        False,
+        True,
+        traded / 2.0 / equity,
+        cost / equity,
+    )
+
+
 def _allocate_core_hold(
     equity: float,
     core: float,
