@@ -122,8 +122,9 @@ def strategic_weights(
     sleeve_fraction: float = 1.0,
     core_hold: float = 1.0,
     trend_is_on: bool | None = None,
+    dip_boost: float | None = None,
 ) -> dict[str, float]:
-    """Strategic weights. A dip swaps the core from SPY to SSO and leaves the sleeve budget alone.
+    """Strategic weights. A dip moves part of the core from SPY to SSO and leaves the sleeve budget alone.
 
     ``sleeve_fraction`` is the share of the sleeve budget kept in the leveraged
     fund while the trend is on. The rest of that budget is cash. The fraction
@@ -132,6 +133,8 @@ def strategic_weights(
     budget is cash. It is ignored while the equity trend is on. ``trend_is_on``
     is that equity trend when a credit hedge has already turned ``trend_on``
     into the sleeve flag. When it is omitted, the sleeve flag is the equity trend.
+    ``dip_boost`` is the share of the invested core held in SSO. When it is
+    omitted, the whole invested core is SSO if ``dip_on`` and SPY otherwise.
     """
     raw: dict[str, float] = {}
 
@@ -142,7 +145,12 @@ def strategic_weights(
     equity_trend = bool(trend_on) if trend_is_on is None else bool(trend_is_on)
     hold = 1.0 if equity_trend else min(1.0, max(0.0, float(core_hold)))
     fraction = min(1.0, max(0.0, float(sleeve_fraction))) if trend_on else 0.0
-    add("SSO" if dip_on else spec.core_symbol, spec.core_weight * hold)
+    if dip_boost is None:
+        boost = 1.0 if dip_on else 0.0
+    else:
+        boost = min(1.0, max(0.0, float(dip_boost)))
+    add(spec.core_symbol, spec.core_weight * hold * (1.0 - boost))
+    add("SSO", spec.core_weight * hold * boost)
     add(spec.sleeve_symbol, spec.sleeve_weight * fraction)
     add(spec.cash_symbol, spec.sleeve_weight * (1.0 - fraction) + spec.core_weight * (1.0 - hold))
     rounded = {symbol: round(weight, 6) for symbol, weight in raw.items() if round(weight, 6) > 0}
@@ -181,6 +189,8 @@ def build_trend_signal(
     core_hold_info: dict | None = None,
     curve_on: pd.Series | None = None,
     curve_info: dict | None = None,
+    dip_boost: pd.Series | None = None,
+    dip_size_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -203,6 +213,9 @@ def build_trend_signal(
     when a walk-forward core-hold rule cleared the materiality bar.
     ``curve_on`` true at the signal close parks the whole book in BIL. It is
     set only when a walk-forward yield-curve clock cleared the materiality bar.
+    ``dip_boost`` is the share of the invested core held in SSO. It is set only
+    when a walk-forward sized dip cleared the materiality bar. A missing series
+    leaves the three-down-close overlay at a full SSO swap.
     Dates after ``as_of`` are ignored. A missing value on or before ``as_of``
     is an error.
     """
@@ -229,11 +242,23 @@ def build_trend_signal(
         raise ValueError("trend override is missing sessions at or before as_of")
     history = history.astype(bool)
     visible = close.loc[:as_of_ts]
-    dips = dip_active(visible, dip_rule, dip_hold) if apply_dip else pd.Series(False, index=visible.index)
+    if dip_boost is not None:
+        aligned_boost = dip_boost.reindex(visible.index).astype(float)
+        if aligned_boost.isna().any() or not np.isfinite(aligned_boost.to_numpy(dtype=float)).all():
+            raise ValueError("dip boost is missing sessions at or before as_of")
+        if (aligned_boost < -1e-12).any() or (aligned_boost > 1.0 + 1e-12).any():
+            raise ValueError("dip boost must be in [0, 1]")
+        boost_now = min(1.0, max(0.0, float(aligned_boost.iloc[-1])))
+        boost_prev = min(1.0, max(0.0, float(aligned_boost.iloc[-2]))) if len(aligned_boost) > 1 else 0.0
+    else:
+        dips = dip_active(visible, dip_rule, dip_hold) if apply_dip else pd.Series(False, index=visible.index)
+        dip_flag = bool(dips.iloc[-1]) if len(dips) else False
+        prev_flag = bool(dips.iloc[-2]) if len(dips) > 1 else False
+        boost_now = 1.0 if dip_flag else 0.0
+        boost_prev = 1.0 if prev_flag else 0.0
     on = bool(history.iloc[-1])
-    dip_on = bool(dips.iloc[-1]) if len(dips) else False
+    dip_on = boost_now > 1e-12
     previous = bool(history.iloc[-2]) if len(history) > 1 else None
-    previous_dip = bool(dips.iloc[-2]) if len(dips) > 1 else False
     hedge_now = False
     hedge_prev = False
     if hedge_on is not None:
@@ -297,7 +322,7 @@ def build_trend_signal(
     schedule = rebalance_mask(state.index, spec.rebalance)
     scheduled = bool(schedule.loc[as_of_ts])
     changed = previous is None or on != previous
-    dip_changed = dip_on != previous_dip
+    dip_changed = abs(boost_now - boost_prev) > 1e-8
     hedge_changed = hedge_now != hedge_prev
     scale_label = "drawdown_stop" if dd_info else "vol_scale"
     if spec.rebalance == "daily":
@@ -379,7 +404,7 @@ def build_trend_signal(
     else:
         weights = strategic_weights(
             spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0,
-            core_hold=hold_now, trend_is_on=on,
+            core_hold=hold_now, trend_is_on=on, dip_boost=boost_now,
         )
     average = close.rolling(spec.window, min_periods=spec.window).mean().loc[as_of_ts]
     payload = {
@@ -433,6 +458,10 @@ def build_trend_signal(
         if curve_info:
             payload["diagnostics"].update(curve_info)
         payload["diagnostics"]["curve_on"] = bool(curve_now)
+    if dip_size_info or dip_boost is not None:
+        if dip_size_info:
+            payload["diagnostics"].update(dip_size_info)
+        payload["diagnostics"]["dip_boost"] = boost_now
     if idle_info:
         payload["diagnostics"].update(idle_info)
     if idle_symbol is not None:
