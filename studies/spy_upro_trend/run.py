@@ -52,6 +52,7 @@ from quantforge.strategies.corehold import kept_core_hold
 from quantforge.strategies.curve import has_kept_curve, kept_curve_clock, treasury_spread
 from quantforge.strategies.credit import kept_hedge_stress  # noqa: E402
 from quantforge.strategies.drawdown import kept_drawdown_scale  # noqa: E402
+from quantforge.strategies.drift import kept_drift_mix  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend  # noqa: E402
@@ -739,6 +740,12 @@ def main() -> None:
         tnx_frames = load_bars(source, ["^TNX"], start="1990-01-01")
         curve_spread = treasury_spread(tnx_frames["^TNX"]["close"], frames["^IRX"]["close"], spy.index)
         curve_on, curve_info = kept_curve_clock(HERE / "iterations.json", curve_spread, as_of=as_of)
+    drift_mix, drift_info = kept_drift_mix(
+        HERE / "iterations.json",
+        spy["open"], spy["close"],
+        sso_px["open"], sso_px["close"], upro_px["open"], upro_px["close"],
+        rf, as_of=as_of,
+    )
     desk_signal = build_trend_signal(
         desk, spy["close"], as_of=as_of, strategy_id="trend_core",
         hedge_on=hedge_stress, hedge_rule=hedge_rule, hedge_info=hedge_info,
@@ -748,6 +755,7 @@ def main() -> None:
         core_hold=core_hold, core_hold_info=core_hold_info,
         curve_on=curve_on, curve_info=curve_info,
         dd_info=dd_info,
+        drift_mix=drift_mix, drift_info=drift_info,
         **idle_kwargs,
     )
     allowed = ALLOWED_TREND_TICKERS
@@ -755,7 +763,9 @@ def main() -> None:
         allowed = allowed | frozenset({idle_kwargs["idle_symbol"]})
     write_signal(desk_signal, HERE / "signals.json", allowed_tickers=allowed)
     signal_title = "Trend-core (2% band, dip overlay on the SPY half)"
-    if curve_info:
+    if drift_info and not drift_info.get("drift_calendar", True):
+        signal_title = "Trend-core that resets the mix on the kept UPRO drift band"
+    elif curve_info:
         signal_title = "Trend-core that sits in T-bills on the kept yield-curve recession clock"
     elif core_hold_info:
         signal_title = "Trend-core with the kept off-trend core hold"

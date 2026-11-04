@@ -67,6 +67,8 @@ def write_signals_note(path, sections: list[tuple[str, str, dict]]) -> Path:
                 lines.append(f"- Sleeve scale: `{diag['sleeve_scale']}`")
             if "dip_on" in diag:
                 lines.append(f"- Dip-buy on: `{diag['dip_on']}`")
+            if diag.get("drift_rule"):
+                lines.append(f"- Drift band: `{diag['drift_rule']}`")
             if "reference_close" in diag and diag.get("sma") is not None:
                 lines.append(
                     f"- SPY close {diag['reference_close']:.2f} versus SMA {diag['sma']:.2f}"

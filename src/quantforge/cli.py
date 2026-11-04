@@ -13,11 +13,13 @@ from quantforge.data.base import DataError
 from quantforge.eval.ledger import TrialLedger
 from quantforge.signals.emit import write_signal
 from quantforge.signals.schema import ALLOWED_TREND_TICKERS
+from quantforge.engine.leverage import FINANCING_SPREAD, LEVERAGED_ETFS, synthesize_leveraged
 from quantforge.strategies.dipbuy import build_dip_signal
 from quantforge.strategies.confirm import kept_confirm_trend
 from quantforge.strategies.corehold import kept_core_hold
 from quantforge.strategies.credit import kept_hedge_stress
 from quantforge.strategies.drawdown import kept_drawdown_scale
+from quantforge.strategies.drift import has_kept_drift, kept_drift_mix, lagged_tbill
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal
 from quantforge.strategies.volscale import kept_sleeve_scale
@@ -117,6 +119,30 @@ def _signals(args) -> int:
             study / "iterations.json", close, close.index[-1], idle_closes,
         )
         core_hold, core_hold_info = kept_core_hold(study / "iterations.json", close, as_of=close.index[-1])
+        drift_kwargs = {}
+        if has_kept_drift(study / "iterations.json"):
+            names = ["SPY", "SSO", "UPRO", "^IRX"]
+            loaded = load_bars(
+                get_source("yahoo"), names,
+                start=args.start, end=args.end, cache_dir=cache,
+            )
+            spy_frame = loaded["SPY"]
+            irx = lagged_tbill(loaded["^IRX"]["close"], spy_frame.index)
+            synth = {}
+            for symbol, leverage in (("SSO", 2), ("UPRO", 3)):
+                meta = LEVERAGED_ETFS[symbol]
+                synth[leverage] = synthesize_leveraged(
+                    spy_frame["open"], spy_frame["close"], irx,
+                    leverage, meta["expense_ratio"], FINANCING_SPREAD,
+                )
+            drift_mix, drift_info = kept_drift_mix(
+                study / "iterations.json",
+                spy_frame["open"], spy_frame["close"],
+                synth[2]["open"], synth[2]["close"],
+                synth[3]["open"], synth[3]["close"],
+                irx, as_of=spy_frame.index[-1],
+            )
+            drift_kwargs = {"drift_mix": drift_mix, "drift_info": drift_info}
         payload = build_trend_signal(
             TrendCoreSpec(), close, strategy_id="trend_core",
             hedge_on=stress, hedge_rule=rule, hedge_info=info,
@@ -126,6 +152,7 @@ def _signals(args) -> int:
             dd_info=dd_info,
             core_hold=core_hold, core_hold_info=core_hold_info,
             **idle_kwargs,
+            **drift_kwargs,
         )
         dest = Path(args.out) if args.out else study / "signals.json"
         allowed = ALLOWED_TREND_TICKERS
