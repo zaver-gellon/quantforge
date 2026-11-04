@@ -9503,6 +9503,441 @@
         "dip_boost": null,
         "trade_reason": "dip_overlay"
       }
+    },
+    {
+      "id": "2026-11-04-drift-band",
+      "date": "2026-11-04",
+      "title": "One-sided UPRO drift band",
+      "hypothesis": "The live book resets both piles to 50/50 on a quarterly calendar. Between those dates the sleeve is 3x while the trend is on, so a rally lifts its weight above one half and the book carries the extra leverage until the calendar date. That same date also trades when the drift is small, and it buys the sleeve back after the sleeve has shrunk. The original grid compared monthly and quarterly calendars. It did not test a no-trade band. Earlier iterations tried to cut the -46.8% trough by selling the SPY half, by parking the whole book in T-bills after a curve inversion, or by getting UPRO out on a faster signal. Those rules were rejected. The sized dip changed the overlay and was rejected too. This test does not add a regime signal and does not sell the core. It replaces the quarterly mix date. After the close, if the sleeve is in UPRO and its weight is strictly above one half by more than a fixed band, the next open resets both piles to 50/50. If the weight is at or below that ceiling, or the sleeve is in T-bills, the piles are left alone, including when UPRO has fallen below half. A trend flip still swaps the sleeve instrument and does not by itself resize the piles. The three-down-close dip is unchanged. Bands are 2, 4, 6, 8, and 10 percentage points, fixed before this sample is scored. The quarterly calendar is the current book, already counted, and is the walk-forward's option to keep it. The five bands are new trials. Fills stay next-open with 5 bp one-way costs. Cash pays no spread. The stitched path is kept only when it clears the materiality bar.",
+      "status": "tested",
+      "kept": false,
+      "overlay": "drift_band",
+      "decision": "rejected",
+      "decision_note": "Refreshed lead out-of-sample 2006-01-03 to 2026-11-04 (5243 sessions): CAGR 0.158541, Sharpe 0.628453, max drawdown -0.468262. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-04 (8500 sessions). SSO ends 2026-11-04, UPRO ends 2026-11-04, ^IRX ends 2026-11-04. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-03 (5242 sessions) has CAGR 0.156511, Sharpe 0.621917, max drawdown -0.468262, against the stored row CAGR 0.156512, Sharpe 0.621918, max drawdown -0.468261. Candidate versus that refreshed book: Sharpe 0.628453 -> 0.628453 (delta 0.000000), CAGR 0.158541 -> 0.158541 (delta 0.000000), max drawdown -0.468262 -> -0.468262 (delta 0.000000). Last walk-forward pick: drift_off. Out-of-sample turnover per year 13.18 -> 13.18. The stitched rule calls a mix on 83 closes; the quarterly calendar calls one on 83 closes in the same window. The 2 percentage-point band, run on its own, calls a mix on 11 of 5243 out-of-sample closes. The stitched drift band does not clear the materiality bar. The live book stays the plain trend core. Previous signal 2026-11-04 (close 2026-11-03): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-05 (close 2026-11-04): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.",
+      "data": {
+        "bands": [
+          0.02,
+          0.04,
+          0.06,
+          0.08,
+          0.1
+        ],
+        "live_cell": "drift_off",
+        "trigger": "upro_weight_above_sleeve_weight_plus_band",
+        "price_sample_end": "2026-11-04",
+        "spy_close_end": "2026-11-04",
+        "coverage": [
+          {
+            "symbol": "SPY",
+            "start": "1993-01-29",
+            "end": "2026-11-04",
+            "n_obs": 8500
+          },
+          {
+            "symbol": "SSO",
+            "start": "2006-06-21",
+            "end": "2026-11-04",
+            "n_obs": 5126
+          },
+          {
+            "symbol": "UPRO",
+            "start": "2009-06-25",
+            "end": "2026-11-04",
+            "n_obs": 4368
+          },
+          {
+            "symbol": "^IRX",
+            "start": "1990-01-02",
+            "end": "2026-11-04",
+            "n_obs": 9248
+          }
+        ],
+        "oos_mix_closes": {
+          "stitched": 83,
+          "quarterly": 83,
+          "band_2pp": 11
+        },
+        "oos_turnover_per_year": {
+          "current": 13.177722585347732,
+          "candidate": 13.177722585347732
+        }
+      },
+      "variants": [
+        {
+          "name": "drift_off",
+          "counts_for_deflation": false,
+          "band": null,
+          "cagr": 0.12965396263113438,
+          "sharpe": 0.5257928022576892,
+          "max_drawdown": -0.4682617499644446,
+          "turnover_per_year": 13.623534042860474,
+          "dsr": null,
+          "years_selected": 21,
+          "note": "The current book. Already counted."
+        },
+        {
+          "name": "drift_b02",
+          "counts_for_deflation": true,
+          "band": 0.02,
+          "cagr": 0.11943532358755293,
+          "sharpe": 0.49476170183511653,
+          "max_drawdown": -0.489992988447162,
+          "turnover_per_year": 15.258095448361255,
+          "dsr": 0.5124031474835001,
+          "years_selected": 0,
+          "note": null
+        },
+        {
+          "name": "drift_b04",
+          "counts_for_deflation": true,
+          "band": 0.04,
+          "cagr": 0.11993999896067042,
+          "sharpe": 0.49562522945398874,
+          "max_drawdown": -0.4895382351444223,
+          "turnover_per_year": 15.049585860814474,
+          "dsr": 0.5141689589864643,
+          "years_selected": 0,
+          "note": null
+        },
+        {
+          "name": "drift_b06",
+          "counts_for_deflation": true,
+          "band": 0.06,
+          "cagr": 0.12106365987332413,
+          "sharpe": 0.49882452623807877,
+          "max_drawdown": -0.4859551874910517,
+          "turnover_per_year": 14.808949101233729,
+          "dsr": 0.5207093380559102,
+          "years_selected": 0,
+          "note": null
+        },
+        {
+          "name": "drift_b08",
+          "counts_for_deflation": true,
+          "band": 0.08,
+          "cagr": 0.12197134398276921,
+          "sharpe": 0.5002038879422465,
+          "max_drawdown": -0.48243743341409084,
+          "turnover_per_year": 14.428529199302922,
+          "dsr": 0.5235143302592414,
+          "years_selected": 0,
+          "note": null
+        },
+        {
+          "name": "drift_b10",
+          "counts_for_deflation": true,
+          "band": 0.1,
+          "cagr": 0.1215852429525599,
+          "sharpe": 0.49752443708707605,
+          "max_drawdown": -0.48868341648659874,
+          "turnover_per_year": 14.515361879233616,
+          "dsr": 0.5180398988350869,
+          "years_selected": 0,
+          "note": null
+        }
+      ],
+      "walk_forward_picks": [
+        [
+          "2006-01-03",
+          "drift_off"
+        ],
+        [
+          "2007-01-03",
+          "drift_off"
+        ],
+        [
+          "2008-01-02",
+          "drift_off"
+        ],
+        [
+          "2009-01-02",
+          "drift_off"
+        ],
+        [
+          "2010-01-04",
+          "drift_off"
+        ],
+        [
+          "2011-01-03",
+          "drift_off"
+        ],
+        [
+          "2012-01-03",
+          "drift_off"
+        ],
+        [
+          "2013-01-02",
+          "drift_off"
+        ],
+        [
+          "2014-01-02",
+          "drift_off"
+        ],
+        [
+          "2015-01-02",
+          "drift_off"
+        ],
+        [
+          "2016-01-04",
+          "drift_off"
+        ],
+        [
+          "2017-01-03",
+          "drift_off"
+        ],
+        [
+          "2018-01-02",
+          "drift_off"
+        ],
+        [
+          "2019-01-02",
+          "drift_off"
+        ],
+        [
+          "2020-01-02",
+          "drift_off"
+        ],
+        [
+          "2021-01-04",
+          "drift_off"
+        ],
+        [
+          "2022-01-03",
+          "drift_off"
+        ],
+        [
+          "2023-01-03",
+          "drift_off"
+        ],
+        [
+          "2024-01-02",
+          "drift_off"
+        ],
+        [
+          "2025-01-02",
+          "drift_off"
+        ],
+        [
+          "2026-01-02",
+          "drift_off"
+        ]
+      ],
+      "oos_window": {
+        "start": "2006-01-03",
+        "end": "2026-11-04",
+        "n_days": 5243
+      },
+      "oos": {
+        "current": {
+          "cagr": 0.15854146713978934,
+          "vol": 0.2622063339854348,
+          "sharpe": 0.6284531992847162,
+          "sharpe_per_period": 0.039592606318580005,
+          "max_drawdown": -0.4682617499644446,
+          "n_days": 5243,
+          "start": "2006-01-03",
+          "end": "2026-11-04"
+        },
+        "candidate": {
+          "cagr": 0.15854146713978934,
+          "vol": 0.2622063339854348,
+          "sharpe": 0.6284531992847162,
+          "sharpe_per_period": 0.039592606318580005,
+          "max_drawdown": -0.4682617499644446,
+          "n_days": 5243,
+          "start": "2006-01-03",
+          "end": "2026-11-04"
+        }
+      },
+      "lead_oos": {
+        "before": {
+          "cagr": 0.15854146713978934,
+          "vol": 0.2622063339854348,
+          "sharpe": 0.6284531992847162,
+          "sharpe_per_period": 0.039592606318580005,
+          "max_drawdown": -0.4682617499644446,
+          "n_days": 5243,
+          "start": "2006-01-03",
+          "end": "2026-11-04"
+        },
+        "after": {
+          "cagr": 0.15854146713978934,
+          "vol": 0.2622063339854348,
+          "sharpe": 0.6284531992847162,
+          "sharpe_per_period": 0.039592606318580005,
+          "max_drawdown": -0.4682617499644446,
+          "n_days": 5243,
+          "start": "2006-01-03",
+          "end": "2026-11-04"
+        }
+      },
+      "lead_refresh": {
+        "prior_id": "2026-11-03-dip-size-gate",
+        "prior": {
+          "cagr": 0.15651166072254385,
+          "vol": 0.2621053690787745,
+          "sharpe": 0.6219180856782444,
+          "sharpe_per_period": 0.03918089430483569,
+          "max_drawdown": -0.46826054150555607,
+          "n_days": 5242,
+          "start": "2006-01-03",
+          "end": "2026-11-03"
+        },
+        "refreshed": {
+          "cagr": 0.15854146713978934,
+          "vol": 0.2622063339854348,
+          "sharpe": 0.6284531992847162,
+          "sharpe_per_period": 0.039592606318580005,
+          "max_drawdown": -0.4682617499644446,
+          "n_days": 5243,
+          "start": "2006-01-03",
+          "end": "2026-11-04"
+        },
+        "cagr_delta": 0.0020298064172454833,
+        "sharpe_delta": 0.006535113606471854,
+        "max_drawdown_delta": -1.2084588885130643e-06,
+        "display_unchanged": false,
+        "through_prior_end": {
+          "cagr": 0.15651143184016614,
+          "sharpe": 0.6219171298294909,
+          "max_drawdown": -0.4682617499644446,
+          "n_days": 5242,
+          "start": "2006-01-03",
+          "end": "2026-11-03"
+        },
+        "note": "After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-04 (8500 sessions). SSO ends 2026-11-04, UPRO ends 2026-11-04, ^IRX ends 2026-11-04. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-03 (5242 sessions) has CAGR 0.156511, Sharpe 0.621917, max drawdown -0.468262, against the stored row CAGR 0.156512, Sharpe 0.621918, max drawdown -0.468261."
+      },
+      "materiality": {
+        "pass": false,
+        "bar": {
+          "sharpe_improvement": 0.05,
+          "drawdown_improvement": 0.03,
+          "cagr_slack": 0.005,
+          "improvement_dsr_min": 0.75,
+          "neighbor_sharpe_tol": 0.05,
+          "neighbor_drawdown_tol": 0.03
+        },
+        "checks": [
+          {
+            "name": "a Sharpe +0.05",
+            "pass": false,
+            "detail": "Sharpe 0.628453 -> 0.628453 (delta 0.000000; need >= 0.05)."
+          },
+          {
+            "name": "a drawdown +3pp and CAGR within 0.5pp",
+            "pass": false,
+            "detail": "Max drawdown -0.468262 -> -0.468262 (delta 0.000000; need >= 0.03). CAGR 0.158541 -> 0.158541 (delta 0.000000; floor -0.0050)."
+          },
+          {
+            "name": "a overall",
+            "pass": false,
+            "detail": "Either the Sharpe clause or the drawdown clause is enough."
+          },
+          {
+            "name": "b deflated Sharpe of the improvement >= 0.75",
+            "pass": false,
+            "detail": "Improvement Sharpe 0.000000, deflated Sharpe 0.000000 (need >= 0.75). Trials 325, daily-Sharpe dispersion 0.010542, daily multiple-testing benchmark 0.030788."
+          },
+          {
+            "name": "b still helps with the best improvement year removed",
+            "pass": false,
+            "detail": "Removed 2006 (summed daily improvement 0.000000). Remaining Sharpe delta 0.000000, CAGR delta 0.000000, max-drawdown delta 0.000000."
+          },
+          {
+            "name": "b overall",
+            "pass": false,
+            "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+          },
+          {
+            "name": "c neighboring parameters",
+            "pass": false,
+            "detail": "The last walk-forward pick is the current book, which has no parameter neighbors."
+          }
+        ],
+        "oos": {
+          "current": {
+            "cagr": 0.15854146713978934,
+            "vol": 0.2622063339854348,
+            "sharpe": 0.6284531992847162,
+            "sharpe_per_period": 0.039592606318580005,
+            "max_drawdown": -0.4682617499644446,
+            "n_days": 5243,
+            "start": "2006-01-03",
+            "end": "2026-11-04"
+          },
+          "candidate": {
+            "cagr": 0.15854146713978934,
+            "vol": 0.2622063339854348,
+            "sharpe": 0.6284531992847162,
+            "sharpe_per_period": 0.039592606318580005,
+            "max_drawdown": -0.4682617499644446,
+            "n_days": 5243,
+            "start": "2006-01-03",
+            "end": "2026-11-04"
+          }
+        },
+        "criterion_a": {
+          "sharpe_delta": 0.0,
+          "cagr_delta": 0.0,
+          "max_drawdown_delta": 0.0,
+          "sharpe_pass": false,
+          "drawdown_pass": false,
+          "pass": false
+        },
+        "criterion_b": {
+          "pass": false,
+          "dsr_pass": false,
+          "still_helps": false,
+          "improvement_sharpe": 0.0,
+          "improvement_sharpe_per_period": 0.0,
+          "improvement_dsr": 0.0,
+          "sr0_daily": 0.03078786589691826,
+          "n_trials": 325,
+          "sharpe_dispersion_daily": 0.010541693208107748,
+          "best_year": 2006,
+          "best_year_improvement_sum": 0.0,
+          "without_best_year": {
+            "sharpe_delta": 0.0,
+            "cagr_delta": 0.0,
+            "max_drawdown_delta": 0.0,
+            "sharpe_pass": false,
+            "drawdown_pass": false,
+            "pass": false
+          }
+        },
+        "criterion_c": {
+          "pass": false,
+          "detail": "The last walk-forward pick is the current book, which has no parameter neighbors.",
+          "cell": null,
+          "neighbors": []
+        }
+      },
+      "n_trials": 325,
+      "sharpe_dispersion_daily": 0.010541693208107748,
+      "last_pick": "drift_off",
+      "previous_signal": {
+        "date": "2026-11-04",
+        "weights": {
+          "SPY": 0.5,
+          "UPRO": 0.5
+        },
+        "trend_on": true,
+        "dip_on": false,
+        "signal_date": "2026-11-03"
+      },
+      "signal": {
+        "date": "2026-11-05",
+        "signal_date": "2026-11-04",
+        "weights": {
+          "SPY": 0.5,
+          "UPRO": 0.5
+        },
+        "trend_on": true,
+        "dip_on": false,
+        "drift_rule": null,
+        "rebalance_mix": false,
+        "trade_reason": "none"
+      }
     }
   ]
 }

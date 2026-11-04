@@ -191,6 +191,8 @@ def build_trend_signal(
     curve_info: dict | None = None,
     dip_boost: pd.Series | None = None,
     dip_size_info: dict | None = None,
+    drift_mix: pd.Series | None = None,
+    drift_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -216,8 +218,10 @@ def build_trend_signal(
     ``dip_boost`` is the share of the invested core held in SSO. It is set only
     when a walk-forward sized dip cleared the materiality bar. A missing series
     leaves the three-down-close overlay at a full SSO swap.
-    Dates after ``as_of`` are ignored. A missing value on or before ``as_of``
-    is an error.
+    ``drift_mix`` replaces the quarterly mix date when a walk-forward drift
+    band cleared the materiality bar and the cell in force is not the calendar.
+    True at the signal close resets both piles at the next open. Dates after
+    ``as_of`` are ignored. A missing value on or before ``as_of`` is an error.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -321,6 +325,15 @@ def build_trend_signal(
         scale_changed = abs(fraction - prev_fraction) > 1e-8
     schedule = rebalance_mask(state.index, spec.rebalance)
     scheduled = bool(schedule.loc[as_of_ts])
+    drift_replaced_calendar = False
+    if drift_info is not None and not bool(drift_info.get("drift_calendar", True)):
+        if drift_mix is None:
+            raise ValueError("a drift band requires its mix series")
+        aligned_mix = drift_mix.reindex(visible.index)
+        if aligned_mix.isna().any():
+            raise ValueError("drift mix is missing sessions at or before as_of")
+        scheduled = bool(aligned_mix.astype(bool).iloc[-1])
+        drift_replaced_calendar = True
     changed = previous is None or on != previous
     dip_changed = abs(boost_now - boost_prev) > 1e-8
     hedge_changed = hedge_now != hedge_prev
@@ -366,7 +379,7 @@ def build_trend_signal(
         reason = "core_hold"
     elif scheduled:
         trade = True
-        reason = "scheduled_rebalance"
+        reason = "drift_band" if drift_replaced_calendar else "scheduled_rebalance"
     else:
         trade = False
         reason = "none"
@@ -462,6 +475,10 @@ def build_trend_signal(
         if dip_size_info:
             payload["diagnostics"].update(dip_size_info)
         payload["diagnostics"]["dip_boost"] = boost_now
+    if drift_info:
+        payload["diagnostics"].update(drift_info)
+        if drift_replaced_calendar:
+            payload["diagnostics"]["drift_mix"] = bool(scheduled)
     if idle_info:
         payload["diagnostics"].update(idle_info)
     if idle_symbol is not None:
