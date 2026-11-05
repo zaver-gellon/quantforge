@@ -376,7 +376,7 @@ def build_trend_signal(
         reason = scale_label
     elif hold_changed:
         trade = True
-        reason = "core_hold"
+        reason = "fast_reentry" if (core_hold_info or {}).get("reentry_rule") else "core_hold"
     elif scheduled:
         trade = True
         reason = "drift_band" if drift_replaced_calendar else "scheduled_rebalance"

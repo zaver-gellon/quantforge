@@ -53,6 +53,7 @@ from quantforge.strategies.curve import has_kept_curve, kept_curve_clock, treasu
 from quantforge.strategies.credit import kept_hedge_stress  # noqa: E402
 from quantforge.strategies.drawdown import kept_drawdown_scale  # noqa: E402
 from quantforge.strategies.drift import kept_drift_mix  # noqa: E402
+from quantforge.strategies.reentry import kept_fast_reentry  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend  # noqa: E402
@@ -735,6 +736,11 @@ def main() -> None:
         idle_closes[idle_choice["symbol"]] = idle_frames[idle_choice["symbol"]]["close"]
     idle_kwargs = idle_signal_kwargs(HERE / "iterations.json", spy["close"], as_of, idle_closes)
     core_hold, core_hold_info = kept_core_hold(HERE / "iterations.json", spy["close"], as_of=as_of)
+    reentry_hold, reentry_info = kept_fast_reentry(HERE / "iterations.json", spy["close"], as_of=as_of)
+    if reentry_hold is not None and core_hold is not None:
+        raise RuntimeError("the iteration log kept both an off-trend core hold and a fast re-entry")
+    if reentry_hold is not None:
+        core_hold, core_hold_info = reentry_hold, reentry_info
     curve_on, curve_info = None, None
     if has_kept_curve(HERE / "iterations.json"):
         tnx_frames = load_bars(source, ["^TNX"], start="1990-01-01")
@@ -767,6 +773,8 @@ def main() -> None:
         signal_title = "Trend-core that resets the mix on the kept UPRO drift band"
     elif curve_info:
         signal_title = "Trend-core that sits in T-bills on the kept yield-curve recession clock"
+    elif reentry_info and not reentry_info.get("reentry_live", False):
+        signal_title = "Trend-core that re-enters the SPY half on a shorter trend while the 200-day band is off"
     elif core_hold_info:
         signal_title = "Trend-core with the kept off-trend core hold"
     elif confirm_info:

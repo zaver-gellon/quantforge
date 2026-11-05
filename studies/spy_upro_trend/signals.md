@@ -12,14 +12,14 @@ mix rebalance is due. A bot that marks to `weights` on every session instead reb
 ## Trend-core (2% band, dip overlay on the SPY half)
 
 - File: `signals.json`
-- Session: `2026-11-05`
+- Session: `2026-11-06`
 - Weights: SPY 0.5000, UPRO 0.5000
-- Signal close: `2026-11-04`
+- Signal close: `2026-11-05`
 - Trade reason: `none`
 - Trend on: `True`
 - Credit hedge on: `False`
 - Dip-buy on: `False`
-- SPY close 766.81 versus SMA 727.12
+- SPY close 733.00 versus SMA 727.39
 
 
 `signals_flagship.json` is written by `python studies/flagship/run.py` and is not this fixed book.

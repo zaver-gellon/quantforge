@@ -709,6 +709,117 @@ def run_core_hold(
     )
 
 
+def run_fast_reentry(
+    spy_open: pd.Series,
+    spy_close: pd.Series,
+    sso_open: pd.Series,
+    sso_close: pd.Series,
+    upro_open: pd.Series,
+    upro_close: pd.Series,
+    trend_on: pd.Series,
+    fast_on: pd.Series,
+    dip_on: pd.Series,
+    mix_rebalance: pd.Series,
+    core_weight: float,
+    sleeve_weight: float,
+    cash_yield: pd.Series,
+    spy_cost: float = 0.0,
+    sso_cost: float = 0.0,
+    upro_cost: float = 0.0,
+    execution: str = "next_open",
+) -> BacktestResult:
+    """Trend-core book that can put the core back to work while the slow band is off.
+
+    ``trend_on[t]`` is the sleeve filter, known at the close of t and filled at
+    the next open. While it is on, the book is the ordinary trend core and
+    ``fast_on`` is ignored. While it is off, the sleeve stays in T-bills and the
+    core is invested only when ``fast_on[t]`` is true. Otherwise that pile earns
+    the cash yield. The dip applies only to the invested core. A flip resizes
+    the invested share of the core and moves the sleeve. It does not reset
+    drifted pile sizes. A mix reset still does. Cash pays no spread.
+    """
+    if execution not in ("next_open", "next_close"):
+        raise ValueError(f"unknown execution {execution!r}")
+    if core_weight < 0 or sleeve_weight < 0 or core_weight + sleeve_weight > 1 + 1e-8:
+        raise ValueError("core and sleeve weights must be non-negative and sum to at most 1")
+    idx = spy_close.index
+    prices = {
+        "spy_o": spy_open.reindex(idx).to_numpy(dtype=float),
+        "spy_c": spy_close.reindex(idx).to_numpy(dtype=float),
+        "sso_o": sso_open.reindex(idx).to_numpy(dtype=float),
+        "sso_c": sso_close.reindex(idx).to_numpy(dtype=float),
+        "upro_o": upro_open.reindex(idx).to_numpy(dtype=float),
+        "upro_c": upro_close.reindex(idx).to_numpy(dtype=float),
+    }
+    stacked = np.column_stack(list(prices.values()))
+    if np.any(~np.isfinite(stacked)) or np.any(stacked <= 0):
+        raise ValueError("SPY, SSO, and UPRO prices must be finite and positive")
+    trend = trend_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    fast = fast_on.reindex(idx)
+    if fast.isna().any():
+        raise ValueError("fast_on is missing sessions")
+    fast = fast.astype(bool).to_numpy(dtype=bool)
+    dip = dip_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    mix = mix_rebalance.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    rf = cash_yield.reindex(idx).astype(float).fillna(0.0).to_numpy(dtype=float)
+    n = len(idx)
+    core = 0.0
+    core_cash = 0.0
+    sleeve = 0.0
+    resid = 1.0
+    core_sso = False
+    sleeve_upro = False
+    held_frac = 1.0
+    rets = np.full(n, np.nan)
+    turn = np.zeros(n)
+    drag = np.zeros(n)
+    exposure = np.full(n, np.nan)
+    for i in range(1, n):
+        prev = core + core_cash + sleeve + resid
+        fraction = 1.0 if fast[i - 1] else 0.0
+        if execution == "next_open":
+            core = _mark(core, prices["sso_o"][i], prices["sso_c"][i - 1], prices["spy_o"][i], prices["spy_c"][i - 1], core_sso)
+            core_cash *= 1.0 + rf[i]
+            if sleeve_upro:
+                sleeve *= prices["upro_o"][i] / prices["upro_c"][i - 1]
+            else:
+                sleeve *= 1.0 + rf[i]
+            resid *= 1.0 + rf[i]
+            core, core_cash, sleeve, resid, core_sso, sleeve_upro, held_frac, turn[i], drag[i] = _allocate_core_hold(
+                core + core_cash + sleeve + resid, core, core_cash, sleeve, resid,
+                core_sso, sleeve_upro, held_frac,
+                bool(dip[i - 1]), bool(trend[i - 1]), fraction, bool(i == 1 or mix[i - 1]),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+            )
+            core = _mark(core, prices["sso_c"][i], prices["sso_o"][i], prices["spy_c"][i], prices["spy_o"][i], core_sso)
+            if sleeve_upro:
+                sleeve *= prices["upro_c"][i] / prices["upro_o"][i]
+        else:
+            core = _mark(core, prices["sso_c"][i], prices["sso_c"][i - 1], prices["spy_c"][i], prices["spy_c"][i - 1], core_sso)
+            core_cash *= 1.0 + rf[i]
+            if sleeve_upro:
+                sleeve *= prices["upro_c"][i] / prices["upro_c"][i - 1]
+            else:
+                sleeve *= 1.0 + rf[i]
+            resid *= 1.0 + rf[i]
+            core, core_cash, sleeve, resid, core_sso, sleeve_upro, held_frac, turn[i], drag[i] = _allocate_core_hold(
+                core + core_cash + sleeve + resid, core, core_cash, sleeve, resid,
+                core_sso, sleeve_upro, held_frac,
+                bool(dip[i - 1]), bool(trend[i - 1]), fraction, bool(i == 1 or mix[i - 1]),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+            )
+        new = core + core_cash + sleeve + resid
+        rets[i] = new / prev - 1.0
+        invested = core + (sleeve if sleeve_upro else 0.0)
+        exposure[i] = invested / new if new else 0.0
+    return BacktestResult(
+        returns=pd.Series(rets, index=idx, name="return"),
+        turnover=pd.Series(turn, index=idx, name="turnover"),
+        cost_drag=pd.Series(drag, index=idx, name="cost_drag"),
+        exposure=pd.Series(exposure, index=idx, name="exposure"),
+    )
+
+
 def run_curve_clock(
     spy_open: pd.Series,
     spy_close: pd.Series,
