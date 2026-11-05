@@ -1026,3 +1026,82 @@ Materiality bar. Each line is produced by the scorer from the paths it just ran.
 Decision: rejected.
 
 Refreshed lead out-of-sample 2006-01-03 to 2026-11-04 (5243 sessions): CAGR 0.158541, Sharpe 0.628453, max drawdown -0.468262. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-04 (8500 sessions). SSO ends 2026-11-04, UPRO ends 2026-11-04, ^IRX ends 2026-11-04. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-03 (5242 sessions) has CAGR 0.156511, Sharpe 0.621917, max drawdown -0.468262, against the stored row CAGR 0.156512, Sharpe 0.621918, max drawdown -0.468261. Candidate versus that refreshed book: Sharpe 0.628453 -> 0.628453 (delta 0.000000), CAGR 0.158541 -> 0.158541 (delta 0.000000), max drawdown -0.468262 -> -0.468262 (delta 0.000000). Last walk-forward pick: drift_off. Out-of-sample turnover per year 13.18 -> 13.18. The stitched rule calls a mix on 83 closes; the quarterly calendar calls one on 83 closes in the same window. The 2 percentage-point band, run on its own, calls a mix on 11 of 5243 out-of-sample closes. The stitched drift band does not clear the materiality bar. The live book stays the plain trend core. Previous signal 2026-11-04 (close 2026-11-03): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-05 (close 2026-11-04): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.
+
+### 2026-11-05 — Fast re-entry of the SPY core
+
+The live book's maximum drawdown is still about -46.8%, with the trough on 2009-03-09. Faster exits of the UPRO sleeve left that trough in place. Parking the SPY half in T-bills for the entire time the 200-day band is off did cut the drawdown by more than 3 points, and it was rejected because the cash stake also sat out the rebound and the CAGR give-up was larger than half a point. Replacing that cash with bonds or gold, and parking the whole book after a curve inversion, failed for the same reason: the rebound that was missed cost more CAGR than the bar allows. The one-sided drift band and the sized dip did not touch that trough. This test does not change the sleeve's 200-day rule and does not hold a constant cash fraction for the whole off-trend episode. While the 200-day 2% band is on, the book is the unchanged trend core. While that band is off, the core is in SPY, or in SSO when the three-down-close dip is on, only when a shorter trend filter is on, and in T-bills when that shorter filter is off. The sleeve stays in T-bills until the 200-day band turns back on. The shorter filter uses the same hysteresis as the live band: it turns on only above the average times one plus the band and off only below the average times one minus the band. Windows are 20, 50, and 100 sessions. Bands are 0 and 2%. The six cells are new trials. The current book, which never moves the core to T-bills, is the walk-forward's option to keep the present rule and is not a new trial. A constant off-trend cash fraction is not in this grid. Fills stay next-open with 5 bp one-way costs. Cash pays no spread. The stitched path is kept only when it clears the materiality bar.
+
+- `SPY` from 1993-01-29 to 2026-11-05 (8501 sessions).
+- `SSO` from 2006-06-21 to 2026-11-05 (5127 sessions).
+- `UPRO` from 2009-06-25 to 2026-11-05 (4369 sessions).
+- `^IRX` from 1990-01-02 to 2026-11-05 (9249 sessions).
+
+Refreshed lead book, out of sample, before the candidate is judged. Window 2006-01-03 to 2026-11-05 (5244 sessions): CAGR 15.34%, Sharpe 0.611, max drawdown -46.83%. Prior write-up `2026-11-04-drift-band` through 2026-11-04: CAGR 15.85%, Sharpe 0.628, max drawdown -46.83%. Deltas versus that row: CAGR -0.51%, Sharpe -0.018, max drawdown 0.00%. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-05 (8501 sessions). SSO ends 2026-11-05, UPRO ends 2026-11-05, ^IRX ends 2026-11-05. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-04 (5243 sessions) has CAGR 0.158541, Sharpe 0.628453, max drawdown -0.468261, against the stored row CAGR 0.158541, Sharpe 0.628453, max drawdown -0.468262.
+
+Variants tried. Counting rows increment the ledger. The walk-forward stitch is a selection over those rows and is stored as an audit.
+
+| variant | counts | full-sample CAGR | Sharpe | max DD | years selected |
+| --- | --- | --- | --- | --- | --- |
+| reentry_off | no | 12.6% | 0.51 | -46.8% | 2 |
+| reentry_w020_b0 | yes | 12.0% | 0.50 | -42.2% | 9 |
+| reentry_w020_b2 | yes | 12.1% | 0.51 | -42.2% | 2 |
+| reentry_w050_b0 | yes | 11.8% | 0.50 | -42.2% | 3 |
+| reentry_w050_b2 | yes | 11.9% | 0.50 | -42.2% | 1 |
+| reentry_w100_b0 | yes | 11.6% | 0.49 | -42.2% | 0 |
+| reentry_w100_b2 | yes | 11.3% | 0.48 | -42.2% | 4 |
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2006-01-03 | reentry_w020_b0 |
+| 2007-01-03 | reentry_w020_b0 |
+| 2008-01-02 | reentry_w020_b0 |
+| 2009-01-02 | reentry_w020_b0 |
+| 2010-01-04 | reentry_w020_b0 |
+| 2011-01-03 | reentry_w020_b0 |
+| 2012-01-03 | reentry_w100_b2 |
+| 2013-01-02 | reentry_w100_b2 |
+| 2014-01-02 | reentry_w100_b2 |
+| 2015-01-02 | reentry_w100_b2 |
+| 2016-01-04 | reentry_w050_b0 |
+| 2017-01-03 | reentry_w050_b0 |
+| 2018-01-02 | reentry_w050_b0 |
+| 2019-01-02 | reentry_w050_b2 |
+| 2020-01-02 | reentry_w020_b0 |
+| 2021-01-04 | reentry_w020_b0 |
+| 2022-01-03 | reentry_w020_b0 |
+| 2023-01-03 | reentry_w020_b2 |
+| 2024-01-02 | reentry_off |
+| 2025-01-02 | reentry_off |
+| 2026-01-02 | reentry_w020_b2 |
+
+Out-of-sample window: 2006-01-03 to 2026-11-05 (5244 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.34% | 0.611 | n/a | -46.83% |
+| candidate | 13.63% | 0.567 | n/a | -42.16% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.610653 -> 0.566929 (delta -0.043724; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.468261 -> -0.421565 (delta 0.046697; need >= 0.03). CAGR 0.153419 -> 0.136331 (delta -0.017088; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe -0.228355, deflated Sharpe 0.000512 (need >= 0.75). Trials 331, daily-Sharpe dispersion 0.010447, daily multiple-testing benchmark 0.030572. |
+| b still helps with the best improvement year removed | no | Removed 2008 (summed daily improvement 0.050037). Remaining Sharpe delta -0.064920, CAGR delta -0.022620, max-drawdown delta 0.020264. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | yes | All 2 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell. |
+
+Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample window.
+
+| neighbor | similar | CAGR | Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| reentry_w020_b0 | yes | 13.88% | 0.577 | -42.16% |
+| reentry_w050_b2 | yes | 14.30% | 0.593 | -42.16% |
+
+Decision: rejected.
+
+Refreshed lead out-of-sample 2006-01-03 to 2026-11-05 (5244 sessions): CAGR 0.153419, Sharpe 0.610653, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-05 (8501 sessions). SSO ends 2026-11-05, UPRO ends 2026-11-05, ^IRX ends 2026-11-05. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-04 (5243 sessions) has CAGR 0.158541, Sharpe 0.628453, max drawdown -0.468261, against the stored row CAGR 0.158541, Sharpe 0.628453, max drawdown -0.468262. Candidate versus that refreshed book: Sharpe 0.610653 -> 0.566929 (delta -0.043724), CAGR 0.153419 -> 0.136331 (delta -0.017088), max drawdown -0.468261 -> -0.421565 (delta 0.046697). Last walk-forward pick: reentry_w020_b2. Out-of-sample turnover per year 13.18 -> 12.08. Of 1109 out-of-sample sessions with the 200-day band off, the stitched rule held the core in T-bills on 616 and had re-entered it on 450. The stitched fast re-entry does not clear the materiality bar. The live book stays the plain trend core. Previous signal 2026-11-05 (close 2026-11-04): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-06 (close 2026-11-05): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.
