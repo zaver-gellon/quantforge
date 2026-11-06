@@ -123,6 +123,7 @@ def strategic_weights(
     core_hold: float = 1.0,
     trend_is_on: bool | None = None,
     dip_boost: float | None = None,
+    sleeve_unlevered: bool = False,
 ) -> dict[str, float]:
     """Strategic weights. A dip moves part of the core from SPY to SSO and leaves the sleeve budget alone.
 
@@ -135,6 +136,9 @@ def strategic_weights(
     into the sleeve flag. When it is omitted, the sleeve flag is the equity trend.
     ``dip_boost`` is the share of the invested core held in SSO. When it is
     omitted, the whole invested core is SSO if ``dip_on`` and SPY otherwise.
+    ``sleeve_unlevered`` puts the sleeve budget in the core symbol instead of
+    the leveraged fund. It applies only while the equity trend is on, and the
+    dip does not cover that stake.
     """
     raw: dict[str, float] = {}
 
@@ -151,8 +155,12 @@ def strategic_weights(
         boost = min(1.0, max(0.0, float(dip_boost)))
     add(spec.core_symbol, spec.core_weight * hold * (1.0 - boost))
     add("SSO", spec.core_weight * hold * boost)
-    add(spec.sleeve_symbol, spec.sleeve_weight * fraction)
-    add(spec.cash_symbol, spec.sleeve_weight * (1.0 - fraction) + spec.core_weight * (1.0 - hold))
+    if bool(sleeve_unlevered) and equity_trend:
+        add(spec.core_symbol, spec.sleeve_weight)
+        add(spec.cash_symbol, spec.core_weight * (1.0 - hold))
+    else:
+        add(spec.sleeve_symbol, spec.sleeve_weight * fraction)
+        add(spec.cash_symbol, spec.sleeve_weight * (1.0 - fraction) + spec.core_weight * (1.0 - hold))
     rounded = {symbol: round(weight, 6) for symbol, weight in raw.items() if round(weight, 6) > 0}
     total = sum(rounded.values())
     if total > 1.0:
@@ -193,6 +201,8 @@ def build_trend_signal(
     dip_size_info: dict | None = None,
     drift_mix: pd.Series | None = None,
     drift_info: dict | None = None,
+    sleeve_fast: pd.Series | None = None,
+    sleeve_gear_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -222,6 +232,12 @@ def build_trend_signal(
     band cleared the materiality bar and the cell in force is not the calendar.
     True at the signal close resets both piles at the next open. Dates after
     ``as_of`` are ignored. A missing value on or before ``as_of`` is an error.
+    ``sleeve_fast`` is set only when a walk-forward sleeve-gear rule cleared
+    the materiality bar. False at the signal close, while the equity trend is
+    on and no credit hedge has moved the sleeve, holds that sleeve in SPY
+    instead of the leveraged fund. The dip does not cover that stake. True
+    leaves the sleeve in the leveraged fund. The flag is ignored while the
+    equity trend is off.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -314,6 +330,26 @@ def build_trend_signal(
             curve_prev = bool(aligned_curve.iloc[-2])
     prev_on = False if previous is None else bool(previous)
     hold_changed = abs((1.0 if on else hold_now) - (1.0 if prev_on else hold_prev)) > 1e-8
+    fast_now = True
+    fast_prev = True
+    if sleeve_fast is not None:
+        aligned_fast = sleeve_fast.reindex(visible.index)
+        if aligned_fast.isna().any():
+            raise ValueError("sleeve gear is missing sessions at or before as_of")
+        aligned_fast = aligned_fast.astype(bool)
+        fast_now = bool(aligned_fast.iloc[-1])
+        if len(aligned_fast) > 1:
+            fast_prev = bool(aligned_fast.iloc[-2])
+    unlevered_now = bool(sleeve_on and not fast_now)
+    prev_sleeve_on = bool(prev_on and not hedge_prev)
+    unlevered_prev = bool(prev_sleeve_on and not fast_prev)
+    gear_changed = (
+        unlevered_now != unlevered_prev
+        and bool(on) == bool(prev_on)
+        and bool(on)
+        and not hedge_now
+        and not hedge_prev
+    )
     scale_changed = False
     if sleeve_scale is not None:
         prev_fraction = 1.0 if (bool(previous) and not hedge_prev) else 0.0
@@ -377,6 +413,9 @@ def build_trend_signal(
     elif hold_changed:
         trade = True
         reason = "fast_reentry" if (core_hold_info or {}).get("reentry_rule") else "core_hold"
+    elif gear_changed:
+        trade = True
+        reason = "sleeve_gear"
     elif scheduled:
         trade = True
         reason = "drift_band" if drift_replaced_calendar else "scheduled_rebalance"
@@ -418,6 +457,7 @@ def build_trend_signal(
         weights = strategic_weights(
             spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0,
             core_hold=hold_now, trend_is_on=on, dip_boost=boost_now,
+            sleeve_unlevered=unlevered_now,
         )
     average = close.rolling(spec.window, min_periods=spec.window).mean().loc[as_of_ts]
     payload = {
@@ -479,6 +519,11 @@ def build_trend_signal(
         payload["diagnostics"].update(drift_info)
         if drift_replaced_calendar:
             payload["diagnostics"]["drift_mix"] = bool(scheduled)
+    if sleeve_gear_info or sleeve_fast is not None:
+        if sleeve_gear_info:
+            payload["diagnostics"].update(sleeve_gear_info)
+        payload["diagnostics"]["sleeve_fast_on"] = bool(fast_now)
+        payload["diagnostics"]["sleeve_unlevered"] = bool(unlevered_now)
     if idle_info:
         payload["diagnostics"].update(idle_info)
     if idle_symbol is not None:

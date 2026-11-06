@@ -10,6 +10,7 @@ from quantforge.engine.backtest import (
     run_drift_band,
     run_fast_reentry,
     run_idle_diversifier,
+    run_sleeve_gear,
     run_trend_core,
     run_vol_sleeve,
 )
@@ -41,6 +42,7 @@ __all__ = [
     "run_drift_band",
     "run_fast_reentry",
     "run_idle_diversifier",
+    "run_sleeve_gear",
     "run_trend_core",
     "run_vol_sleeve",
     "stitch_ohlc",
