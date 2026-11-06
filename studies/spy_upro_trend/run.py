@@ -54,6 +54,7 @@ from quantforge.strategies.credit import kept_hedge_stress  # noqa: E402
 from quantforge.strategies.drawdown import kept_drawdown_scale  # noqa: E402
 from quantforge.strategies.drift import kept_drift_mix  # noqa: E402
 from quantforge.strategies.reentry import kept_fast_reentry  # noqa: E402
+from quantforge.strategies.sleevegear import kept_sleeve_gear  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend  # noqa: E402
@@ -741,6 +742,7 @@ def main() -> None:
         raise RuntimeError("the iteration log kept both an off-trend core hold and a fast re-entry")
     if reentry_hold is not None:
         core_hold, core_hold_info = reentry_hold, reentry_info
+    sleeve_fast, gear_info = kept_sleeve_gear(HERE / "iterations.json", spy["close"], as_of=as_of)
     curve_on, curve_info = None, None
     if has_kept_curve(HERE / "iterations.json"):
         tnx_frames = load_bars(source, ["^TNX"], start="1990-01-01")
@@ -759,6 +761,7 @@ def main() -> None:
         trend_override=vote_trend, vote_info=vote_info,
         confirm_info=confirm_info,
         core_hold=core_hold, core_hold_info=core_hold_info,
+        sleeve_fast=sleeve_fast, sleeve_gear_info=gear_info,
         curve_on=curve_on, curve_info=curve_info,
         dd_info=dd_info,
         drift_mix=drift_mix, drift_info=drift_info,
@@ -775,6 +778,8 @@ def main() -> None:
         signal_title = "Trend-core that sits in T-bills on the kept yield-curve recession clock"
     elif reentry_info and not reentry_info.get("reentry_live", False):
         signal_title = "Trend-core that re-enters the SPY half on a shorter trend while the 200-day band is off"
+    elif gear_info and not gear_info.get("sleeve_gear_live", True):
+        signal_title = "Trend-core that holds the sleeve in SPY when a shorter trend is off"
     elif core_hold_info:
         signal_title = "Trend-core with the kept off-trend core hold"
     elif confirm_info:

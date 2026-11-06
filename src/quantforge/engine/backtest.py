@@ -820,6 +820,116 @@ def run_fast_reentry(
     )
 
 
+def run_sleeve_gear(
+    spy_open: pd.Series,
+    spy_close: pd.Series,
+    sso_open: pd.Series,
+    sso_close: pd.Series,
+    upro_open: pd.Series,
+    upro_close: pd.Series,
+    trend_on: pd.Series,
+    fast_on: pd.Series,
+    dip_on: pd.Series,
+    mix_rebalance: pd.Series,
+    core_weight: float,
+    sleeve_weight: float,
+    cash_yield: pd.Series,
+    spy_cost: float = 0.0,
+    sso_cost: float = 0.0,
+    upro_cost: float = 0.0,
+    execution: str = "next_open",
+) -> BacktestResult:
+    """Trend-core book that can hold the sleeve in SPY instead of UPRO.
+
+    ``trend_on[t]`` is the sleeve's slow filter, known at the close of t and
+    filled at the next open. While it is off, the sleeve is in T-bills and
+    ``fast_on`` is ignored. While it is on and ``fast_on[t]`` is true, the
+    sleeve is UPRO. While it is on and ``fast_on[t]`` is false, the sleeve is
+    SPY. The dip applies only to the core pile. The sleeve's SPY stake is not
+    dipped and is not merged with the core, so a mix reset still restores the
+    two piles. A gear change swaps the sleeve instrument and does not by itself
+    resize drifted piles. Cash pays no spread.
+    """
+    if execution not in ("next_open", "next_close"):
+        raise ValueError(f"unknown execution {execution!r}")
+    if core_weight < 0 or sleeve_weight < 0 or core_weight + sleeve_weight > 1 + 1e-8:
+        raise ValueError("core and sleeve weights must be non-negative and sum to at most 1")
+    idx = spy_close.index
+    prices = {
+        "spy_o": spy_open.reindex(idx).to_numpy(dtype=float),
+        "spy_c": spy_close.reindex(idx).to_numpy(dtype=float),
+        "sso_o": sso_open.reindex(idx).to_numpy(dtype=float),
+        "sso_c": sso_close.reindex(idx).to_numpy(dtype=float),
+        "upro_o": upro_open.reindex(idx).to_numpy(dtype=float),
+        "upro_c": upro_close.reindex(idx).to_numpy(dtype=float),
+    }
+    stacked = np.column_stack(list(prices.values()))
+    if np.any(~np.isfinite(stacked)) or np.any(stacked <= 0):
+        raise ValueError("SPY, SSO, and UPRO prices must be finite and positive")
+    trend = trend_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    fast = fast_on.reindex(idx)
+    if fast.isna().any():
+        raise ValueError("fast_on is missing sessions")
+    fast = fast.astype(bool).to_numpy(dtype=bool)
+    dip = dip_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    mix = mix_rebalance.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    rf = cash_yield.reindex(idx).astype(float).fillna(0.0).to_numpy(dtype=float)
+    # 0 cash, 1 SPY, 2 UPRO. The slow trend off forces cash.
+    gear = np.where(trend, np.where(fast, 2, 1), 0).astype(int)
+    n = len(idx)
+    core = 0.0
+    sleeve = 0.0
+    resid = 1.0
+    core_sso = False
+    sleeve_gear = 0
+    rets = np.full(n, np.nan)
+    turn = np.zeros(n)
+    drag = np.zeros(n)
+    exposure = np.full(n, np.nan)
+    for i in range(1, n):
+        prev = core + sleeve + resid
+        want = int(gear[i - 1])
+        if execution == "next_open":
+            core = _mark(core, prices["sso_o"][i], prices["sso_c"][i - 1], prices["spy_o"][i], prices["spy_c"][i - 1], core_sso)
+            sleeve = _mark_gear(
+                sleeve, prices["spy_o"][i], prices["spy_c"][i - 1],
+                prices["upro_o"][i], prices["upro_c"][i - 1], sleeve_gear, 1.0 + rf[i],
+            )
+            resid *= 1.0 + rf[i]
+            core, sleeve, resid, core_sso, sleeve_gear, turn[i], drag[i] = _allocate_sleeve_gear(
+                core + sleeve + resid, core, sleeve, resid, core_sso, sleeve_gear,
+                bool(dip[i - 1]), want, bool(i == 1 or mix[i - 1]),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+            )
+            core = _mark(core, prices["sso_c"][i], prices["sso_o"][i], prices["spy_c"][i], prices["spy_o"][i], core_sso)
+            sleeve = _mark_gear(
+                sleeve, prices["spy_c"][i], prices["spy_o"][i],
+                prices["upro_c"][i], prices["upro_o"][i], sleeve_gear, 1.0,
+            )
+        else:
+            core = _mark(core, prices["sso_c"][i], prices["sso_c"][i - 1], prices["spy_c"][i], prices["spy_c"][i - 1], core_sso)
+            sleeve = _mark_gear(
+                sleeve, prices["spy_c"][i], prices["spy_c"][i - 1],
+                prices["upro_c"][i], prices["upro_c"][i - 1], sleeve_gear, 1.0 + rf[i],
+            )
+            resid *= 1.0 + rf[i]
+            core, sleeve, resid, core_sso, sleeve_gear, turn[i], drag[i] = _allocate_sleeve_gear(
+                core + sleeve + resid, core, sleeve, resid, core_sso, sleeve_gear,
+                bool(dip[i - 1]), want, bool(i == 1 or mix[i - 1]),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+            )
+        new = core + sleeve + resid
+        rets[i] = new / prev - 1.0
+        invested = core + (sleeve if sleeve_gear in (1, 2) else 0.0)
+        exposure[i] = invested / new if new else 0.0
+    return BacktestResult(
+        returns=pd.Series(rets, index=idx, name="return"),
+        turnover=pd.Series(turn, index=idx, name="turnover"),
+        cost_drag=pd.Series(drag, index=idx, name="cost_drag"),
+        exposure=pd.Series(exposure, index=idx, name="exposure"),
+    )
+
+
 def run_curve_clock(
     spy_open: pd.Series,
     spy_close: pd.Series,
@@ -1499,6 +1609,108 @@ def _allocate_dip(
         tgt_resid * scale,
         float(want_boost),
         bool(want_trend),
+        turnover,
+        cost / equity,
+    )
+
+
+def _mark_gear(
+    value: float,
+    num_spy: float,
+    den_spy: float,
+    num_upro: float,
+    den_upro: float,
+    gear: int,
+    cash_factor: float,
+) -> float:
+    """Mark a sleeve pile. Gear 2 is UPRO, gear 1 is SPY, gear 0 is cash."""
+    if value == 0.0:
+        return 0.0
+    if gear == 2:
+        return value * num_upro / den_upro
+    if gear == 1:
+        return value * num_spy / den_spy
+    if gear == 0:
+        return value * cash_factor
+    raise ValueError(f"unknown sleeve gear {gear}")
+
+
+def _allocate_sleeve_gear(
+    equity: float,
+    core: float,
+    sleeve: float,
+    resid: float,
+    core_sso: bool,
+    sleeve_gear: int,
+    want_dip: bool,
+    want_gear: int,
+    do_mix: bool,
+    core_weight: float,
+    sleeve_weight: float,
+    spy_cost: float,
+    sso_cost: float,
+    upro_cost: float,
+):
+    """Same pile rules as the trend core, with the sleeve in cash, SPY, or UPRO.
+
+    Cash pays no spread. Switching instruments pays the leaving leg and the
+    arriving leg. A resize inside one instrument pays that instrument's cost
+    on the dollars that move.
+    """
+    if equity <= 0:
+        raise ValueError("equity is non-positive")
+    want_gear = int(want_gear)
+    sleeve_gear = int(sleeve_gear)
+    if want_gear not in (0, 1, 2) or sleeve_gear not in (0, 1, 2):
+        raise ValueError("sleeve gear must be 0, 1, or 2")
+    if not do_mix and want_dip == core_sso and want_gear == sleeve_gear:
+        return core, sleeve, resid, core_sso, sleeve_gear, 0.0, 0.0
+    if do_mix:
+        tgt_core = core_weight * equity
+        tgt_sleeve = sleeve_weight * equity
+    else:
+        tgt_core = core
+        tgt_sleeve = sleeve
+    tgt_resid = equity - tgt_core - tgt_sleeve
+    cost = 0.0
+    traded = 0.0
+    if want_dip != core_sso:
+        old = sso_cost if core_sso else spy_cost
+        new = sso_cost if want_dip else spy_cost
+        cost += core * old + tgt_core * new
+        traded += core + tgt_core
+    else:
+        inst = sso_cost if want_dip else spy_cost
+        delta = abs(tgt_core - core)
+        cost += delta * inst
+        traded += delta
+
+    def _leg(gear: int, dollars: float) -> tuple[float, float]:
+        if gear == 2:
+            return dollars * upro_cost, dollars
+        if gear == 1:
+            return dollars * spy_cost, dollars
+        return 0.0, 0.0
+
+    if want_gear != sleeve_gear:
+        left_cost, left_traded = _leg(sleeve_gear, sleeve)
+        right_cost, right_traded = _leg(want_gear, tgt_sleeve)
+        cost += left_cost + right_cost
+        traded += left_traded + right_traded
+    else:
+        moved_cost, moved = _leg(want_gear, abs(tgt_sleeve - sleeve))
+        cost += moved_cost
+        traded += moved
+    if cost >= equity:
+        raise ValueError("transaction costs consume the whole book")
+    scale = (equity - cost) / equity
+    turnover = traded / 2.0 / equity
+    return (
+        tgt_core * scale,
+        tgt_sleeve * scale,
+        tgt_resid * scale,
+        bool(want_dip),
+        want_gear,
         turnover,
         cost / equity,
     )

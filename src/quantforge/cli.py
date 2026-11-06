@@ -21,6 +21,7 @@ from quantforge.strategies.credit import kept_hedge_stress
 from quantforge.strategies.drawdown import kept_drawdown_scale
 from quantforge.strategies.drift import has_kept_drift, kept_drift_mix, lagged_tbill
 from quantforge.strategies.reentry import kept_fast_reentry
+from quantforge.strategies.sleevegear import kept_sleeve_gear
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal
 from quantforge.strategies.volscale import kept_sleeve_scale
@@ -125,6 +126,7 @@ def _signals(args) -> int:
             raise DataError("the iteration log kept both an off-trend core hold and a fast re-entry")
         if reentry_hold is not None:
             core_hold, core_hold_info = reentry_hold, reentry_info
+        sleeve_fast, gear_info = kept_sleeve_gear(study / "iterations.json", close, as_of=close.index[-1])
         drift_kwargs = {}
         if has_kept_drift(study / "iterations.json"):
             names = ["SPY", "SSO", "UPRO", "^IRX"]
@@ -157,6 +159,7 @@ def _signals(args) -> int:
             confirm_info=confirm_info,
             dd_info=dd_info,
             core_hold=core_hold, core_hold_info=core_hold_info,
+            sleeve_fast=sleeve_fast, sleeve_gear_info=gear_info,
             **idle_kwargs,
             **drift_kwargs,
         )
