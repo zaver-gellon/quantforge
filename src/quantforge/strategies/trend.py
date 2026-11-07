@@ -203,6 +203,7 @@ def build_trend_signal(
     drift_info: dict | None = None,
     sleeve_fast: pd.Series | None = None,
     sleeve_gear_info: dict | None = None,
+    ema_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -237,7 +238,8 @@ def build_trend_signal(
     on and no credit hedge has moved the sleeve, holds that sleeve in SPY
     instead of the leveraged fund. The dip does not cover that stake. True
     leaves the sleeve in the leveraged fund. The flag is ignored while the
-    equity trend is off.
+    equity trend is off. ``ema_info`` records a kept exponential filter when
+    ``trend_override`` is that filter. It does not change the weights.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -524,6 +526,8 @@ def build_trend_signal(
             payload["diagnostics"].update(sleeve_gear_info)
         payload["diagnostics"]["sleeve_fast_on"] = bool(fast_now)
         payload["diagnostics"]["sleeve_unlevered"] = bool(unlevered_now)
+    if ema_info:
+        payload["diagnostics"].update(ema_info)
     if idle_info:
         payload["diagnostics"].update(idle_info)
     if idle_symbol is not None:

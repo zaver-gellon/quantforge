@@ -54,6 +54,7 @@ from quantforge.strategies.credit import kept_hedge_stress  # noqa: E402
 from quantforge.strategies.drawdown import kept_drawdown_scale  # noqa: E402
 from quantforge.strategies.drift import kept_drift_mix  # noqa: E402
 from quantforge.strategies.reentry import kept_fast_reentry  # noqa: E402
+from quantforge.strategies.ema import kept_ema_trend  # noqa: E402
 from quantforge.strategies.sleevegear import kept_sleeve_gear  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
 from quantforge.strategies.volscale import kept_sleeve_scale
@@ -730,6 +731,12 @@ def main() -> None:
         raise RuntimeError("the iteration log kept both a vote and a confirmation rule")
     if confirm_trend is not None:
         vote_trend, vote_info = confirm_trend, None
+    ema_trend, ema_info = kept_ema_trend(HERE / "iterations.json", spy["close"], as_of=as_of)
+    if ema_trend is not None and vote_trend is not None:
+        raise RuntimeError("the iteration log kept both an exponential filter and another trend override")
+    if ema_trend is not None:
+        vote_trend = ema_trend
+        vote_info = None
     idle_choice = kept_idle_choice(HERE / "iterations.json", as_of)
     idle_closes = {}
     if idle_choice is not None:
@@ -762,6 +769,7 @@ def main() -> None:
         confirm_info=confirm_info,
         core_hold=core_hold, core_hold_info=core_hold_info,
         sleeve_fast=sleeve_fast, sleeve_gear_info=gear_info,
+        ema_info=ema_info,
         curve_on=curve_on, curve_info=curve_info,
         dd_info=dd_info,
         drift_mix=drift_mix, drift_info=drift_info,
@@ -772,7 +780,9 @@ def main() -> None:
         allowed = allowed | frozenset({idle_kwargs["idle_symbol"]})
     write_signal(desk_signal, HERE / "signals.json", allowed_tickers=allowed)
     signal_title = "Trend-core (2% band, dip overlay on the SPY half)"
-    if drift_info and not drift_info.get("drift_calendar", True):
+    if ema_info:
+        signal_title = "Trend-core whose UPRO sleeve follows the kept exponential average"
+    elif drift_info and not drift_info.get("drift_calendar", True):
         signal_title = "Trend-core that resets the mix on the kept UPRO drift band"
     elif curve_info:
         signal_title = "Trend-core that sits in T-bills on the kept yield-curve recession clock"
