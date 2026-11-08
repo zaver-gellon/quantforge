@@ -57,6 +57,7 @@ from quantforge.strategies.reentry import kept_fast_reentry  # noqa: E402
 from quantforge.strategies.ema import kept_ema_trend  # noqa: E402
 from quantforge.strategies.sleevegear import kept_sleeve_gear  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
+from quantforge.strategies.sleevediv import kept_sleeve_cash_choice, sleeve_cash_signal_kwargs  # noqa: E402
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend  # noqa: E402
 from quantforge.strategies.dipbuy import DIP_RULES, dip_active  # noqa: E402
@@ -743,6 +744,14 @@ def main() -> None:
         idle_frames = load_bars(source, [idle_choice["symbol"]], start="1993-01-01")
         idle_closes[idle_choice["symbol"]] = idle_frames[idle_choice["symbol"]]["close"]
     idle_kwargs = idle_signal_kwargs(HERE / "iterations.json", spy["close"], as_of, idle_closes)
+    sleeve_cash_choice = kept_sleeve_cash_choice(HERE / "iterations.json", as_of)
+    sleeve_cash_closes = {}
+    if sleeve_cash_choice is not None:
+        if idle_choice is not None:
+            raise RuntimeError("the iteration log kept both a whole-book diversifier and a sleeve diversifier")
+        sleeve_frames = load_bars(source, [sleeve_cash_choice["symbol"]], start="1993-01-01")
+        sleeve_cash_closes[sleeve_cash_choice["symbol"]] = sleeve_frames[sleeve_cash_choice["symbol"]]["close"]
+    sleeve_cash_kwargs = sleeve_cash_signal_kwargs(HERE / "iterations.json", spy["close"], as_of, sleeve_cash_closes)
     core_hold, core_hold_info = kept_core_hold(HERE / "iterations.json", spy["close"], as_of=as_of)
     reentry_hold, reentry_info = kept_fast_reentry(HERE / "iterations.json", spy["close"], as_of=as_of)
     if reentry_hold is not None and core_hold is not None:
@@ -774,10 +783,13 @@ def main() -> None:
         dd_info=dd_info,
         drift_mix=drift_mix, drift_info=drift_info,
         **idle_kwargs,
+        **sleeve_cash_kwargs,
     )
     allowed = ALLOWED_TREND_TICKERS
     if idle_kwargs.get("idle_symbol"):
         allowed = allowed | frozenset({idle_kwargs["idle_symbol"]})
+    if sleeve_cash_kwargs.get("sleeve_cash_symbol"):
+        allowed = allowed | frozenset({sleeve_cash_kwargs["sleeve_cash_symbol"]})
     write_signal(desk_signal, HERE / "signals.json", allowed_tickers=allowed)
     signal_title = "Trend-core (2% band, dip overlay on the SPY half)"
     if ema_info:
@@ -794,6 +806,8 @@ def main() -> None:
         signal_title = "Trend-core with the kept off-trend core hold"
     elif confirm_info:
         signal_title = "Trend-core with the kept N-day confirmation of the trend band"
+    elif sleeve_cash_kwargs.get("sleeve_cash_info"):
+        signal_title = "Trend-core that invests the off-trend sleeve in the kept bond or gold trend"
     elif idle_kwargs.get("idle_info"):
         signal_title = "Trend-core that leaves equities for the kept bond or gold trend"
     elif dd_info:

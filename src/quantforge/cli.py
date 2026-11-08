@@ -24,6 +24,7 @@ from quantforge.strategies.reentry import kept_fast_reentry
 from quantforge.strategies.ema import kept_ema_trend
 from quantforge.strategies.sleevegear import kept_sleeve_gear
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs
+from quantforge.strategies.sleevediv import kept_sleeve_cash_choice, sleeve_cash_signal_kwargs
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend
@@ -126,6 +127,19 @@ def _signals(args) -> int:
         idle_kwargs = idle_signal_kwargs(
             study / "iterations.json", close, close.index[-1], idle_closes,
         )
+        sleeve_cash_choice = kept_sleeve_cash_choice(study / "iterations.json", close.index[-1])
+        sleeve_cash_closes = {}
+        if sleeve_cash_choice is not None:
+            if idle_choice is not None:
+                raise DataError("the iteration log kept both a whole-book diversifier and a sleeve diversifier")
+            sleeve_frames = load_bars(
+                get_source("yahoo"), [sleeve_cash_choice["symbol"]],
+                start=args.start, end=args.end, cache_dir=cache,
+            )
+            sleeve_cash_closes[sleeve_cash_choice["symbol"]] = sleeve_frames[sleeve_cash_choice["symbol"]]["close"]
+        sleeve_cash_kwargs = sleeve_cash_signal_kwargs(
+            study / "iterations.json", close, close.index[-1], sleeve_cash_closes,
+        )
         core_hold, core_hold_info = kept_core_hold(study / "iterations.json", close, as_of=close.index[-1])
         reentry_hold, reentry_info = kept_fast_reentry(study / "iterations.json", close, as_of=close.index[-1])
         if reentry_hold is not None and core_hold is not None:
@@ -169,11 +183,14 @@ def _signals(args) -> int:
             ema_info=ema_info,
             **idle_kwargs,
             **drift_kwargs,
+            **sleeve_cash_kwargs,
         )
         dest = Path(args.out) if args.out else study / "signals.json"
         allowed = ALLOWED_TREND_TICKERS
         if idle_kwargs.get("idle_symbol"):
             allowed = allowed | frozenset({idle_kwargs["idle_symbol"]})
+        if sleeve_cash_kwargs.get("sleeve_cash_symbol"):
+            allowed = allowed | frozenset({sleeve_cash_kwargs["sleeve_cash_symbol"]})
         write_signal(payload, dest, allowed_tickers=allowed)
         print(f"wrote {dest} for {payload['date']} {payload['weights']}")
         return 0
