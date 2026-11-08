@@ -115,6 +115,30 @@ def trend_state(close: pd.Series, window: int, band: float = 0.0, freq: str = "d
     return pd.Series(out, index=series.index, name="trend_on")
 
 
+def _relocate_sleeve_cash(
+    weights: dict[str, float],
+    cash_symbol: str,
+    sleeve_weight: float,
+    symbol: str,
+) -> dict[str, float]:
+    """Move the sleeve budget from cash into ``symbol``. Core cash stays put."""
+    budget = round(float(sleeve_weight), 6)
+    if budget <= 0.0:
+        return dict(weights)
+    out = dict(weights)
+    held = float(out.get(cash_symbol, 0.0))
+    move = min(held, budget)
+    if move <= 1e-12:
+        raise ValueError("sleeve cash is not in the book to move into the diversifier")
+    out[symbol] = round(float(out.get(symbol, 0.0)) + move, 6)
+    left = round(held - move, 6)
+    if left > 1e-12:
+        out[cash_symbol] = left
+    else:
+        out.pop(cash_symbol, None)
+    return out
+
+
 def strategic_weights(
     spec: TrendCoreSpec,
     trend_on: bool,
@@ -204,6 +228,10 @@ def build_trend_signal(
     sleeve_fast: pd.Series | None = None,
     sleeve_gear_info: dict | None = None,
     ema_info: dict | None = None,
+    sleeve_cash_on: pd.Series | None = None,
+    sleeve_cash_ready: pd.Series | None = None,
+    sleeve_cash_symbol: str | None = None,
+    sleeve_cash_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -240,6 +268,11 @@ def build_trend_signal(
     leaves the sleeve in the leveraged fund. The flag is ignored while the
     equity trend is off. ``ema_info`` records a kept exponential filter when
     ``trend_override`` is that filter. It does not change the weights.
+    ``sleeve_cash_symbol`` is set only when a walk-forward sleeve diversifier
+    cleared the materiality bar. While the equity trend is off, the filter is
+    ready, and ``sleeve_cash_on`` is true, the sleeve budget is held in that
+    asset instead of BIL. The core is not moved. The flag is ignored while the
+    equity trend is on.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -352,6 +385,30 @@ def build_trend_signal(
         and not hedge_now
         and not hedge_prev
     )
+    sleeve_cash_now = False
+    sleeve_cash_prev = False
+    if sleeve_cash_symbol is not None:
+        if idle_symbol is not None:
+            raise ValueError("a sleeve diversifier and a whole-book diversifier cannot both be kept")
+        if sleeve_cash_on is None or sleeve_cash_ready is None:
+            raise ValueError("sleeve diversifier requires its state and ready series")
+        aligned_cash_on = sleeve_cash_on.reindex(visible.index)
+        aligned_cash_ready = sleeve_cash_ready.reindex(visible.index)
+        if aligned_cash_on.isna().any() or aligned_cash_ready.isna().any():
+            raise ValueError("sleeve diversifier is missing sessions at or before as_of")
+        aligned_cash_on = aligned_cash_on.astype(bool)
+        aligned_cash_ready = aligned_cash_ready.astype(bool)
+        sleeve_cash_now = (not on) and bool(aligned_cash_on.iloc[-1]) and bool(aligned_cash_ready.iloc[-1])
+        if len(aligned_cash_on) > 1:
+            sleeve_cash_prev = (
+                (not prev_on) and bool(aligned_cash_on.iloc[-2]) and bool(aligned_cash_ready.iloc[-2])
+            )
+    sleeve_cash_changed = bool(
+        sleeve_cash_symbol is not None
+        and previous is not None
+        and bool(on) == bool(previous)
+        and sleeve_cash_now != sleeve_cash_prev
+    )
     scale_changed = False
     if sleeve_scale is not None:
         prev_fraction = 1.0 if (bool(previous) and not hedge_prev) else 0.0
@@ -418,6 +475,9 @@ def build_trend_signal(
     elif gear_changed:
         trade = True
         reason = "sleeve_gear"
+    elif sleeve_cash_changed:
+        trade = True
+        reason = "sleeve_diversifier"
     elif scheduled:
         trade = True
         reason = "drift_band" if drift_replaced_calendar else "scheduled_rebalance"
@@ -461,6 +521,8 @@ def build_trend_signal(
             core_hold=hold_now, trend_is_on=on, dip_boost=boost_now,
             sleeve_unlevered=unlevered_now,
         )
+        if sleeve_cash_now:
+            weights = _relocate_sleeve_cash(weights, spec.cash_symbol, spec.sleeve_weight, sleeve_cash_symbol)
     average = close.rolling(spec.window, min_periods=spec.window).mean().loc[as_of_ts]
     payload = {
         "date": next_nyse_session(as_of_ts).strftime("%Y-%m-%d"),
@@ -528,6 +590,10 @@ def build_trend_signal(
         payload["diagnostics"]["sleeve_unlevered"] = bool(unlevered_now)
     if ema_info:
         payload["diagnostics"].update(ema_info)
+    if sleeve_cash_info or sleeve_cash_symbol is not None:
+        if sleeve_cash_info:
+            payload["diagnostics"].update(sleeve_cash_info)
+        payload["diagnostics"]["sleeve_cash_applied"] = bool(sleeve_cash_now)
     if idle_info:
         payload["diagnostics"].update(idle_info)
     if idle_symbol is not None:
@@ -537,5 +603,7 @@ def build_trend_signal(
     allowed = set(ALLOWED_TREND_TICKERS)
     if idle_symbol is not None:
         allowed.add(idle_symbol)
+    if sleeve_cash_symbol is not None:
+        allowed.add(sleeve_cash_symbol)
     validate_signal(payload, allowed_tickers=frozenset(allowed))
     return payload
