@@ -13,6 +13,7 @@ from quantforge.engine.backtest import (
     run_sleeve_diversifier,
     run_sleeve_gear,
     run_trend_core,
+    run_vol_gear,
     run_vol_sleeve,
 )
 from quantforge.engine.costs import CostModel, crypto_costs, equity_costs
@@ -46,6 +47,7 @@ __all__ = [
     "run_sleeve_diversifier",
     "run_sleeve_gear",
     "run_trend_core",
+    "run_vol_gear",
     "run_vol_sleeve",
     "stitch_ohlc",
     "synthesize_leveraged",

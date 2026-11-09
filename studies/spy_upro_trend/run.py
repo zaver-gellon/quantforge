@@ -58,6 +58,7 @@ from quantforge.strategies.ema import kept_ema_trend  # noqa: E402
 from quantforge.strategies.sleevegear import kept_sleeve_gear  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
 from quantforge.strategies.sleevediv import kept_sleeve_cash_choice, sleeve_cash_signal_kwargs  # noqa: E402
+from quantforge.strategies.volgear import kept_vol_gear
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend  # noqa: E402
 from quantforge.strategies.dipbuy import DIP_RULES, dip_active  # noqa: E402
@@ -759,6 +760,11 @@ def main() -> None:
     if reentry_hold is not None:
         core_hold, core_hold_info = reentry_hold, reentry_info
     sleeve_fast, gear_info = kept_sleeve_gear(HERE / "iterations.json", spy["close"], as_of=as_of)
+    sleeve_upro_share, vol_gear_info = kept_vol_gear(HERE / "iterations.json", spy["close"], as_of=as_of)
+    if sleeve_upro_share is not None and sleeve_fast is not None:
+        raise RuntimeError("the iteration log kept both a vol gear and a sleeve gear")
+    if sleeve_upro_share is not None and sleeve_scale is not None:
+        raise RuntimeError("the iteration log kept both a vol gear and a sleeve scale")
     curve_on, curve_info = None, None
     if has_kept_curve(HERE / "iterations.json"):
         tnx_frames = load_bars(source, ["^TNX"], start="1990-01-01")
@@ -778,6 +784,7 @@ def main() -> None:
         confirm_info=confirm_info,
         core_hold=core_hold, core_hold_info=core_hold_info,
         sleeve_fast=sleeve_fast, sleeve_gear_info=gear_info,
+        sleeve_upro_share=sleeve_upro_share, vol_gear_info=vol_gear_info,
         ema_info=ema_info,
         curve_on=curve_on, curve_info=curve_info,
         dd_info=dd_info,
@@ -792,7 +799,9 @@ def main() -> None:
         allowed = allowed | frozenset({sleeve_cash_kwargs["sleeve_cash_symbol"]})
     write_signal(desk_signal, HERE / "signals.json", allowed_tickers=allowed)
     signal_title = "Trend-core (2% band, dip overlay on the SPY half)"
-    if ema_info:
+    if vol_gear_info and not vol_gear_info.get("vol_gear_live", True):
+        signal_title = "Trend-core that scales the UPRO sleeve's leverage by realized volatility"
+    elif ema_info:
         signal_title = "Trend-core whose UPRO sleeve follows the kept exponential average"
     elif drift_info and not drift_info.get("drift_calendar", True):
         signal_title = "Trend-core that resets the mix on the kept UPRO drift band"

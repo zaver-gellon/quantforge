@@ -148,6 +148,7 @@ def strategic_weights(
     trend_is_on: bool | None = None,
     dip_boost: float | None = None,
     sleeve_unlevered: bool = False,
+    sleeve_upro_share: float | None = None,
 ) -> dict[str, float]:
     """Strategic weights. A dip moves part of the core from SPY to SSO and leaves the sleeve budget alone.
 
@@ -162,7 +163,10 @@ def strategic_weights(
     omitted, the whole invested core is SSO if ``dip_on`` and SPY otherwise.
     ``sleeve_unlevered`` puts the sleeve budget in the core symbol instead of
     the leveraged fund. It applies only while the equity trend is on, and the
-    dip does not cover that stake.
+    dip does not cover that stake. ``sleeve_upro_share`` is the share of the
+    sleeve budget held in the leveraged fund while the sleeve is on. The rest
+    of that budget is the core symbol, not cash. It is ignored when the sleeve
+    is off. A missing share leaves the whole sleeve in the leveraged fund.
     """
     raw: dict[str, float] = {}
 
@@ -179,7 +183,14 @@ def strategic_weights(
         boost = min(1.0, max(0.0, float(dip_boost)))
     add(spec.core_symbol, spec.core_weight * hold * (1.0 - boost))
     add("SSO", spec.core_weight * hold * boost)
-    if bool(sleeve_unlevered) and equity_trend:
+    if sleeve_upro_share is not None and bool(trend_on):
+        if bool(sleeve_unlevered):
+            raise ValueError("vol gear and an unlevered sleeve cannot both apply")
+        share = min(1.0, max(0.0, float(sleeve_upro_share)))
+        add(spec.sleeve_symbol, spec.sleeve_weight * share)
+        add(spec.core_symbol, spec.sleeve_weight * (1.0 - share))
+        add(spec.cash_symbol, spec.core_weight * (1.0 - hold))
+    elif bool(sleeve_unlevered) and equity_trend:
         add(spec.core_symbol, spec.sleeve_weight)
         add(spec.cash_symbol, spec.core_weight * (1.0 - hold))
     else:
@@ -232,6 +243,8 @@ def build_trend_signal(
     sleeve_cash_ready: pd.Series | None = None,
     sleeve_cash_symbol: str | None = None,
     sleeve_cash_info: dict | None = None,
+    sleeve_upro_share: pd.Series | None = None,
+    vol_gear_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -273,6 +286,10 @@ def build_trend_signal(
     ready, and ``sleeve_cash_on`` is true, the sleeve budget is held in that
     asset instead of BIL. The core is not moved. The flag is ignored while the
     equity trend is on.
+    ``sleeve_upro_share`` is set only when a walk-forward vol-gear rule cleared
+    the materiality bar. While the sleeve is on, that share of the sleeve
+    budget is UPRO and the rest is SPY. The dip does not cover the SPY stake.
+    The share is ignored while the sleeve is off.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -378,6 +395,27 @@ def build_trend_signal(
     unlevered_now = bool(sleeve_on and not fast_now)
     prev_sleeve_on = bool(prev_on and not hedge_prev)
     unlevered_prev = bool(prev_sleeve_on and not fast_prev)
+    share_now = 1.0
+    share_prev = 1.0
+    if sleeve_upro_share is not None:
+        if sleeve_fast is not None:
+            raise ValueError("a vol-scaled sleeve and a trend sleeve gear cannot both be kept")
+        if sleeve_scale is not None:
+            raise ValueError("a vol-scaled sleeve and a cash sleeve scale cannot both be kept")
+        aligned_share = sleeve_upro_share.reindex(visible.index).astype(float)
+        if aligned_share.isna().any() or not np.isfinite(aligned_share.to_numpy(dtype=float)).all():
+            raise ValueError("vol gear share is missing sessions at or before as_of")
+        if (aligned_share < -1e-12).any() or (aligned_share > 1.0 + 1e-12).any():
+            raise ValueError("vol gear share must be in [0, 1]")
+        share_now = min(1.0, max(0.0, float(aligned_share.iloc[-1])))
+        if len(aligned_share) > 1:
+            share_prev = min(1.0, max(0.0, float(aligned_share.iloc[-2])))
+    blend_changed = (
+        sleeve_upro_share is not None
+        and sleeve_on
+        and prev_sleeve_on
+        and abs(share_now - share_prev) > 1e-8
+    )
     gear_changed = (
         unlevered_now != unlevered_prev
         and bool(on) == bool(prev_on)
@@ -475,6 +513,9 @@ def build_trend_signal(
     elif gear_changed:
         trade = True
         reason = "sleeve_gear"
+    elif blend_changed:
+        trade = True
+        reason = "vol_gear"
     elif sleeve_cash_changed:
         trade = True
         reason = "sleeve_diversifier"
@@ -520,6 +561,7 @@ def build_trend_signal(
             spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0,
             core_hold=hold_now, trend_is_on=on, dip_boost=boost_now,
             sleeve_unlevered=unlevered_now,
+            sleeve_upro_share=None if sleeve_upro_share is None else share_now,
         )
         if sleeve_cash_now:
             weights = _relocate_sleeve_cash(weights, spec.cash_symbol, spec.sleeve_weight, sleeve_cash_symbol)
@@ -594,6 +636,13 @@ def build_trend_signal(
         if sleeve_cash_info:
             payload["diagnostics"].update(sleeve_cash_info)
         payload["diagnostics"]["sleeve_cash_applied"] = bool(sleeve_cash_now)
+    if vol_gear_info or sleeve_upro_share is not None:
+        if vol_gear_info:
+            payload["diagnostics"].update(vol_gear_info)
+        payload["diagnostics"]["sleeve_upro_share"] = None if sleeve_upro_share is None else float(share_now)
+        payload["diagnostics"]["sleeve_leverage_applied"] = (
+            None if not sleeve_on or sleeve_upro_share is None else float(1.0 + 2.0 * share_now)
+        )
     if idle_info:
         payload["diagnostics"].update(idle_info)
     if idle_symbol is not None:
