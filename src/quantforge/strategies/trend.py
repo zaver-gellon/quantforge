@@ -245,6 +245,8 @@ def build_trend_signal(
     sleeve_cash_info: dict | None = None,
     sleeve_upro_share: pd.Series | None = None,
     vol_gear_info: dict | None = None,
+    cushion_share: pd.Series | None = None,
+    cushion_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -290,6 +292,8 @@ def build_trend_signal(
     the materiality bar. While the sleeve is on, that share of the sleeve
     budget is UPRO and the rest is SPY. The dip does not cover the SPY stake.
     The share is ignored while the sleeve is off.
+    ``cushion_share`` is that same blend when a walk-forward cushion scale
+    cleared the bar. It cannot be set together with ``sleeve_upro_share``.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -395,23 +399,27 @@ def build_trend_signal(
     unlevered_now = bool(sleeve_on and not fast_now)
     prev_sleeve_on = bool(prev_on and not hedge_prev)
     unlevered_prev = bool(prev_sleeve_on and not fast_prev)
+    if cushion_share is not None and sleeve_upro_share is not None:
+        raise ValueError("a cushion scale and a realized-vol gear cannot both be kept")
+    blend_share = cushion_share if cushion_share is not None else sleeve_upro_share
+    blend_label = "cushion" if cushion_share is not None else "vol_gear"
     share_now = 1.0
     share_prev = 1.0
-    if sleeve_upro_share is not None:
+    if blend_share is not None:
         if sleeve_fast is not None:
-            raise ValueError("a vol-scaled sleeve and a trend sleeve gear cannot both be kept")
+            raise ValueError("a scaled sleeve and a trend sleeve gear cannot both be kept")
         if sleeve_scale is not None:
-            raise ValueError("a vol-scaled sleeve and a cash sleeve scale cannot both be kept")
-        aligned_share = sleeve_upro_share.reindex(visible.index).astype(float)
+            raise ValueError("a scaled sleeve and a cash sleeve scale cannot both be kept")
+        aligned_share = blend_share.reindex(visible.index).astype(float)
         if aligned_share.isna().any() or not np.isfinite(aligned_share.to_numpy(dtype=float)).all():
-            raise ValueError("vol gear share is missing sessions at or before as_of")
+            raise ValueError("sleeve share is missing sessions at or before as_of")
         if (aligned_share < -1e-12).any() or (aligned_share > 1.0 + 1e-12).any():
-            raise ValueError("vol gear share must be in [0, 1]")
+            raise ValueError("sleeve share must be in [0, 1]")
         share_now = min(1.0, max(0.0, float(aligned_share.iloc[-1])))
         if len(aligned_share) > 1:
             share_prev = min(1.0, max(0.0, float(aligned_share.iloc[-2])))
     blend_changed = (
-        sleeve_upro_share is not None
+        blend_share is not None
         and sleeve_on
         and prev_sleeve_on
         and abs(share_now - share_prev) > 1e-8
@@ -515,7 +523,7 @@ def build_trend_signal(
         reason = "sleeve_gear"
     elif blend_changed:
         trade = True
-        reason = "vol_gear"
+        reason = blend_label
     elif sleeve_cash_changed:
         trade = True
         reason = "sleeve_diversifier"
@@ -561,7 +569,7 @@ def build_trend_signal(
             spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0,
             core_hold=hold_now, trend_is_on=on, dip_boost=boost_now,
             sleeve_unlevered=unlevered_now,
-            sleeve_upro_share=None if sleeve_upro_share is None else share_now,
+            sleeve_upro_share=None if blend_share is None else share_now,
         )
         if sleeve_cash_now:
             weights = _relocate_sleeve_cash(weights, spec.cash_symbol, spec.sleeve_weight, sleeve_cash_symbol)
@@ -636,7 +644,14 @@ def build_trend_signal(
         if sleeve_cash_info:
             payload["diagnostics"].update(sleeve_cash_info)
         payload["diagnostics"]["sleeve_cash_applied"] = bool(sleeve_cash_now)
-    if vol_gear_info or sleeve_upro_share is not None:
+    if cushion_info or cushion_share is not None:
+        if cushion_info:
+            payload["diagnostics"].update(cushion_info)
+        payload["diagnostics"]["cushion_share"] = None if cushion_share is None else float(share_now)
+        payload["diagnostics"]["sleeve_leverage_applied"] = (
+            None if not sleeve_on or cushion_share is None else float(1.0 + 2.0 * share_now)
+        )
+    elif vol_gear_info or sleeve_upro_share is not None:
         if vol_gear_info:
             payload["diagnostics"].update(vol_gear_info)
         payload["diagnostics"]["sleeve_upro_share"] = None if sleeve_upro_share is None else float(share_now)
