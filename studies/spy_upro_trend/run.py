@@ -58,6 +58,7 @@ from quantforge.strategies.ema import kept_ema_trend  # noqa: E402
 from quantforge.strategies.sleevegear import kept_sleeve_gear  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
 from quantforge.strategies.sleevediv import kept_sleeve_cash_choice, sleeve_cash_signal_kwargs  # noqa: E402
+from quantforge.strategies.billgear import align_bill_yield, has_kept_bill, kept_bill_gear
 from quantforge.strategies.cushion import kept_cushion
 from quantforge.strategies.volgear import kept_vol_gear
 from quantforge.strategies.volscale import kept_sleeve_scale
@@ -773,6 +774,22 @@ def main() -> None:
         raise RuntimeError("the iteration log kept both a cushion scale and a sleeve gear")
     if cushion_share is not None and sleeve_scale is not None:
         raise RuntimeError("the iteration log kept both a cushion scale and a sleeve scale")
+    bill_share = None
+    bill_info = None
+    if has_kept_bill(HERE / "iterations.json"):
+        bill_share, bill_info = kept_bill_gear(
+            HERE / "iterations.json",
+            align_bill_yield(frames["^IRX"]["close"], spy.index),
+            as_of=as_of,
+        )
+    if bill_share is not None and cushion_share is not None:
+        raise RuntimeError("the iteration log kept both a bill-yield gear and a cushion scale")
+    if bill_share is not None and sleeve_upro_share is not None:
+        raise RuntimeError("the iteration log kept both a bill-yield gear and a vol gear")
+    if bill_share is not None and sleeve_fast is not None:
+        raise RuntimeError("the iteration log kept both a bill-yield gear and a sleeve gear")
+    if bill_share is not None and sleeve_scale is not None:
+        raise RuntimeError("the iteration log kept both a bill-yield gear and a sleeve scale")
     curve_on, curve_info = None, None
     if has_kept_curve(HERE / "iterations.json"):
         tnx_frames = load_bars(source, ["^TNX"], start="1990-01-01")
@@ -794,6 +811,7 @@ def main() -> None:
         sleeve_fast=sleeve_fast, sleeve_gear_info=gear_info,
         sleeve_upro_share=sleeve_upro_share, vol_gear_info=vol_gear_info,
         cushion_share=cushion_share, cushion_info=cushion_info,
+        bill_share=bill_share, bill_info=bill_info,
         ema_info=ema_info,
         curve_on=curve_on, curve_info=curve_info,
         dd_info=dd_info,
@@ -808,7 +826,9 @@ def main() -> None:
         allowed = allowed | frozenset({sleeve_cash_kwargs["sleeve_cash_symbol"]})
     write_signal(desk_signal, HERE / "signals.json", allowed_tickers=allowed)
     signal_title = "Trend-core (2% band, dip overlay on the SPY half)"
-    if cushion_info and not cushion_info.get("cushion_live", True):
+    if bill_info and not bill_info.get("bill_live", True):
+        signal_title = "Trend-core that holds the sleeve in SPY when the T-bill yield is above the kept threshold"
+    elif cushion_info and not cushion_info.get("cushion_live", True):
         signal_title = "Trend-core that scales the UPRO sleeve by its cushion over the 200-day average"
     elif vol_gear_info and not vol_gear_info.get("vol_gear_live", True):
         signal_title = "Trend-core that scales the UPRO sleeve's leverage by realized volatility"
