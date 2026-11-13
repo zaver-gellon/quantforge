@@ -1643,3 +1643,84 @@ Materiality bar. Each line is produced by the scorer from the paths it just ran.
 Decision: rejected.
 
 Refreshed lead out-of-sample 2006-01-03 to 2026-11-12 (5249 sessions): CAGR 0.156651, Sharpe 0.621038, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-12 (8506 sessions). SSO ends 2026-11-12, UPRO ends 2026-11-12, ^IRX ends 2026-11-12. That is the Thursday 2026-11-12 close. The next NYSE session is 2026-11-13. The 2026-11-12 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-11 (5248 sessions) has CAGR 0.157082, Sharpe 0.622446, max drawdown -0.468261, against the stored row CAGR 0.157082, Sharpe 0.622447, max drawdown -0.468263. Candidate versus that refreshed book: Sharpe 0.621038 -> 0.612339 (delta -0.008699), CAGR 0.156651 -> 0.153665 (delta -0.002986), max drawdown -0.468261 -> -0.468261 (delta 0.000000). Last walk-forward pick: pause_off. Out-of-sample turnover per year 13.16 -> 13.70. Of 4140 out-of-sample sessions with the 200-day band on, the stitched rule set the sleeve's UPRO share below 1 on 24. Mean close-known leverage on band-on sessions was 2.992. Of those paused sessions, 24 also had the core's three-down-close dip on. A share of 1 matches the trend core (max abs return gap 0.000e+00). The stitched down-streak pause does not clear the materiality bar. The live book stays the plain trend core. Previous signal 2026-11-12 (close 2026-11-11): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-13 (close 2026-11-12): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.
+
+### 2026-11-13 — VIX term-structure gate on the UPRO sleeve
+
+The live book's maximum drawdown is still about -46.8%, and the book trails SPY in the fast 2020 and 2022 breaks, because the 3x sleeve stays fully invested until SPY closes through the lower side of its 200-day band. The sleeve rules tried since 2026-11-06 were rejected. An exponential average, a shorter trend that swaps UPRO for SPY, realized volatility, the gap of price over the 200-day average, the T-bill yield, and a short run of down closes all read SPY's own path or a slow rate level. The 2026-11-09 realized-vol gear was on for 489 of 4137 band-on sessions and the daily improvement had a negative Sharpe. The 2026-11-10 cushion scale was never selected. The 2026-11-11 bill-yield gear was on for 1249 of 4139 band-on sessions and gave up about 2.7 points of CAGR. The 2026-11-12 down-streak pause was on for 24 of 4140 band-on sessions, and the stitched Sharpe fell. Those clocks are the same equity path the 200-day band already uses, either faster or shorter, and they either cut bull markets or almost never leave the current book. This test does not add another average of SPY, does not read realized volatility, the bill, the cushion, or consecutive down closes, and does not sell the sleeve into T-bills while the band is on. It reads the CBOE implied-volatility term structure. The input is the same-session close of ^VIX divided by the same-session close of ^VIX3M. In a calm market the one-month index sits below the three-month index. The curve inverts when near-term protection is the scarce one, which has clustered at the start of the fast breaks the 200-day band exits late. A session missing either print does not invert the curve and does not cut the sleeve. There is no forward fill. VIX3M begins when that index was published, in 2006. Sessions before the first joint close keep a share of 1, so they match the current book. While the 200-day 2% band is on and the ratio is at or above a threshold, the sleeve's UPRO share for the next session drops to a floor and the rest of the sleeve is SPY. When the ratio is back below the threshold, or the band is off, the share is 1. The core's three-down-close dip is unchanged. The quarterly mix is unchanged. Thresholds are 1.00, 1.05, and 1.10. Floors are 0 and 1/2, so the sleeve goes to SPY or to 2x. The six cells are new trials. The current book, which keeps the share at 1 whenever the band is on, is the walk-forward's option to keep the present rule and is not a new trial. Ties in the trailing excess Sharpe break alphabetically, so the current book wins a tie. Fills stay next-open with 5 bp one-way costs. Cash pays no spread. The blend pays 5 bp on the SPY dollars and the UPRO dollars that trade. The stitched path is kept only when it clears the materiality bar.
+
+- `SPY` from 1993-01-29 to 2026-11-13 (8507 sessions).
+- `SSO` from 2006-06-21 to 2026-11-13 (5133 sessions).
+- `UPRO` from 2009-06-25 to 2026-11-13 (4375 sessions).
+- `^IRX` from 1990-01-02 to 2026-11-13 (9255 sessions).
+- `^VIX` from 1990-01-02 to 2026-11-13 (9288 sessions).
+- `^VIX3M` from 2006-07-17 to 2026-11-13 (5116 sessions).
+
+Refreshed lead book, out of sample, before the candidate is judged. Window 2006-01-03 to 2026-11-13 (5250 sessions): CAGR 15.62%, Sharpe 0.620, max drawdown -46.83%. Prior write-up `2026-11-12-streak-pause` through 2026-11-12: CAGR 15.67%, Sharpe 0.621, max drawdown -46.83%. Deltas versus that row: CAGR -0.04%, Sharpe -0.001, max drawdown -0.00%. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-13 (8507 sessions). SSO ends 2026-11-13, UPRO ends 2026-11-13, ^IRX ends 2026-11-13, ^VIX ends 2026-11-13, ^VIX3M ends 2026-11-13. That is the Friday 2026-11-13 close. The next NYSE session is 2026-11-16. The 2026-11-13 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-12 (5249 sessions) has CAGR 0.156652, Sharpe 0.621038, max drawdown -0.468261, against the stored row CAGR 0.156651, Sharpe 0.621038, max drawdown -0.468261.
+
+Variants tried. Counting rows increment the ledger. The walk-forward stitch is a selection over those rows and is stored as an audit.
+
+| variant | counts | full-sample CAGR | Sharpe | max DD | years selected |
+| --- | --- | --- | --- | --- | --- |
+| term_off | no | 12.8% | 0.52 | -46.8% | 2 |
+| term_t100_f00 | yes | 13.1% | 0.55 | -42.7% | 18 |
+| term_t100_f50 | yes | 13.0% | 0.53 | -44.3% | 0 |
+| term_t105_f00 | yes | 13.1% | 0.54 | -46.6% | 0 |
+| term_t105_f50 | yes | 13.0% | 0.53 | -46.6% | 1 |
+| term_t110_f00 | yes | 13.3% | 0.54 | -46.5% | 0 |
+| term_t110_f50 | yes | 13.1% | 0.53 | -46.6% | 0 |
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2006-01-03 | term_off |
+| 2007-01-03 | term_off |
+| 2008-01-02 | term_t100_f00 |
+| 2009-01-02 | term_t100_f00 |
+| 2010-01-04 | term_t105_f50 |
+| 2011-01-03 | term_t100_f00 |
+| 2012-01-03 | term_t100_f00 |
+| 2013-01-02 | term_t100_f00 |
+| 2014-01-02 | term_t100_f00 |
+| 2015-01-02 | term_t100_f00 |
+| 2016-01-04 | term_t100_f00 |
+| 2017-01-03 | term_t100_f00 |
+| 2018-01-02 | term_t100_f00 |
+| 2019-01-02 | term_t100_f00 |
+| 2020-01-02 | term_t100_f00 |
+| 2021-01-04 | term_t100_f00 |
+| 2022-01-03 | term_t100_f00 |
+| 2023-01-03 | term_t100_f00 |
+| 2024-01-02 | term_t100_f00 |
+| 2025-01-02 | term_t100_f00 |
+| 2026-01-02 | term_t100_f00 |
+
+Out-of-sample window: 2006-01-03 to 2026-11-13 (5250 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.62% | 0.620 | n/a | -46.83% |
+| candidate | 15.60% | 0.641 | n/a | -46.83% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.619599 -> 0.640955 (delta 0.021356; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.468261 -> -0.468277 (delta -0.000015; need >= 0.03). CAGR 0.156212 -> 0.156022 (delta -0.000190; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe -0.089821, deflated Sharpe 0.006811 (need >= 0.75). Trials 388, daily-Sharpe dispersion 0.009720, daily multiple-testing benchmark 0.028922. |
+| b still helps with the best improvement year removed | no | Removed 2020 (summed daily improvement 0.134589). Remaining Sharpe delta -0.017081, CAGR delta -0.009767, max-drawdown delta -0.000015. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | no | At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell. |
+
+Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample window.
+
+| neighbor | similar | CAGR | Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| term_t100_f50 | yes | 15.88% | 0.643 | -44.30% |
+| term_t105_f00 | no | 16.06% | 0.648 | -46.58% |
+
+Decision: rejected.
+
+Refreshed lead out-of-sample 2006-01-03 to 2026-11-13 (5250 sessions): CAGR 0.156212, Sharpe 0.619599, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-13 (8507 sessions). SSO ends 2026-11-13, UPRO ends 2026-11-13, ^IRX ends 2026-11-13, ^VIX ends 2026-11-13, ^VIX3M ends 2026-11-13. That is the Friday 2026-11-13 close. The next NYSE session is 2026-11-16. The 2026-11-13 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-12 (5249 sessions) has CAGR 0.156652, Sharpe 0.621038, max drawdown -0.468261, against the stored row CAGR 0.156651, Sharpe 0.621038, max drawdown -0.468261. Candidate versus that refreshed book: Sharpe 0.619599 -> 0.640955 (delta 0.021356), CAGR 0.156212 -> 0.156022 (delta -0.000190), max drawdown -0.468261 -> -0.468277 (delta -0.000015). Last walk-forward pick: term_t100_f00. Out-of-sample turnover per year 13.16 -> 16.31. Joint VIX/VIX3M closes on the SPY calendar run from 2006-07-17 to 2026-11-13 (5116 sessions). Of 4141 out-of-sample sessions with the 200-day band on, 4030 had a same-session ratio and the stitched rule set the sleeve's UPRO share below 1 on 152. Mean ratio on band-on sessions with a print was 0.8878. Mean ratio on gated sessions was 1.0530. Mean close-known leverage on band-on sessions was 2.927. Of those gated sessions, 39 also had the core's three-down-close dip on. A share of 1 matches the trend core (max abs return gap 0.000e+00). At the signal close, VIX was 19.3000, VIX3M was 20.6200, and the ratio was 0.9360. The stitched VIX term-structure gate does not clear the materiality bar. The live book stays the plain trend core. SPY close 754.3700 versus the 200-day average 729.3152 (+3.44% versus the average), above the upper band. Previous signal 2026-11-13 (close 2026-11-12): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-16 (close 2026-11-13): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.
