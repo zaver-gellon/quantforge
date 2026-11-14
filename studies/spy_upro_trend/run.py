@@ -60,6 +60,7 @@ from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # n
 from quantforge.strategies.sleevediv import kept_sleeve_cash_choice, sleeve_cash_signal_kwargs  # noqa: E402
 from quantforge.strategies.billgear import align_bill_yield, has_kept_bill, kept_bill_gear
 from quantforge.strategies.pause import has_kept_streak_pause, kept_streak_pause
+from quantforge.strategies.onslice import ASSETS as SLICE_ASSETS, has_kept_ontrend_slice, kept_ontrend_slice
 from quantforge.strategies.cushion import kept_cushion
 from quantforge.strategies.volgear import kept_vol_gear
 from quantforge.strategies.volscale import kept_sleeve_scale
@@ -807,6 +808,29 @@ def main() -> None:
         raise RuntimeError("the iteration log kept both a down-streak pause and a sleeve gear")
     if pause_share is not None and sleeve_scale is not None:
         raise RuntimeError("the iteration log kept both a down-streak pause and a sleeve scale")
+    slice_kwargs = {}
+    if has_kept_ontrend_slice(HERE / "iterations.json"):
+        slice_frames = load_bars(source, list(SLICE_ASSETS), start="1993-01-01")
+        slice_symbol, slice_weight, slice_ready, slice_info = kept_ontrend_slice(
+            HERE / "iterations.json",
+            {symbol: slice_frames[symbol]["close"] for symbol in SLICE_ASSETS},
+            as_of=as_of,
+            calendar=spy.index,
+        )
+        if slice_symbol is not None and (
+            sleeve_upro_share is not None or sleeve_fast is not None or sleeve_scale is not None
+            or cushion_share is not None or bill_share is not None or pause_share is not None
+        ):
+            raise RuntimeError("the iteration log kept both an on-trend slice and another sleeve rule")
+        if slice_symbol is not None:
+            slice_kwargs = {
+                "slice_symbol": slice_symbol,
+                "slice_weight": slice_weight,
+                "slice_ready": slice_ready,
+                "slice_info": slice_info,
+            }
+        elif slice_info is not None:
+            slice_kwargs = {"slice_info": slice_info}
     curve_on, curve_info = None, None
     if has_kept_curve(HERE / "iterations.json"):
         tnx_frames = load_bars(source, ["^TNX"], start="1990-01-01")
@@ -831,6 +855,7 @@ def main() -> None:
         bill_share=bill_share, bill_info=bill_info,
         pause_share=pause_share, pause_info=pause_info,
         ema_info=ema_info,
+        **slice_kwargs,
         curve_on=curve_on, curve_info=curve_info,
         dd_info=dd_info,
         drift_mix=drift_mix, drift_info=drift_info,
@@ -842,9 +867,13 @@ def main() -> None:
         allowed = allowed | frozenset({idle_kwargs["idle_symbol"]})
     if sleeve_cash_kwargs.get("sleeve_cash_symbol"):
         allowed = allowed | frozenset({sleeve_cash_kwargs["sleeve_cash_symbol"]})
+    if slice_kwargs.get("slice_symbol"):
+        allowed = allowed | frozenset({slice_kwargs["slice_symbol"]})
     write_signal(desk_signal, HERE / "signals.json", allowed_tickers=allowed)
     signal_title = "Trend-core (2% band, dip overlay on the SPY half)"
-    if bill_info and not bill_info.get("bill_live", True):
+    if slice_kwargs.get("slice_info") and not slice_kwargs["slice_info"].get("slice_live", True):
+        signal_title = "Trend-core that holds a fixed gold or Treasury slice in the on-trend sleeve"
+    elif bill_info and not bill_info.get("bill_live", True):
         signal_title = "Trend-core that holds the sleeve in SPY when the T-bill yield is above the kept threshold"
     elif cushion_info and not cushion_info.get("cushion_live", True):
         signal_title = "Trend-core that scales the UPRO sleeve by its cushion over the 200-day average"
