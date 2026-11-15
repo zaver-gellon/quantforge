@@ -275,6 +275,8 @@ def build_trend_signal(
     slice_weight: float | None = None,
     slice_ready: pd.Series | None = None,
     slice_info: dict | None = None,
+    dip_hold_flag: pd.Series | None = None,
+    dip_hold_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -337,7 +339,10 @@ def build_trend_signal(
     ``slice_symbol`` is set only when a walk-forward on-trend slice cleared
     the materiality bar. While the sleeve is on and ``slice_ready`` is true,
     ``slice_weight`` of the book is moved from the leveraged sleeve into that
-    asset. The slice is not held while the sleeve is off.
+    asset.     The slice is not held while the sleeve is off.
+    ``dip_hold_flag`` replaces the three-down overlay's exit when a walk-forward
+    hold rule cleared the materiality bar. It is the decision to hold SSO in
+    the core on the next session. It cannot be set together with a sized dip.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -362,6 +367,8 @@ def build_trend_signal(
         raise ValueError("trend override is missing sessions at or before as_of")
     history = history.astype(bool)
     visible = close.loc[:as_of_ts]
+    if dip_boost is not None and dip_hold_flag is not None:
+        raise ValueError("a sized dip and a dip-hold exit cannot both be kept")
     if dip_boost is not None:
         aligned_boost = dip_boost.reindex(visible.index).astype(float)
         if aligned_boost.isna().any() or not np.isfinite(aligned_boost.to_numpy(dtype=float)).all():
@@ -370,6 +377,13 @@ def build_trend_signal(
             raise ValueError("dip boost must be in [0, 1]")
         boost_now = min(1.0, max(0.0, float(aligned_boost.iloc[-1])))
         boost_prev = min(1.0, max(0.0, float(aligned_boost.iloc[-2]))) if len(aligned_boost) > 1 else 0.0
+    elif dip_hold_flag is not None:
+        aligned_hold = dip_hold_flag.reindex(visible.index)
+        if aligned_hold.isna().any():
+            raise ValueError("dip hold flag is missing sessions at or before as_of")
+        aligned_hold = aligned_hold.astype(bool)
+        boost_now = 1.0 if bool(aligned_hold.iloc[-1]) else 0.0
+        boost_prev = 1.0 if len(aligned_hold) > 1 and bool(aligned_hold.iloc[-2]) else 0.0
     else:
         dips = dip_active(visible, dip_rule, dip_hold) if apply_dip else pd.Series(False, index=visible.index)
         dip_flag = bool(dips.iloc[-1]) if len(dips) else False
@@ -725,6 +739,9 @@ def build_trend_signal(
         if dip_size_info:
             payload["diagnostics"].update(dip_size_info)
         payload["diagnostics"]["dip_boost"] = boost_now
+    if dip_hold_info or dip_hold_flag is not None:
+        if dip_hold_info:
+            payload["diagnostics"].update(dip_hold_info)
     if drift_info:
         payload["diagnostics"].update(drift_info)
         if drift_replaced_calendar:
