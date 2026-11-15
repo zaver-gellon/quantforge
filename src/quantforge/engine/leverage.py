@@ -27,6 +27,11 @@ LEVERAGED_ETFS = {
     "UPRO": {"underlying": "SPY", "leverage": 3, "expense_ratio": 0.0091},
     "QLD": {"underlying": "QQQ", "leverage": 2, "expense_ratio": 0.0095},
     "TQQQ": {"underlying": "QQQ", "leverage": 3, "expense_ratio": 0.0084},
+    # Direxion Daily 20+ Year Treasury Bull 3X. 1.03% is the assumed gross
+    # expense ratio, same status as the equity figures above: not a prospectus scrape.
+    "TMF": {"underlying": "TLT", "leverage": 3, "expense_ratio": 0.0103},
+    # ProShares Ultra Gold is 2x, not 3x. There is no liquid 3x gold ETF in this set.
+    "UGL": {"underlying": "GLD", "leverage": 2, "expense_ratio": 0.0095},
 }
 FINANCING_SPREAD = 0.004
 

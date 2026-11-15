@@ -1,0 +1,50 @@
+{
+  "strategy": "spy-rsi-boost",
+  "strategy_id": "spy-rsi-boost",
+  "date": "2026-11-16",
+  "as_of": "2026-11-13",
+  "signal_date": "2026-11-13",
+  "weights": {
+    "SPY": 1.0
+  },
+  "levels": {
+    "entry": "Wilder RSI(2) < 10 and SPY above its 200-day average",
+    "entry_level": 10.0,
+    "entry_value": 42.82782351308247,
+    "exit": "RSI(2) > 70, or SPY close above its 5-day average (754.7820), or 10 sessions",
+    "exit_level": 754.7819946289062,
+    "exit_rsi": 70.0,
+    "stop": "none",
+    "stop_level": null,
+    "reference_close": 754.3699951171875,
+    "rsi2": 42.82782351308247,
+    "boost_on": false,
+    "sma200": 729.315171508789,
+    "sessions_held": 0
+  },
+  "validated": false,
+  "generated_at": "2026-11-15T23:10:10Z",
+  "diagnostics": {
+    "cell": "rsi10_f33_n10",
+    "fill": "next_open",
+    "fraction": 0.3333333333333333,
+    "max_hold": 10,
+    "threshold": 10.0,
+    "boost_on": false,
+    "rsi2": 42.82782351308247,
+    "sessions_held": 0,
+    "rule": "Hold SPY. After the close, if Wilder RSI(2) is below the threshold and SPY is above its 200-day average, move that fraction from SPY into UPRO at the next open. Return to SPY when RSI(2) is above 70, SPY closes above its 5-day average, or the hold expires. No stop. This daily signal is not the 12:50 PT check."
+  },
+  "validated_reason": "did_not_clear_materiality_bar",
+  "oos": {
+    "cagr": 0.12359883736699828,
+    "sharpe": 0.5801817862739512,
+    "max_drawdown": -0.5512174836327495,
+    "worst_year": 2008,
+    "worst_year_return": -0.3679500812377733,
+    "start": "2006-01-03",
+    "end": "2026-11-13",
+    "n_days": 5250
+  },
+  "cell": "rsi10_f33_n10"
+}

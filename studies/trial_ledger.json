@@ -2,6 +2,39 @@
   "version": 1,
   "trials": [
     {
+      "trial_id": "00cf0b7b70984663",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f33_n05_next_open",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09397644740157274,
+        "vol": 0.21039412155726414,
+        "sharpe": 0.44037761234287826,
+        "sharpe_per_period": 0.027743234726665657,
+        "max_drawdown": -0.5677961402856108,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377714,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.992922778218339,
+        "total_return": 10.119742790632879
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "010cbf9ea764c438",
       "study": "spy_upro_trend",
       "family": "term_gate",
@@ -88,6 +121,37 @@
       "updated_at": "2026-10-25T07:20:14Z"
     },
     {
+      "trial_id": "01b5446428a125d8",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "band5_n03_SSO",
+      "params": {
+        "entry": "band5",
+        "max_hold": 3,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.03993385321828535,
+        "vol": 0.12961313127252794,
+        "sharpe": 0.21814035184442326,
+        "sharpe_per_period": 0.013742567321667662,
+        "max_drawdown": -0.25187499746722264,
+        "worst_year": 2000,
+        "worst_year_return": -0.16512180565836754,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 38.407812962414916,
+        "total_return": 1.857920327652126
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "01cddc6d39fbbf37",
       "study": "flagship",
       "family": "trend_core",
@@ -126,6 +190,38 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:58:46Z",
       "updated_at": "2026-10-25T06:58:50Z"
+    },
+    {
+      "trial_id": "023a8cbef21ee07a",
+      "study": "spy_upro_trend",
+      "family": "qqq_trend",
+      "name": "qqq_band02",
+      "params": {
+        "band": 0.02,
+        "core": 0.5,
+        "sleeve": 0.5,
+        "dip": true,
+        "rebalance": "quarterly"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.14198200432342056,
+        "vol": 0.373105563309726,
+        "sharpe": 0.49135490557512973,
+        "sharpe_per_period": 0.030954739971785297,
+        "max_drawdown": -0.7703568481450856,
+        "worst_year": 2000,
+        "worst_year_return": -0.4339510043994136,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 13.77525525139711,
+        "total_return": 34.17830606361008
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
     },
     {
       "trial_id": "026c582a03f3f7a5",
@@ -221,6 +317,37 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "036f75b4b191ed6f",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_15_n10_UPRO",
+      "params": {
+        "entry": "rsi2_15",
+        "max_hold": 10,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.08674219776399394,
+        "vol": 0.1904742737510131,
+        "sharpe": 0.4313772653754904,
+        "sharpe_per_period": 0.027176224207649397,
+        "max_drawdown": -0.32999892450751467,
+        "worst_year": 2018,
+        "worst_year_return": -0.1806893139279908,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 22.820952944658185,
+        "total_return": 8.307259181351585
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "03d71d89f22894f0",
@@ -467,6 +594,37 @@
       "updated_at": "2026-11-04T22:21:27Z"
     },
     {
+      "trial_id": "05fe389ae867098e",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "band5_n03_SPY",
+      "params": {
+        "entry": "band5",
+        "max_hold": 3,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.02314200315925885,
+        "vol": 0.06486414629219173,
+        "sharpe": 0.08721187156814268,
+        "sharpe_per_period": 0.0054942380267572425,
+        "max_drawdown": -0.1341254546391618,
+        "worst_year": 2012,
+        "worst_year_return": -0.08514857927093622,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 38.407812962414916,
+        "total_return": 0.8469535954969731
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "06734d57d58c1890",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -648,6 +806,37 @@
       "updated_at": "2026-11-11T22:05:06Z"
     },
     {
+      "trial_id": "0764f06d8bb8ae19",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_15_n10_SPY",
+      "params": {
+        "entry": "rsi2_15",
+        "max_hold": 10,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.038927170998506844,
+        "vol": 0.06369725788250839,
+        "sharpe": 0.3279889495894908,
+        "sharpe_per_period": 0.020662890576573847,
+        "max_drawdown": -0.11909410271968446,
+        "worst_year": 2018,
+        "worst_year_return": -0.04960364737825851,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 22.820952944658185,
+        "total_return": 1.784648491685044
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "082f39e3b45a5c5d",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -694,6 +883,59 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "089d0f3b186737e1",
+      "study": "spy_upro_trend",
+      "family": "audit",
+      "name": "spy_rsi_boost_walk_forward",
+      "params": {
+        "last_pick": "rsi15_f50_n10",
+        "bar": "materiality_v1"
+      },
+      "sample_start": "2006-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.12861814156703644,
+        "sharpe": 0.5802957849478715,
+        "max_drawdown": -0.5540863341020725,
+        "dsr": 0.6723442629926575,
+        "materiality_pass": false
+      },
+      "counts_for_deflation": false,
+      "recorded_at": "2026-11-15T23:10:10Z",
+      "updated_at": "2026-11-15T23:10:10Z"
+    },
+    {
+      "trial_id": "08a9394a9a6f897c",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_05_n05_SPY",
+      "params": {
+        "entry": "rsi2_05",
+        "max_hold": 5,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.029636904799923425,
+        "vol": 0.04242905075104126,
+        "sharpe": 0.254112048188231,
+        "sharpe_per_period": 0.01600873886902048,
+        "max_drawdown": -0.12689120784310437,
+        "worst_year": 2020,
+        "worst_year_return": -0.04704494404521009,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.681562592482983,
+        "total_return": 1.1885443856402347
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
     },
     {
       "trial_id": "08c1796f59a9b3ab",
@@ -1042,6 +1284,37 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "0c3630107a42a574",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_05_n03_SSO",
+      "params": {
+        "entry": "rsi2_05",
+        "max_hold": 3,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.03349151278371387,
+        "vol": 0.07698990257473082,
+        "sharpe": 0.21555081091312536,
+        "sharpe_per_period": 0.013579429505671307,
+        "max_drawdown": -0.30449074169281887,
+        "worst_year": 2020,
+        "worst_year_return": -0.1888930829260651,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.979875702870672,
+        "total_return": 1.4192185905485575
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
+    },
+    {
       "trial_id": "0d252ad44c268835",
       "study": "spy_upro_trend",
       "family": "audit",
@@ -1082,6 +1355,39 @@
       "counts_for_deflation": false,
       "recorded_at": "2026-11-02T22:10:39Z",
       "updated_at": "2026-11-02T22:10:39Z"
+    },
+    {
+      "trial_id": "0d72c857bca6b822",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f25_n10_close",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.25,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09617156991089715,
+        "vol": 0.2079214806282755,
+        "sharpe": 0.4527853301097539,
+        "sharpe_per_period": 0.028524905312954752,
+        "max_drawdown": -0.5531824804652667,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 10.733862801700116
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "0de1e7829a3984dc",
@@ -1262,6 +1568,37 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-11-08T22:18:31Z",
       "updated_at": "2026-11-08T22:18:31Z"
+    },
+    {
+      "trial_id": "11752e77a0d7a188",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "lead_overlay_next_open",
+      "params": {
+        "rule": "lead_spy_half",
+        "fraction_of_core": 0.3333333333333333,
+        "cell": "rsi10_f33_n10",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.1279239535573471,
+        "vol": 0.26669572156015237,
+        "sharpe": 0.5132350951782565,
+        "sharpe_per_period": 0.032333164348978344,
+        "max_drawdown": -0.4804059631532165,
+        "worst_year": 2022,
+        "worst_year_return": -0.27440019015707406,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 15.482798790788213,
+        "total_return": 24.235504590415268
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "118267007647f51d",
@@ -1959,6 +2296,39 @@
       "updated_at": "2026-10-25T06:58:51Z"
     },
     {
+      "trial_id": "1589c7fe6fc505e9",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f50_n05_next_open",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.5,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09418149517252616,
+        "vol": 0.2068319660678448,
+        "sharpe": 0.4452286655065499,
+        "sharpe_per_period": 0.028048844963923784,
+        "max_drawdown": -0.5465918096998174,
+        "worst_year": 2008,
+        "worst_year_return": -0.36795008123777195,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 3.8904319018379527,
+        "total_return": 10.175771499472381
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "159d6b32c0092949",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -2047,6 +2417,38 @@
       "updated_at": "2026-10-25T06:58:50Z"
     },
     {
+      "trial_id": "16574c498e59d081",
+      "study": "spy_upro_trend",
+      "family": "exposure",
+      "name": "2.5x",
+      "params": {
+        "exposure": 2.5,
+        "core": 0.25,
+        "sleeve": 0.75,
+        "dip": true,
+        "band": 0.02
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.14237805194151898,
+        "vol": 0.30154719615718883,
+        "sharpe": 0.5297003523366758,
+        "sharpe_per_period": 0.033370454804664086,
+        "max_drawdown": -0.4743442945221419,
+        "worst_year": 2022,
+        "worst_year_return": -0.3270468456288894,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 34.506950442122125
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
+    },
+    {
       "trial_id": "17ff7d46dce82657",
       "study": "spy_upro_trend",
       "family": "ema_trend",
@@ -2094,6 +2496,70 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-11-07T22:13:02Z",
       "updated_at": "2026-11-07T22:13:02Z"
+    },
+    {
+      "trial_id": "18144420dfcf3360",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "band5_n03_UPRO",
+      "params": {
+        "entry": "band5",
+        "max_hold": 3,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.053321043480313746,
+        "vol": 0.19440640655298838,
+        "sharpe": 0.2658646280701366,
+        "sharpe_per_period": 0.01674913659399322,
+        "max_drawdown": -0.4278590173881086,
+        "worst_year": 2000,
+        "worst_year_return": -0.26675847491391946,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 38.407812962414916,
+        "total_return": 3.027377179509876
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "188838fc3202b7f4",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f50_n10_close",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.5,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.10653497563331338,
+        "vol": 0.21955303608571902,
+        "sharpe": 0.4831107579726831,
+        "sharpe_per_period": 0.030435369059991814,
+        "max_drawdown": -0.5539681720831116,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 14.101968219188523
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "19e97e45d8c53234",
@@ -2189,6 +2655,37 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "1b999ec6b9427108",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "ibs_0.2_n05_UPRO",
+      "params": {
+        "entry": "ibs_0.2",
+        "max_hold": 5,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.08307400744401594,
+        "vol": 0.2092700006398644,
+        "sharpe": 0.3946039206146868,
+        "sharpe_per_period": 0.024859549820057603,
+        "max_drawdown": -0.43050343142290237,
+        "worst_year": 2018,
+        "worst_year_return": -0.2561386350349807,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 43.92660550458716,
+        "total_return": 7.500473476998501
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "1c2d83d5d702428b",
@@ -2317,6 +2814,36 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "1e7b3536fc240a2f",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "standalone_upro_next_open",
+      "params": {
+        "rule": "upro_or_cash",
+        "cell": "rsi10_f33_n10",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09018832537247845,
+        "vol": 0.18428039753061765,
+        "sharpe": 0.4569381381040787,
+        "sharpe_per_period": 0.028786526984293535,
+        "max_drawdown": -0.4245985461897436,
+        "worst_year": 2011,
+        "worst_year_return": -0.3304480478830738,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 15.1393903521752,
+        "total_return": 9.132012349428075
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "1ebed6630e48b842",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -2398,6 +2925,37 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T07:20:07Z",
       "updated_at": "2026-10-25T07:20:07Z"
+    },
+    {
+      "trial_id": "1fcd1f326fc7e227",
+      "study": "spy_upro_trend",
+      "family": "nasdaq_vol",
+      "name": "band02_vol20",
+      "params": {
+        "band": 0.02,
+        "vol_target": 0.2,
+        "vol_window": 20,
+        "cap": 1.0
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.10615198465277365,
+        "vol": 0.19121692627725206,
+        "sharpe": 0.5227468429451676,
+        "sharpe_per_period": 0.032932392474028425,
+        "max_drawdown": -0.37755301499799687,
+        "worst_year": 2016,
+        "worst_year_return": -0.17498065654070227,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 4.3665905609839095,
+        "total_return": 13.96241642613034
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "2064319b003abf41",
@@ -2544,6 +3102,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-26T21:17:54Z",
       "updated_at": "2026-10-26T21:17:54Z"
+    },
+    {
+      "trial_id": "21622675ba0705b5",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f25_n05_next_open",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.25,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09107424891719518,
+        "vol": 0.20522186280616134,
+        "sharpe": 0.4332590369610686,
+        "sharpe_per_period": 0.02729477344661484,
+        "max_drawdown": -0.5623226947493543,
+        "worst_year": 2008,
+        "worst_year_return": -0.36795008123777195,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 6.0052571868786915,
+        "total_return": 9.355148829046632
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "21f2546bc101a485",
@@ -2771,6 +3362,37 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "23e3e98baf8fbd59",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "ibs_0.2_n03_UPRO",
+      "params": {
+        "entry": "ibs_0.2",
+        "max_hold": 3,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.10387172964978753,
+        "vol": 0.18873831862511217,
+        "sharpe": 0.515972772150086,
+        "sharpe_per_period": 0.03250563454888513,
+        "max_drawdown": -0.37228182801212195,
+        "worst_year": 2005,
+        "worst_year_return": -0.18702924810345645,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 45.94021899970406,
+        "total_return": 13.156899557683817
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "244065940c6d6e4b",
       "study": "spy_upro_trend",
       "family": "sleeve_gear",
@@ -2868,6 +3490,67 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-11-13T22:06:44Z",
       "updated_at": "2026-11-13T22:06:45Z"
+    },
+    {
+      "trial_id": "25c9823e65289b71",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_05_n03_SPY",
+      "params": {
+        "entry": "rsi2_05",
+        "max_hold": 3,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.024984579553396724,
+        "vol": 0.03840493489566379,
+        "sharpe": 0.15855685511750436,
+        "sharpe_per_period": 0.009988882099714623,
+        "max_drawdown": -0.1559898157181283,
+        "worst_year": 2020,
+        "worst_year_return": -0.09687254410860435,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.979875702870672,
+        "total_return": 0.9382581410229509
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
+    },
+    {
+      "trial_id": "264bb8a1da6f744f",
+      "study": "spy_upro_trend",
+      "family": "audit",
+      "name": "btc_trend_crypto_cost",
+      "params": {
+        "cell": "walk_forward",
+        "one_way": 0.0028,
+        "fill": "stitched"
+      },
+      "sample_start": "2019-01-02",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.33112464308461176,
+        "vol": 0.46871792195946604,
+        "sharpe": 0.7909002629363368,
+        "sharpe_per_period": 0.04983462596541926,
+        "max_drawdown": -0.6698507604508066,
+        "worst_year": 2022,
+        "worst_year_return": -0.33518053300024264,
+        "n_days": 1979,
+        "start": "2019-01-02",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 8.45173040017278
+      },
+      "counts_for_deflation": false,
+      "recorded_at": "2026-11-15T23:12:27Z",
+      "updated_at": "2026-11-15T23:12:27Z"
     },
     {
       "trial_id": "26f4809ddbbe8fa6",
@@ -3052,6 +3735,70 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "284f695d953c857a",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f33_n10_close",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.10072807458064403,
+        "vol": 0.2141334482512989,
+        "sharpe": 0.465204732915764,
+        "sharpe_per_period": 0.029307312041986826,
+        "max_drawdown": -0.5536363774344071,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 12.114535485689697
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "28b04f89ad5fd538",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_05_n05_UPRO",
+      "params": {
+        "entry": "rsi2_05",
+        "max_hold": 5,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.05114892472421406,
+        "vol": 0.12685804109565613,
+        "sharpe": 0.3049526348143862,
+        "sharpe_per_period": 0.019211631770198658,
+        "max_drawdown": -0.3968604802750926,
+        "worst_year": 2018,
+        "worst_year_return": -0.16734664870010163,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.681562592482983,
+        "total_return": 2.8104842850934166
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
     },
     {
       "trial_id": "28dcb0de5f41a10d",
@@ -3291,6 +4038,71 @@
       "updated_at": "2026-10-25T06:58:51Z"
     },
     {
+      "trial_id": "2a2806fbdaf5d05f",
+      "study": "spy_upro_trend",
+      "family": "exposure",
+      "name": "1.5x",
+      "params": {
+        "exposure": 1.5,
+        "core": 0.75,
+        "sleeve": 0.25,
+        "dip": true,
+        "band": 0.02
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.10666067793994971,
+        "vol": 0.23301491773780672,
+        "sharpe": 0.46883921147315466,
+        "sharpe_per_period": 0.0295362796118646,
+        "max_drawdown": -0.513431640545429,
+        "worst_year": 2008,
+        "worst_year_return": -0.284736891696737,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 14.148043320023652
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
+    },
+    {
+      "trial_id": "2a30cfd701342e12",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f25_n05_next_open",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.25,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.08818086886195631,
+        "vol": 0.19855611829296693,
+        "sharpe": 0.42760265114596463,
+        "sharpe_per_period": 0.026938428266990156,
+        "max_drawdown": -0.5480417498080601,
+        "worst_year": 2008,
+        "worst_year_return": -0.36795008123777273,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 1.9576324603572008,
+        "total_return": 8.64339436286572
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "2a6369effb075cd5",
       "study": "spy_upro_trend",
       "family": "dip_hold",
@@ -3385,6 +4197,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-31T21:12:12Z",
       "updated_at": "2026-10-31T21:12:12Z"
+    },
+    {
+      "trial_id": "2add21e8caaecc22",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f50_n10_next_open",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.5,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.0919499884019439,
+        "vol": 0.21013878481274584,
+        "sharpe": 0.431952508437383,
+        "sharpe_per_period": 0.02721246379577484,
+        "max_drawdown": -0.5465918096998168,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377712,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 3.8594686042053348,
+        "total_return": 9.580365704366336
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "2bdcff9a2cd69961",
@@ -3484,6 +4329,37 @@
       "updated_at": "2026-11-06T22:17:35Z"
     },
     {
+      "trial_id": "2e77309ed16a5b87",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "band5_n05_UPRO",
+      "params": {
+        "entry": "band5",
+        "max_hold": 5,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.05150271956297514,
+        "vol": 0.2121985699684648,
+        "sharpe": 0.25273812627710707,
+        "sharpe_per_period": 0.01592218351968373,
+        "max_drawdown": -0.41020745454999663,
+        "worst_year": 2007,
+        "worst_year_return": -0.3120376850808346,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 35.42468185853803,
+        "total_return": 2.8450283264839826
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "2e9296625fa7c0a2",
       "study": "spy_upro_trend",
       "family": "idle_diversifier",
@@ -3531,6 +4407,71 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-30T21:17:36Z",
       "updated_at": "2026-10-30T21:17:36Z"
+    },
+    {
+      "trial_id": "2eb7722c8e853e8c",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f33_n10_next_open",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.0976716172411316,
+        "vol": 0.21387462992047604,
+        "sharpe": 0.4524814253103439,
+        "sharpe_per_period": 0.02850575969349482,
+        "max_drawdown": -0.5629917474261626,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377716,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.736533743416581,
+        "total_return": 11.17216725794076
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "306da38297557348",
+      "study": "spy_upro_trend",
+      "family": "rotation",
+      "name": "TQQQ_L42",
+      "params": {
+        "equity": "TQQQ",
+        "lookback": 42,
+        "bonds": "TMF",
+        "gold": "UGL",
+        "gold_leverage": 2
+      },
+      "sample_start": "2004-11-19",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09835945391662526,
+        "vol": 0.45688249200231723,
+        "sharpe": 0.39705245468745076,
+        "sharpe_per_period": 0.0250142150085614,
+        "max_drawdown": -0.7694832843763343,
+        "worst_year": 2022,
+        "worst_year_return": -0.45516871748664334,
+        "n_days": 5531,
+        "start": "2004-11-19",
+        "end": "2026-11-13",
+        "turnover_per_year": 11.70927499548002,
+        "total_return": 6.839293711654878
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "326bc0fa109dd766",
@@ -3762,6 +4703,38 @@
       "updated_at": "2026-10-25T07:20:14Z"
     },
     {
+      "trial_id": "349545c1ed13b437",
+      "study": "spy_upro_trend",
+      "family": "rebalance",
+      "name": "reb_monthly",
+      "params": {
+        "rebalance": "monthly",
+        "core": 0.5,
+        "sleeve": 0.5,
+        "band": 0.02,
+        "dip": true
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.12715467707204176,
+        "vol": 0.2593798842973797,
+        "sharpe": 0.5176200401352997,
+        "sharpe_per_period": 0.03260941035648891,
+        "max_drawdown": -0.47422396251019294,
+        "worst_year": 2022,
+        "worst_year_return": -0.2645974950387022,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 13.676452549699558,
+        "total_return": 23.777981054943467
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
+    },
+    {
       "trial_id": "357e699275fe84dc",
       "study": "spy_upro_trend",
       "family": "dip_buy",
@@ -3842,6 +4815,90 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:58:46Z",
       "updated_at": "2026-10-25T06:58:50Z"
+    },
+    {
+      "trial_id": "364d1cc10a28c508",
+      "study": "spy_upro_trend",
+      "family": "audit",
+      "name": "rebalance_walk_forward",
+      "params": {
+        "last_pick": "daily",
+        "bar": "materiality_v1"
+      },
+      "sample_start": "2006-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.15665608242582807,
+        "sharpe": 0.6209382520307327,
+        "max_drawdown": -0.4607205396043954,
+        "dsr": 0.7340995747953447,
+        "materiality_pass": false
+      },
+      "counts_for_deflation": false,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "36741a9ce015d0ab",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_10_n03_UPRO",
+      "params": {
+        "entry": "rsi2_10",
+        "max_hold": 3,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.05220806515588983,
+        "vol": 0.1460975714987054,
+        "sharpe": 0.28982128557494513,
+        "sharpe_per_period": 0.01825837583275986,
+        "max_drawdown": -0.4240607550740275,
+        "worst_year": 2020,
+        "worst_year_return": -0.21259002748983613,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 16.332642793725956,
+        "total_return": 2.914799166167673
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "36784a631c142893",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "ibs_0.2_n05_SPY",
+      "params": {
+        "entry": "ibs_0.2",
+        "max_hold": 5,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.031054787243623094,
+        "vol": 0.06994892402088612,
+        "sharpe": 0.19589817178131388,
+        "sharpe_per_period": 0.012341338001583251,
+        "max_drawdown": -0.1417276738958434,
+        "worst_year": 2018,
+        "worst_year_return": -0.08559286498251562,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 43.92660550458716,
+        "total_return": 1.270819510120805
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "36b768e6912eb6e4",
@@ -4353,6 +5410,37 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "3a3be050daf2e0cc",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "lead_overlay_close",
+      "params": {
+        "rule": "lead_spy_half",
+        "fraction_of_core": 0.3333333333333333,
+        "cell": "rsi10_f33_n10",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.1365144201155868,
+        "vol": 0.2650410646023143,
+        "sharpe": 0.5433054137037743,
+        "sharpe_per_period": 0.03422755652918186,
+        "max_drawdown": -0.4745388898656463,
+        "worst_year": 2022,
+        "worst_year_return": -0.28064985541258713,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 29.92993646261221
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "3a57e33f5ca3be5a",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -4399,6 +5487,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "3ac47e6ff603822e",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f25_n10_close",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.25,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.08831840026378979,
+        "vol": 0.19979039768186865,
+        "sharpe": 0.4268831136227865,
+        "sharpe_per_period": 0.02689309830960661,
+        "max_drawdown": -0.5495589658598974,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 8.67613273395587
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "3acb1c47d56b7645",
@@ -4627,6 +5748,38 @@
       "updated_at": "2026-10-25T06:58:51Z"
     },
     {
+      "trial_id": "3df1284de5c33a5a",
+      "study": "spy_upro_trend",
+      "family": "rotation",
+      "name": "UPRO_L63",
+      "params": {
+        "equity": "UPRO",
+        "lookback": 63,
+        "bonds": "TMF",
+        "gold": "UGL",
+        "gold_leverage": 2
+      },
+      "sample_start": "2004-11-19",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.15202955959456332,
+        "vol": 0.41355888220382503,
+        "sharpe": 0.5075788191898649,
+        "sharpe_per_period": 0.031977351020286454,
+        "max_drawdown": -0.6933282053728382,
+        "worst_year": 2022,
+        "worst_year_return": -0.5141843122458631,
+        "n_days": 5531,
+        "start": "2004-11-19",
+        "end": "2026-11-13",
+        "turnover_per_year": 10.706924606761888,
+        "total_return": 21.33721149441063
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "3e0251de8bc6ebed",
       "study": "spy_upro_trend",
       "family": "audit",
@@ -4715,6 +5868,39 @@
       "updated_at": "2026-11-01T22:14:05Z"
     },
     {
+      "trial_id": "3eb75e2f35364862",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f50_n05_close",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.5,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.10452297926517384,
+        "vol": 0.2151018343541253,
+        "sharpe": 0.48000469793514033,
+        "sharpe_per_period": 0.030239691191086958,
+        "max_drawdown": -0.5594099549001725,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 13.382596506316286
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "3f08d1406247c715",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -4761,6 +5947,70 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "3f222e4e151e0a5a",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f33_n10_close",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09865817638621177,
+        "vol": 0.2089233822051385,
+        "sharpe": 0.46247294598539296,
+        "sharpe_per_period": 0.0291352129072708,
+        "max_drawdown": -0.5511422211374672,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 11.468980433802484
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "400118dba38cd340",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "ibs_0.2_n05_SSO",
+      "params": {
+        "entry": "ibs_0.2",
+        "max_hold": 5,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.05794410189171684,
+        "vol": 0.13941045369667415,
+        "sharpe": 0.3354729718555702,
+        "sharpe_per_period": 0.021134374549891217,
+        "max_drawdown": -0.28830495290514746,
+        "worst_year": 2018,
+        "worst_year_return": -0.17193927701268696,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 43.92660550458716,
+        "total_return": 3.5292685123942453
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "4024871b3669f4e9",
@@ -5105,6 +6355,68 @@
       "updated_at": "2026-11-02T22:10:39Z"
     },
     {
+      "trial_id": "421906bf3874c542",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_15_n05_SPY",
+      "params": {
+        "entry": "rsi2_15",
+        "max_hold": 5,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.035707962578276575,
+        "vol": 0.062498171639171096,
+        "sharpe": 0.2834183486689921,
+        "sharpe_per_period": 0.017854998875023936,
+        "max_drawdown": -0.11909410271968457,
+        "worst_year": 2022,
+        "worst_year_return": -0.039052013172382605,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 23.641313998224327,
+        "total_return": 1.5622770936427308
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "422979366cd33329",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_15_n03_UPRO",
+      "params": {
+        "entry": "rsi2_15",
+        "max_hold": 3,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.07366665099538361,
+        "vol": 0.16489107764343713,
+        "sharpe": 0.397241395877199,
+        "sharpe_per_period": 0.025025707438525904,
+        "max_drawdown": -0.31868308943387946,
+        "worst_year": 2022,
+        "worst_year_return": -0.18043155511780629,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 24.983722994968925,
+        "total_return": 5.727297276992761
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "427b4004c807ca11",
       "study": "flagship",
       "family": "crypto_vol_target",
@@ -5278,6 +6590,37 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "451809ae068e6d77",
+      "study": "spy_upro_trend",
+      "family": "nasdaq_vol",
+      "name": "band02_vol30",
+      "params": {
+        "band": 0.02,
+        "vol_target": 0.3,
+        "vol_window": 20,
+        "cap": 1.0
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.13576395605394032,
+        "vol": 0.2775231833065122,
+        "sharpe": 0.5290775856051102,
+        "sharpe_per_period": 0.03333122128522637,
+        "max_drawdown": -0.48573020582953874,
+        "worst_year": 2008,
+        "worst_year_return": -0.2401964632010164,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 5.216484738081407,
+        "total_return": 29.38686849477047
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "4545b44d135076a5",
@@ -6161,6 +7504,37 @@
       "updated_at": "2026-10-25T21:23:18Z"
     },
     {
+      "trial_id": "4f03a3879aa78c18",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_10_n05_SSO",
+      "params": {
+        "entry": "rsi2_10",
+        "max_hold": 5,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.04669064384664967,
+        "vol": 0.10723417874845738,
+        "sharpe": 0.2992246850442187,
+        "sharpe_per_period": 0.018850778151571514,
+        "max_drawdown": -0.31103997711776876,
+        "worst_year": 2018,
+        "worst_year_return": -0.10604135960325123,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 15.437703462562888,
+        "total_return": 2.3999897145731457
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "4fb8b99b8017f277",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -6809,6 +8183,67 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "581da59a5f7cfadf",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_15_n05_SSO",
+      "params": {
+        "entry": "rsi2_15",
+        "max_hold": 5,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.05663996056805809,
+        "vol": 0.12416422678665408,
+        "sharpe": 0.3505167668858963,
+        "sharpe_per_period": 0.022082114682469123,
+        "max_drawdown": -0.23599108446299166,
+        "worst_year": 2022,
+        "worst_year_return": -0.09376180102597897,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 23.641313998224327,
+        "total_return": 3.381897408769584
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "584c722ff941f1ed",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "standalone_upro_close",
+      "params": {
+        "rule": "upro_or_cash",
+        "cell": "rsi10_f33_n10",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.11054208763533735,
+        "vol": 0.18335015028132762,
+        "sharpe": 0.5592668027593688,
+        "sharpe_per_period": 0.035233103929235,
+        "max_drawdown": -0.44206374659420034,
+        "worst_year": 2011,
+        "worst_year_return": -0.3619848254193593,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 15.639246331099987
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "5860357411e61af1",
       "study": "spy_upro_trend",
       "family": "trend_vote",
@@ -6908,6 +8343,68 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "59942d4a6e86bf8e",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "ibs_0.2_n10_UPRO",
+      "params": {
+        "entry": "ibs_0.2",
+        "max_hold": 10,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.10427614921546402,
+        "vol": 0.21348583628106965,
+        "sharpe": 0.4817616912117439,
+        "sharpe_per_period": 0.030350379553800624,
+        "max_drawdown": -0.4280080205560557,
+        "worst_year": 2000,
+        "worst_year_return": -0.24293806894071557,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 43.10624445102101,
+        "total_return": 13.296650460494458
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "5b6aa43389d39ef4",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_05_n10_UPRO",
+      "params": {
+        "entry": "rsi2_05",
+        "max_hold": 10,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.05276489923330163,
+        "vol": 0.12758732532996184,
+        "sharpe": 0.3159767461631315,
+        "sharpe_per_period": 0.01990613689541154,
+        "max_drawdown": -0.3969428824933522,
+        "worst_year": 2018,
+        "worst_year_return": -0.16746040759160907,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.606984314886061,
+        "total_return": 2.97073897675709
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "5b799f3102e53313",
@@ -7088,6 +8585,37 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "5c044c358298fef3",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_05_n05_SSO",
+      "params": {
+        "entry": "rsi2_05",
+        "max_hold": 5,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.041451321698673604,
+        "vol": 0.0848583819729984,
+        "sharpe": 0.2935344262285135,
+        "sharpe_per_period": 0.01849229901558703,
+        "max_drawdown": -0.26697781275705823,
+        "worst_year": 2018,
+        "worst_year_return": -0.1028194567070273,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.681562592482983,
+        "total_return": 1.971888591331484
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
     },
     {
       "trial_id": "5d472462737341f8",
@@ -7381,6 +8909,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "5e0236acf0548c70",
+      "study": "spy_upro_trend",
+      "family": "rebalance",
+      "name": "quarterly",
+      "params": {
+        "rebalance": "quarterly",
+        "core": 0.5,
+        "sleeve": 0.5,
+        "band": 0.02,
+        "dip": true,
+        "counts": false
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.12645639996842206,
+        "vol": 0.25917756985149226,
+        "sharpe": 0.5154172657647527,
+        "sharpe_per_period": 0.03247063834651583,
+        "max_drawdown": -0.467349790208632,
+        "worst_year": 2022,
+        "worst_year_return": -0.26655201414807905,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 13.614529414510935,
+        "total_return": 23.36960647253055
+      },
+      "counts_for_deflation": false,
+      "recorded_at": "2026-11-15T23:10:10Z",
+      "updated_at": "2026-11-15T23:10:10Z"
     },
     {
       "trial_id": "5e20e33d623b48fe",
@@ -7822,6 +9383,37 @@
       "updated_at": "2026-10-25T06:58:51Z"
     },
     {
+      "trial_id": "640b447274851e7c",
+      "study": "spy_upro_trend",
+      "family": "nasdaq_vol",
+      "name": "band00_vol20",
+      "params": {
+        "band": 0.0,
+        "vol_target": 0.2,
+        "vol_window": 20,
+        "cap": 1.0
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.1024123617684849,
+        "vol": 0.19088540443976526,
+        "sharpe": 0.5055792267348056,
+        "sharpe_per_period": 0.03185085428300306,
+        "max_drawdown": -0.3550698955156054,
+        "worst_year": 2005,
+        "worst_year_return": -0.21185385245033528,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 5.866057370450943,
+        "total_return": 12.663455213163031
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "6461aed268ac2eb2",
       "study": "spy_upro_trend",
       "family": "sleeve_cash",
@@ -7966,6 +9558,37 @@
       "updated_at": "2026-10-29T21:15:06Z"
     },
     {
+      "trial_id": "656c1da83903654f",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "ibs_0.2_n10_SPY",
+      "params": {
+        "entry": "ibs_0.2",
+        "max_hold": 10,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.038253596388461375,
+        "vol": 0.07137698371004196,
+        "sharpe": 0.2908528425547416,
+        "sharpe_per_period": 0.018323362622783477,
+        "max_drawdown": -0.13822210669061896,
+        "worst_year": 2005,
+        "worst_year_return": -0.07864627099634514,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 43.10624445102101,
+        "total_return": 1.7366355604669166
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "65f9b6f362cb1fec",
       "study": "spy_upro_trend",
       "family": "drawdown_stop",
@@ -8012,6 +9635,37 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-29T21:15:06Z",
       "updated_at": "2026-10-29T21:15:06Z"
+    },
+    {
+      "trial_id": "666895cfa49fce5a",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "band5_n05_SPY",
+      "params": {
+        "entry": "band5",
+        "max_hold": 5,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.025056481027813993,
+        "vol": 0.07107247965745157,
+        "sharpe": 0.1118427047673385,
+        "sharpe_per_period": 0.007045949484846966,
+        "max_drawdown": -0.13402651291496004,
+        "worst_year": 2007,
+        "worst_year_return": -0.09619787081162967,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 35.42468185853803,
+        "total_return": 0.9419077223490047
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "66ae7ceabafad590",
@@ -8187,6 +9841,39 @@
       "updated_at": "2026-10-25T06:58:50Z"
     },
     {
+      "trial_id": "685b53f8f8ef7eea",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f33_n10_close",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09038824358324327,
+        "vol": 0.2028271164147014,
+        "sharpe": 0.4329153736547248,
+        "sharpe_per_period": 0.027273123091311545,
+        "max_drawdown": -0.5487800985457831,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 9.181957415227675
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "689403fcbc4d6cc3",
       "study": "flagship",
       "family": "stock",
@@ -8274,6 +9961,28 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-30T21:17:36Z",
       "updated_at": "2026-10-30T21:17:36Z"
+    },
+    {
+      "trial_id": "68e660a83a65b38d",
+      "study": "spy_upro_trend",
+      "family": "audit",
+      "name": "rotation_walk_forward",
+      "params": {
+        "last_pick": "TQQQ_L63",
+        "bar": "materiality_v1"
+      },
+      "sample_start": "2008-01-02",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.17495266706540136,
+        "sharpe": 0.5497227195948803,
+        "max_drawdown": -0.7100746389815972,
+        "dsr": 0.615119456602569,
+        "materiality_pass": false
+      },
+      "counts_for_deflation": false,
+      "recorded_at": "2026-11-15T23:10:10Z",
+      "updated_at": "2026-11-15T23:10:10Z"
     },
     {
       "trial_id": "6906c7eaf70649a6",
@@ -8785,6 +10494,38 @@
       "updated_at": "2026-10-25T06:58:50Z"
     },
     {
+      "trial_id": "6c80dc2fc6992d1d",
+      "study": "spy_upro_trend",
+      "family": "rotation",
+      "name": "UPRO_L42",
+      "params": {
+        "equity": "UPRO",
+        "lookback": 42,
+        "bonds": "TMF",
+        "gold": "UGL",
+        "gold_leverage": 2
+      },
+      "sample_start": "2004-11-19",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": -0.014971707985896976,
+        "vol": 0.41156896206380894,
+        "sharpe": 0.12769590237372336,
+        "sharpe_per_period": 0.008044813021501106,
+        "max_drawdown": -0.7470189199394404,
+        "worst_year": 2022,
+        "worst_year_return": -0.4621654026247374,
+        "n_days": 5531,
+        "start": "2004-11-19",
+        "end": "2026-11-13",
+        "turnover_per_year": 13.303923341167962,
+        "total_return": -0.28185942914717477
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "6defba3f56932bd1",
       "study": "spy_upro_trend",
       "family": "vol_gear",
@@ -8975,6 +10716,37 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "6eebebebdd2ce750",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_10_n10_UPRO",
+      "params": {
+        "entry": "rsi2_10",
+        "max_hold": 10,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.06433903984302769,
+        "vol": 0.1638795080392261,
+        "sharpe": 0.3452699395083806,
+        "sharpe_per_period": 0.021751571168391985,
+        "max_drawdown": -0.47447875496859526,
+        "worst_year": 2018,
+        "worst_year_return": -0.23076628599794757,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 15.1393903521752,
+        "total_return": 4.323737328794433
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "6ef2753b54ac75da",
       "study": "flagship",
       "family": "xasset",
@@ -9013,6 +10785,70 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:58:46Z",
       "updated_at": "2026-10-25T06:58:51Z"
+    },
+    {
+      "trial_id": "6f4280881c5d03be",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f50_n10_close",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.5,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.10942906955623433,
+        "vol": 0.2278671168831396,
+        "sharpe": 0.4851958948624205,
+        "sharpe_per_period": 0.030566730056890482,
+        "max_drawdown": -0.556679751451618,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 15.197767326880339
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "6f98e5b8a1922115",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_10_n05_SPY",
+      "params": {
+        "entry": "rsi2_10",
+        "max_hold": 5,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.03075658163186601,
+        "vol": 0.05376001661006691,
+        "sharpe": 0.23086269474459464,
+        "sharpe_per_period": 0.01454405889494448,
+        "max_drawdown": -0.1525275678719945,
+        "worst_year": 2018,
+        "worst_year_return": -0.0451759736250561,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 15.437703462562888,
+        "total_return": 1.2532720711142291
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "6fe95471f86062c9",
@@ -9377,6 +11213,39 @@
       "updated_at": "2026-10-25T07:20:14Z"
     },
     {
+      "trial_id": "72e1b7eb6ca6c8fe",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f33_n05_next_open",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09392671458794477,
+        "vol": 0.2064854404067811,
+        "sharpe": 0.44449590561593794,
+        "sharpe_per_period": 0.02800268201405133,
+        "max_drawdown": -0.5553425020003984,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377714,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 5.227749180941531,
+        "total_return": 10.106194247233468
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "7389525383b22b4a",
       "study": "spy_upro_trend",
       "family": "ontrend_slice",
@@ -9427,6 +11296,37 @@
       "updated_at": "2026-11-14T22:10:13Z"
     },
     {
+      "trial_id": "741a14b9899911a8",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "band5_n10_SSO",
+      "params": {
+        "entry": "band5",
+        "max_hold": 10,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.049354758973033874,
+        "vol": 0.14675878533380599,
+        "sharpe": 0.27034665818974457,
+        "sharpe_per_period": 0.01703149884442354,
+        "max_drawdown": -0.28079383059146124,
+        "worst_year": 2018,
+        "worst_year_return": -0.2054045208901345,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 34.231429416987275,
+        "total_return": 2.6398536951270275
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "74af14ecab607aeb",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -9473,6 +11373,37 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "75277941e0990f16",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_05_n03_UPRO",
+      "params": {
+        "entry": "rsi2_05",
+        "max_hold": 3,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.04006272332026084,
+        "vol": 0.11524642792404063,
+        "sharpe": 0.23133919604821673,
+        "sharpe_per_period": 0.014574077876707923,
+        "max_drawdown": -0.4392974044754423,
+        "worst_year": 2020,
+        "worst_year_return": -0.2745678488052835,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.979875702870672,
+        "total_return": 1.867433143812089
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
     },
     {
       "trial_id": "7562bb5345b94e5b",
@@ -9549,6 +11480,37 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T07:20:07Z",
       "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
+      "trial_id": "76114f0ff3a47c63",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "ibs_0.2_n03_SPY",
+      "params": {
+        "entry": "ibs_0.2",
+        "max_hold": 3,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.035780218867867086,
+        "vol": 0.06311167045675929,
+        "sharpe": 0.2823406756457295,
+        "sharpe_per_period": 0.017787106832365566,
+        "max_drawdown": -0.13822210669061996,
+        "worst_year": 2005,
+        "worst_year_return": -0.06293614356328969,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 45.94021899970406,
+        "total_return": 1.567075237317069
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "7612d17c7ae89de6",
@@ -9830,6 +11792,39 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "779315438d4925ea",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f50_n10_next_open",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.5,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.10494198404916566,
+        "vol": 0.2274327382066587,
+        "sharpe": 0.46782195551281025,
+        "sharpe_per_period": 0.029472193768047997,
+        "max_drawdown": -0.5715877605762238,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377714,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 11.556193526887853,
+        "total_return": 13.52963375377224
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "77da6cbae713ae58",
       "study": "apex",
       "family": "alpha_standalone",
@@ -9903,6 +11898,39 @@
       "updated_at": "2026-10-25T06:58:51Z"
     },
     {
+      "trial_id": "7930c703f8ab3279",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f33_n05_close",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09616581487919973,
+        "vol": 0.21068006225820807,
+        "sharpe": 0.4495768714616121,
+        "sharpe_per_period": 0.02832277646059863,
+        "max_drawdown": -0.5559567168599143,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 10.732210845966874
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "7a2b6ae76e199f10",
       "study": "spy_upro_trend",
       "family": "audit",
@@ -9943,6 +11971,39 @@
       "counts_for_deflation": false,
       "recorded_at": "2026-11-03T22:13:36Z",
       "updated_at": "2026-11-03T22:13:36Z"
+    },
+    {
+      "trial_id": "7a2deef06d9e38e6",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f25_n10_next_open",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.25,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.08709677440865371,
+        "vol": 0.20000132275489785,
+        "sharpe": 0.4210254677644648,
+        "sharpe_per_period": 0.026524074000835497,
+        "max_drawdown": -0.5480417498080599,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377704,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 1.9437123243230694,
+        "total_return": 8.3890403464245
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "7a709de03a92b583",
@@ -10130,6 +12191,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "7e84de0357253fc8",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f25_n05_close",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.25,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09347790961165314,
+        "vol": 0.20217792810872484,
+        "sharpe": 0.4475696008884041,
+        "sharpe_per_period": 0.028196320943534144,
+        "max_drawdown": -0.5525117264321202,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 9.984644513024461
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "7ef5a8f73ecfa92d",
@@ -10538,6 +12632,39 @@
       "updated_at": "2026-11-05T22:11:20Z"
     },
     {
+      "trial_id": "8447c7e4c33ac236",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f50_n05_next_open",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.5,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09951381924833913,
+        "vol": 0.2156241242617376,
+        "sharpe": 0.45827423858602273,
+        "sharpe_per_period": 0.028870699631244813,
+        "max_drawdown": -0.5602152440650578,
+        "worst_year": 2008,
+        "worst_year_return": -0.36795008123777073,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.810887267756424,
+        "total_return": 11.732038030408033
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "84a4311837e91951",
       "study": "apex",
       "family": "apex_book",
@@ -10572,6 +12699,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T07:20:07Z",
       "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
+      "trial_id": "84d4d77e02043730",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f33_n05_next_open",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09023443974067447,
+        "vol": 0.2010902330711132,
+        "sharpe": 0.4341183543411879,
+        "sharpe_per_period": 0.027348909358870955,
+        "max_drawdown": -0.546757429428271,
+        "worst_year": 2008,
+        "worst_year_return": -0.36795008123777206,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 2.6046563693082767,
+        "total_return": 9.143512016044328
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "84fa2ac032b9ec58",
@@ -10717,6 +12877,72 @@
       "updated_at": "2026-10-26T21:17:54Z"
     },
     {
+      "trial_id": "868477b358d9b052",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f50_n10_next_open",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.5,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09988958009082238,
+        "vol": 0.21992239486021276,
+        "sharpe": 0.455267681829229,
+        "sharpe_per_period": 0.028681290343658628,
+        "max_drawdown": -0.5540863341020739,
+        "worst_year": 2008,
+        "worst_year_return": -0.36795008123777206,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.674298060230218,
+        "total_return": 11.84924232308771
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "871b7e448f82199b",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f50_n05_close",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.5,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09673262019503803,
+        "vol": 0.20627686759019703,
+        "sharpe": 0.4571628261576098,
+        "sharpe_per_period": 0.028800682048571728,
+        "max_drawdown": -0.5472217629125316,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 10.895989289199482
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "88d1c8a9aa35233c",
       "study": "apex",
       "family": "apex_book",
@@ -10790,6 +13016,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:58:46Z",
       "updated_at": "2026-10-25T06:58:51Z"
+    },
+    {
+      "trial_id": "892175ab4daff759",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f25_n10_next_open",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.25,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09385604402726666,
+        "vol": 0.2077401669018552,
+        "sharpe": 0.44280186055128806,
+        "sharpe_per_period": 0.02789595930937956,
+        "max_drawdown": -0.5586775491556897,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 5.814558665708423,
+        "total_return": 10.086969037423403
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "8a046d2a25346d46",
@@ -11244,6 +13503,37 @@
       "updated_at": "2026-10-25T07:20:14Z"
     },
     {
+      "trial_id": "8e0b7951941c20b7",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_10_n10_SSO",
+      "params": {
+        "entry": "rsi2_10",
+        "max_hold": 10,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.04985634314845755,
+        "vol": 0.10932653847501955,
+        "sharpe": 0.32318914970967416,
+        "sharpe_per_period": 0.020360509231622338,
+        "max_drawdown": -0.33063272636773355,
+        "worst_year": 2018,
+        "worst_year_return": -0.14846150878712694,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 15.1393903521752,
+        "total_return": 2.6868003995590395
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "8fbb5d99fdd474c9",
       "study": "spy_upro_trend",
       "family": "idle_diversifier",
@@ -11523,6 +13813,38 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-11-10T22:07:39Z",
       "updated_at": "2026-11-10T22:07:39Z"
+    },
+    {
+      "trial_id": "90e2a7a24bec135d",
+      "study": "spy_upro_trend",
+      "family": "rotation",
+      "name": "TQQQ_L63",
+      "params": {
+        "equity": "TQQQ",
+        "lookback": 63,
+        "bonds": "TMF",
+        "gold": "UGL",
+        "gold_leverage": 2
+      },
+      "sample_start": "2004-11-19",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.1917504112880697,
+        "vol": 0.473331068102007,
+        "sharpe": 0.5721976692708515,
+        "sharpe_per_period": 0.036048323987332265,
+        "max_drawdown": -0.7100746389815973,
+        "worst_year": 2022,
+        "worst_year_return": -0.6065479526718562,
+        "n_days": 5531,
+        "start": "2004-11-19",
+        "end": "2026-11-13",
+        "turnover_per_year": 9.431205930211535,
+        "total_return": 46.00527912770005
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "90e784ece1a0cd63",
@@ -12176,6 +14498,37 @@
       "updated_at": "2026-10-29T21:15:06Z"
     },
     {
+      "trial_id": "9b1cf2bf931cba7f",
+      "study": "spy_upro_trend",
+      "family": "nasdaq_vol",
+      "name": "band00_vol40",
+      "params": {
+        "band": 0.0,
+        "vol_target": 0.4,
+        "vol_window": 20,
+        "cap": 1.0
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.14606781118302092,
+        "vol": 0.3446889237229305,
+        "sharpe": 0.5136352735898095,
+        "sharpe_per_period": 0.032358375084703975,
+        "max_drawdown": -0.5619216143474364,
+        "worst_year": 2005,
+        "worst_year_return": -0.3375287316690627,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.630802031225995,
+        "total_return": 37.714198466758624
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "9b4b8fb3e12de64a",
       "study": "spy_upro_trend",
       "family": "audit",
@@ -12408,6 +14761,36 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "9c352fde133b9551",
+      "study": "spy_upro_trend",
+      "family": "btc_trend",
+      "name": "sma10_030",
+      "params": {
+        "fast": 10,
+        "slow": 30,
+        "fallback": "BIL"
+      },
+      "sample_start": "2015-07-21",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.738544018323944,
+        "vol": 0.4876933850979155,
+        "sharpe": 1.3299195527685297,
+        "sharpe_per_period": 0.08379176907629272,
+        "max_drawdown": -0.5989817377669466,
+        "worst_year": 2018,
+        "worst_year_return": -0.405544497868941,
+        "n_days": 2848,
+        "start": "2015-07-21",
+        "end": "2026-11-13",
+        "turnover_per_year": 8.317415730337078,
+        "total_return": 517.1786992278893
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "9c989468a147e32a",
       "study": "apex",
       "family": "apex_book",
@@ -12542,6 +14925,59 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-11-03T22:13:36Z",
       "updated_at": "2026-11-03T22:13:36Z"
+    },
+    {
+      "trial_id": "9cd31b85ee3fc741",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_15_n10_SSO",
+      "params": {
+        "entry": "rsi2_15",
+        "max_hold": 10,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.06372588566813198,
+        "vol": 0.1268510777942438,
+        "sharpe": 0.39841556805768064,
+        "sharpe_per_period": 0.025099678806505574,
+        "max_drawdown": -0.2264088247889573,
+        "worst_year": 2018,
+        "worst_year_return": -0.11358663095382193,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 22.820952944658185,
+        "total_return": 4.242098327572641
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "9d0fd8e8a1c608f3",
+      "study": "spy_upro_trend",
+      "family": "audit",
+      "name": "qqq_trend_walk_forward",
+      "params": {
+        "last_pick": "qqq_band04",
+        "bar": "materiality_v1"
+      },
+      "sample_start": "2006-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.20312819397338222,
+        "sharpe": 0.6688337721574178,
+        "max_drawdown": -0.5546027580384422,
+        "dsr": 0.800152054972799,
+        "materiality_pass": false
+      },
+      "counts_for_deflation": false,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "9d394256ec8f63e8",
@@ -12698,6 +15134,69 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:58:46Z",
       "updated_at": "2026-10-25T06:58:51Z"
+    },
+    {
+      "trial_id": "9ecad44e53972ae9",
+      "study": "spy_upro_trend",
+      "family": "rotation",
+      "name": "UPRO_L21",
+      "params": {
+        "equity": "UPRO",
+        "lookback": 21,
+        "bonds": "TMF",
+        "gold": "UGL",
+        "gold_leverage": 2
+      },
+      "sample_start": "2004-11-19",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.06526631112239722,
+        "vol": 0.4050183402727656,
+        "sharpe": 0.3163333467086288,
+        "sharpe_per_period": 0.019928929428672623,
+        "max_drawdown": -0.66009908309622,
+        "worst_year": 2022,
+        "worst_year_return": -0.2943079319720441,
+        "n_days": 5531,
+        "start": "2004-11-19",
+        "end": "2026-11-13",
+        "turnover_per_year": 18.452359428674743,
+        "total_return": 3.005564655974987
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "9f555c51836ee54f",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_15_n03_SPY",
+      "params": {
+        "entry": "rsi2_15",
+        "max_hold": 3,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.03293205727163251,
+        "vol": 0.05517920771298357,
+        "sharpe": 0.2646083159485382,
+        "sharpe_per_period": 0.016669990513214883,
+        "max_drawdown": -0.10033534362920837,
+        "worst_year": 2022,
+        "worst_year_return": -0.052007341941059826,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 24.983722994968925,
+        "total_return": 1.3843431570776437
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "9f9fe68675ea395a",
@@ -13319,6 +15818,37 @@
       "updated_at": "2026-11-07T22:13:02Z"
     },
     {
+      "trial_id": "a6c571969d13bd76",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "band5_n10_UPRO",
+      "params": {
+        "entry": "band5",
+        "max_hold": 10,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.06429556876392906,
+        "vol": 0.220139381923022,
+        "sharpe": 0.3063809447372967,
+        "sharpe_per_period": 0.019301613495752136,
+        "max_drawdown": -0.40612056087758586,
+        "worst_year": 2000,
+        "worst_year_return": -0.3207960003671886,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 34.231429416987275,
+        "total_return": 4.317909245680065
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "a786d105a9f7bccb",
       "study": "spy_upro_trend",
       "family": "dip_buy",
@@ -13507,6 +16037,39 @@
       "updated_at": "2026-10-25T06:58:51Z"
     },
     {
+      "trial_id": "a80f8652bae48aed",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f50_n10_close",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.5,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09432194815349781,
+        "vol": 0.20968942290619977,
+        "sharpe": 0.44278191901951386,
+        "sharpe_per_period": 0.02789470301800299,
+        "max_drawdown": -0.5472217629125308,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 10.214306605107089
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "a8e7606862d9318b",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -13555,6 +16118,91 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "a952e44633c59809",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_15_n03_SSO",
+      "params": {
+        "entry": "rsi2_15",
+        "max_hold": 3,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.05325738789289702,
+        "vol": 0.10991886724905456,
+        "sharpe": 0.35157574742781394,
+        "sharpe_per_period": 0.022148829122354226,
+        "max_drawdown": -0.2055102419069461,
+        "worst_year": 2007,
+        "worst_year_return": -0.12343019417336987,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 24.983722994968925,
+        "total_return": 3.020855237122353
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "aa76fd55e4ee2017",
+      "study": "spy_upro_trend",
+      "family": "qqq_trend",
+      "name": "qqq_band00",
+      "params": {
+        "band": 0.0,
+        "core": 0.5,
+        "sleeve": 0.5,
+        "dip": true,
+        "rebalance": "quarterly"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.13909460847043098,
+        "vol": 0.37142366839382746,
+        "sharpe": 0.48485717899040864,
+        "sharpe_per_period": 0.030545391383716616,
+        "max_drawdown": -0.7880894437483105,
+        "worst_year": 2000,
+        "worst_year_return": -0.43042763504320614,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 14.816416269899804,
+        "total_return": 31.869272519590417
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
+    },
+    {
+      "trial_id": "aacb8216e56a6f35",
+      "study": "spy_upro_trend",
+      "family": "audit",
+      "name": "meanrev_walk_forward",
+      "params": {
+        "last_pick": "ibs_0.2_n03_UPRO",
+        "bar": "materiality_v1"
+      },
+      "sample_start": "2006-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.08264433017327355,
+        "sharpe": 0.4349363323369547,
+        "max_drawdown": -0.37228182801212173,
+        "dsr": 0.4165217803439758,
+        "materiality_pass": false
+      },
+      "counts_for_deflation": false,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "ab4d02e2e4f2bec7",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -13601,6 +16249,37 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "ac0c27b8ed52f4c2",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_05_n10_SPY",
+      "params": {
+        "entry": "rsi2_05",
+        "max_hold": 10,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.030248273717438545,
+        "vol": 0.04268554231596608,
+        "sharpe": 0.2667536988537802,
+        "sharpe_per_period": 0.016805146933183756,
+        "max_drawdown": -0.12689120784310448,
+        "worst_year": 2020,
+        "worst_year_return": -0.0470449440452102,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.606984314886061,
+        "total_return": 1.223661971006441
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
     },
     {
       "trial_id": "ac973bce7fa408f0",
@@ -13699,6 +16378,39 @@
       "updated_at": "2026-10-27T21:15:47Z"
     },
     {
+      "trial_id": "ad9cabde697bdc8a",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f33_n05_close",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09192541613655925,
+        "vol": 0.2007431291286898,
+        "sharpe": 0.4422430948218329,
+        "sharpe_per_period": 0.027860757772437163,
+        "max_drawdown": -0.5487800985457836,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 9.5739825606402
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "ae1447e67b82cf27",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -13794,6 +16506,36 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-31T21:12:12Z",
       "updated_at": "2026-10-31T21:12:12Z"
+    },
+    {
+      "trial_id": "aea19bc797d69560",
+      "study": "spy_upro_trend",
+      "family": "btc_trend",
+      "name": "sma20_050",
+      "params": {
+        "fast": 20,
+        "slow": 50,
+        "fallback": "BIL"
+      },
+      "sample_start": "2015-07-21",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.5806511868672959,
+        "vol": 0.523826851091166,
+        "sharpe": 1.0949366781637941,
+        "sharpe_per_period": 0.06898663990530264,
+        "max_drawdown": -0.6334791661553483,
+        "worst_year": 2018,
+        "worst_year_return": -0.47318263060575316,
+        "n_days": 2848,
+        "start": "2015-07-21",
+        "end": "2026-11-13",
+        "turnover_per_year": 4.955056179775281,
+        "total_return": 175.6700307821383
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "af7af16dc5a996e2",
@@ -14065,6 +16807,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-11-14T22:10:13Z",
       "updated_at": "2026-11-14T22:10:13Z"
+    },
+    {
+      "trial_id": "b2dba33607afd045",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f25_n05_next_open",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.25,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09100103499303902,
+        "vol": 0.2024096896056799,
+        "sharpe": 0.4360806176536648,
+        "sharpe_per_period": 0.027472529475215984,
+        "max_drawdown": -0.552915561950158,
+        "worst_year": 2008,
+        "worst_year_return": -0.36795008123777184,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 3.9285040664541757,
+        "total_return": 9.336530648953978
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "b2fbd5798bf7a341",
@@ -14750,6 +17525,37 @@
       "updated_at": "2026-10-26T21:17:54Z"
     },
     {
+      "trial_id": "bcce20c6612f8149",
+      "study": "spy_upro_trend",
+      "family": "nasdaq_vol",
+      "name": "band00_vol30",
+      "params": {
+        "band": 0.0,
+        "vol_target": 0.3,
+        "vol_window": 20,
+        "cap": 1.0
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.13066475155956603,
+        "vol": 0.27697108460477665,
+        "sharpe": 0.5133266984399009,
+        "sharpe_per_period": 0.032338935239047004,
+        "max_drawdown": -0.47766926932854104,
+        "worst_year": 2005,
+        "worst_year_return": -0.3150660822137551,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.471122325448717,
+        "total_return": 25.93261317204998
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "bd85816f32ced3e5",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -14942,6 +17748,89 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "bf856e493629319a",
+      "study": "spy_upro_trend",
+      "family": "exposure",
+      "name": "spy_bil_band2",
+      "params": {
+        "book": "SPY/BIL",
+        "band": 0.02,
+        "dip": false,
+        "rebalance": "on_flip"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.08251478963143932,
+        "vol": 0.11853903961369358,
+        "sharpe": 0.565314435353183,
+        "sharpe_per_period": 0.035614097162969566,
+        "max_drawdown": -0.21979573984632206,
+        "worst_year": 2022,
+        "worst_year_return": -0.13125825710397876,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 1.4915655519384434,
+        "total_return": 7.383552689755783
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
+    },
+    {
+      "trial_id": "c10eca82532d85c9",
+      "study": "spy_upro_trend",
+      "family": "audit",
+      "name": "nasdaq_vol_walk_forward",
+      "params": {
+        "last_pick": "band02_vol30",
+        "bar": "materiality_v1"
+      },
+      "sample_start": "2006-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.1625216062701147,
+        "sharpe": 0.6183277959522919,
+        "max_drawdown": -0.47079425341169834,
+        "dsr": 0.7305008578331552,
+        "materiality_pass": false
+      },
+      "counts_for_deflation": false,
+      "recorded_at": "2026-11-15T23:10:10Z",
+      "updated_at": "2026-11-15T23:10:10Z"
+    },
+    {
+      "trial_id": "c141088aaf3f2da5",
+      "study": "spy_upro_trend",
+      "family": "btc_trend",
+      "name": "sma50_200",
+      "params": {
+        "fast": 50,
+        "slow": 200,
+        "fallback": "BIL"
+      },
+      "sample_start": "2015-07-21",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.5664625115662001,
+        "vol": 0.5287786691268915,
+        "sharpe": 1.0686378901823632,
+        "sharpe_per_period": 0.0673296810577249,
+        "max_drawdown": -0.6523448435606688,
+        "worst_year": 2018,
+        "worst_year_return": -0.4079883410827907,
+        "n_days": 2848,
+        "start": "2015-07-21",
+        "end": "2026-11-13",
+        "turnover_per_year": 0.973314606741573,
+        "total_return": 158.5531794556644
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "c19214853c31e734",
@@ -15355,6 +18244,38 @@
       "updated_at": "2026-11-03T22:13:36Z"
     },
     {
+      "trial_id": "c85f7f09d4650e91",
+      "study": "spy_upro_trend",
+      "family": "qqq_trend",
+      "name": "qqq_band04",
+      "params": {
+        "band": 0.04,
+        "core": 0.5,
+        "sleeve": 0.5,
+        "dip": true,
+        "rebalance": "quarterly"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.14182518146479683,
+        "vol": 0.3705983459968226,
+        "sharpe": 0.4918183111393911,
+        "sharpe_per_period": 0.03098393393846891,
+        "max_drawdown": -0.7811113076274572,
+        "worst_year": 2000,
+        "worst_year_return": -0.5022504214067591,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 13.571279552101407,
+        "total_return": 34.048983889588364
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
+    },
+    {
       "trial_id": "c89e5d12ddb4b2ac",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -15640,6 +18561,134 @@
       "updated_at": "2026-10-26T21:17:54Z"
     },
     {
+      "trial_id": "cd24df7b5b7f0fe3",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "band5_n10_SPY",
+      "params": {
+        "entry": "band5",
+        "max_hold": 10,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.029440064531540244,
+        "vol": 0.07357594587088824,
+        "sharpe": 0.1684868998808889,
+        "sharpe_per_period": 0.010614462408511922,
+        "max_drawdown": -0.141291023997845,
+        "worst_year": 2018,
+        "worst_year_return": -0.10127368251871127,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 34.231429416987275,
+        "total_return": 1.177351773200574
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "cdef980bb2496946",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f25_n10_close",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.25,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09456752788032108,
+        "vol": 0.20416082055758572,
+        "sharpe": 0.4501252750352134,
+        "sharpe_per_period": 0.02835732519477795,
+        "max_drawdown": -0.5497521992479726,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 10.28199217471482
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "ce3ec2db8d629b3b",
+      "study": "spy_upro_trend",
+      "family": "nasdaq_vol",
+      "name": "band02_vol40",
+      "params": {
+        "band": 0.02,
+        "vol_target": 0.4,
+        "vol_window": 20,
+        "cap": 1.0
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.14999466655341176,
+        "vol": 0.34532608713645246,
+        "sharpe": 0.5232484964109535,
+        "sharpe_per_period": 0.032963996010317874,
+        "max_drawdown": -0.5683521524941474,
+        "worst_year": 2008,
+        "worst_year_return": -0.3125019287770522,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 4.671141154537341,
+        "total_return": 41.433407714017356
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "ce503db96008312b",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f33_n10_next_open",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09421036549630091,
+        "vol": 0.20916022342514218,
+        "sharpe": 0.4427838872132717,
+        "sharpe_per_period": 0.027894827011729916,
+        "max_drawdown": -0.5512174836327494,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377733,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 5.139461523762246,
+        "total_return": 10.1836820257432
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "ceaf622af2ac54a6",
       "study": "apex",
       "family": "apex_book",
@@ -15674,6 +18723,38 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T07:20:07Z",
       "updated_at": "2026-10-25T07:20:14Z"
+    },
+    {
+      "trial_id": "cec99c6c79fed1af",
+      "study": "spy_upro_trend",
+      "family": "rebalance",
+      "name": "reb_daily",
+      "params": {
+        "rebalance": "daily",
+        "core": 0.5,
+        "sleeve": 0.5,
+        "band": 0.02,
+        "dip": true
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.12961785404789827,
+        "vol": 0.2611666682857234,
+        "sharpe": 0.524212966962746,
+        "sharpe_per_period": 0.03302475643990235,
+        "max_drawdown": -0.46072053960439574,
+        "worst_year": 2022,
+        "worst_year_return": -0.2627103949650259,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 14.099512616957854,
+        "total_return": 25.271791381283286
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
     },
     {
       "trial_id": "cf0eff3984c545c0",
@@ -15957,6 +19038,38 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "d3df82da2c1123ae",
+      "study": "spy_upro_trend",
+      "family": "exposure",
+      "name": "1.0x",
+      "params": {
+        "exposure": 1.0,
+        "core": 1.0,
+        "sleeve": 0.0,
+        "dip": true,
+        "band": 0.02
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.083200783090573,
+        "vol": 0.2294475224554904,
+        "sharpe": 0.37836965194629907,
+        "sharpe_per_period": 0.0238368113482114,
+        "max_drawdown": -0.5721154166451128,
+        "worst_year": 2008,
+        "worst_year_return": -0.3710320157913618,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 7.527197068084648
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:08Z",
+      "updated_at": "2026-11-15T23:10:08Z"
+    },
+    {
       "trial_id": "d3eb37defba8dc98",
       "study": "spy_upro_trend",
       "family": "trend_confirm",
@@ -16096,6 +19209,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "d53ee67b5c0df505",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f25_n05_close",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.25,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.08944540032633874,
+        "vol": 0.19830510667035636,
+        "sharpe": 0.43375012075044284,
+        "sharpe_per_period": 0.027325711106607555,
+        "max_drawdown": -0.5495589658598972,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 8.948467946578768
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "d562a5b06e32948f",
@@ -16523,6 +19669,37 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "d90d093df79792e2",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_10_n10_SPY",
+      "params": {
+        "entry": "rsi2_10",
+        "max_hold": 10,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.032934690560494806,
+        "vol": 0.05485708561103535,
+        "sharpe": 0.26581412793242265,
+        "sharpe_per_period": 0.01674595514894456,
+        "max_drawdown": -0.16406858454472206,
+        "worst_year": 2018,
+        "worst_year_return": -0.06763444761945925,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 15.1393903521752,
+        "total_return": 1.3845061720312102
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "d934212ab187c04e",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -16571,6 +19748,39 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "d9409ebb5a282ffc",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f25_n05_close",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.25,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09272368542747045,
+        "vol": 0.20542496302016114,
+        "sharpe": 0.4404019313774349,
+        "sharpe_per_period": 0.02774476679520211,
+        "max_drawdown": -0.5533612141263513,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 9.783257209058947
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "d9a4d22e67c7ab3c",
       "study": "apex",
       "family": "alpha_standalone",
@@ -16604,6 +19814,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T07:20:07Z",
       "updated_at": "2026-10-25T07:20:07Z"
+    },
+    {
+      "trial_id": "da16510576c2355a",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f25_n10_next_open",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.25,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09122601706206845,
+        "vol": 0.2043337966617104,
+        "sharpe": 0.4349481496069215,
+        "sharpe_per_period": 0.027401185415116974,
+        "max_drawdown": -0.5498072326666845,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377705,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 3.863325048129147,
+        "total_return": 9.393846099108165
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "daa814c93163bc2d",
@@ -16733,6 +19976,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "db9e83dc4c42c8fb",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f50_n05_next_open",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.5,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09944338705136735,
+        "vol": 0.22190225105027203,
+        "sharpe": 0.45130279821579744,
+        "sharpe_per_period": 0.028431507671542004,
+        "max_drawdown": -0.5786283665093952,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377733,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 11.94715777969862,
+        "total_return": 11.710184226597733
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "dbb3c8a4a32c9a98",
@@ -16927,6 +20203,37 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "dd4b842af5fc9974",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_05_n10_SSO",
+      "params": {
+        "entry": "rsi2_05",
+        "max_hold": 10,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.04253513498052408,
+        "vol": 0.08533801980563567,
+        "sharpe": 0.3045536016443121,
+        "sharpe_per_period": 0.01918649318324326,
+        "max_drawdown": -0.2663303302976935,
+        "worst_year": 2018,
+        "worst_year_return": -0.10202697228462576,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 7.606984314886061,
+        "total_return": 2.0559527591464466
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "dd98f005019888be",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -17015,6 +20322,37 @@
       "updated_at": "2026-10-25T06:58:51Z"
     },
     {
+      "trial_id": "dee9deea0713926a",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_10_n03_SPY",
+      "params": {
+        "entry": "rsi2_10",
+        "max_hold": 3,
+        "vehicle": "SPY",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.027752850221512748,
+        "vol": 0.04895469430519034,
+        "sharpe": 0.18889472282526656,
+        "sharpe_per_period": 0.011900129541302663,
+        "max_drawdown": -0.15508945818665465,
+        "worst_year": 2020,
+        "worst_year_return": -0.07249029732372103,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 16.332642793725956,
+        "total_return": 1.08364855240433
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "df4635064ad6431e",
       "study": "spy_upro_trend",
       "family": "audit",
@@ -17046,6 +20384,37 @@
       "counts_for_deflation": false,
       "recorded_at": "2026-10-25T06:57:45Z",
       "updated_at": "2026-10-30T21:18:16Z"
+    },
+    {
+      "trial_id": "dfc76fc930b2cbb2",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_15_n05_UPRO",
+      "params": {
+        "entry": "rsi2_15",
+        "max_hold": 5,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.07655647085133332,
+        "vol": 0.18651221878031804,
+        "sharpe": 0.386105969507539,
+        "sharpe_per_period": 0.02432418960724604,
+        "max_drawdown": -0.3510148308369283,
+        "worst_year": 2000,
+        "worst_year_return": -0.16630353558209876,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 23.641313998224327,
+        "total_return": 6.230128798097432
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "dff826b79597ba57",
@@ -18042,6 +21411,37 @@
       "updated_at": "2026-11-11T22:05:06Z"
     },
     {
+      "trial_id": "eb631b82dd89f81f",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "ibs_0.2_n03_SSO",
+      "params": {
+        "entry": "ibs_0.2",
+        "max_hold": 3,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.06959123149018343,
+        "vol": 0.125738566636679,
+        "sharpe": 0.44434223016045726,
+        "sharpe_per_period": 0.02799300065397845,
+        "max_drawdown": -0.26281269433691545,
+        "worst_year": 2005,
+        "worst_year_return": -0.1269456304599761,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 45.94021899970406,
+        "total_return": 5.075025451519278
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "ebf5448f2daa2505",
       "study": "spy_upro_trend",
       "family": "trend_vote",
@@ -18095,6 +21495,38 @@
       "updated_at": "2026-10-27T21:15:47Z"
     },
     {
+      "trial_id": "ec1375a34c9bbb80",
+      "study": "spy_upro_trend",
+      "family": "rotation",
+      "name": "TQQQ_L21",
+      "params": {
+        "equity": "TQQQ",
+        "lookback": 21,
+        "bonds": "TMF",
+        "gold": "UGL",
+        "gold_leverage": 2
+      },
+      "sample_start": "2004-11-19",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.11844506534878407,
+        "vol": 0.4470603893509527,
+        "sharpe": 0.43615350702491695,
+        "sharpe_per_period": 0.027477572478546854,
+        "max_drawdown": -0.8267377015293683,
+        "worst_year": 2022,
+        "worst_year_return": -0.5900759308466087,
+        "n_days": 5531,
+        "start": "2004-11-19",
+        "end": "2026-11-13",
+        "turnover_per_year": 16.8577110829868,
+        "total_return": 10.668487648702213
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "ecf5bb8eb92e1a88",
       "study": "spy_upro_trend",
       "family": "cushion",
@@ -18141,6 +21573,28 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-11-10T22:07:39Z",
       "updated_at": "2026-11-10T22:07:39Z"
+    },
+    {
+      "trial_id": "eda14f956706c8bc",
+      "study": "spy_upro_trend",
+      "family": "audit",
+      "name": "btc_trend_walk_forward",
+      "params": {
+        "last_pick": "sma10_030",
+        "bar": "materiality_v1"
+      },
+      "sample_start": "2019-01-02",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.3579451225640109,
+        "sharpe": 0.8336277530674094,
+        "max_drawdown": -0.6652554823354339,
+        "dsr": 0.8333704001784892,
+        "materiality_pass": false
+      },
+      "counts_for_deflation": false,
+      "recorded_at": "2026-11-15T23:10:10Z",
+      "updated_at": "2026-11-15T23:10:10Z"
     },
     {
       "trial_id": "ee017a9dcb76b4c6",
@@ -18606,6 +22060,70 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-25T06:32:33Z",
       "updated_at": "2026-10-30T21:18:13Z"
+    },
+    {
+      "trial_id": "f1fd11c578e64fd7",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi10_f33_n05_close",
+      "params": {
+        "threshold": 10.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.09724186743473262,
+        "vol": 0.20616216254124228,
+        "sharpe": 0.45955279322001996,
+        "sharpe_per_period": 0.028951246962279967,
+        "max_drawdown": -0.5548044920341113,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 11.04501165705846
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "f23ef7213c0ac0ac",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_10_n05_UPRO",
+      "params": {
+        "entry": "rsi2_10",
+        "max_hold": 5,
+        "vehicle": "UPRO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.06007866550961105,
+        "vol": 0.16076441196442848,
+        "sharpe": 0.32388617265648056,
+        "sharpe_per_period": 0.02040442079906157,
+        "max_drawdown": -0.44963007941222455,
+        "worst_year": 2018,
+        "worst_year_return": -0.17059025320668741,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 15.437703462562888,
+        "total_return": 3.7808303980324656
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "f287b1a4d9c00d31",
@@ -19189,6 +22707,37 @@
       "updated_at": "2026-10-30T21:18:13Z"
     },
     {
+      "trial_id": "fa8e7de2dbd57687",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "band5_n05_SSO",
+      "params": {
+        "entry": "band5",
+        "max_hold": 5,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.04011742083953673,
+        "vol": 0.14155814780016607,
+        "sharpe": 0.21251926760416745,
+        "sharpe_per_period": 0.013388446096780419,
+        "max_drawdown": -0.2625783035041799,
+        "worst_year": 2007,
+        "worst_year_return": -0.2073245742934423,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 35.42468185853803,
+        "total_return": 1.8714799639955464
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "fa9b0ce89f13bc76",
       "study": "spy_upro_trend",
       "family": "trend_grid",
@@ -19522,6 +23071,37 @@
       "updated_at": "2026-10-25T06:58:51Z"
     },
     {
+      "trial_id": "fc27996a2c06d2a0",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "ibs_0.2_n10_SSO",
+      "params": {
+        "entry": "ibs_0.2",
+        "max_hold": 10,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.07192891771030285,
+        "vol": 0.14223825733139994,
+        "sharpe": 0.42391149707365877,
+        "sharpe_per_period": 0.026705890211080684,
+        "max_drawdown": -0.2861459721980141,
+        "worst_year": 2005,
+        "worst_year_return": -0.15846794771858863,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 43.10624445102101,
+        "total_return": 5.441324277621573
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
       "trial_id": "fc4ad203c1fb928e",
       "study": "spy_upro_trend",
       "family": "idle_diversifier",
@@ -19569,6 +23149,39 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-10-30T21:17:36Z",
       "updated_at": "2026-10-30T21:17:36Z"
+    },
+    {
+      "trial_id": "fc819baf10cf9f4a",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi05_f33_n10_next_open",
+      "params": {
+        "threshold": 5.0,
+        "fraction": 0.3333333333333333,
+        "max_hold": 10,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "next_open"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.08877492632909845,
+        "vol": 0.20311533813748733,
+        "sharpe": 0.42529586035141315,
+        "sharpe_per_period": 0.026793103353359615,
+        "max_drawdown": -0.5467574294282709,
+        "worst_year": 2008,
+        "worst_year_return": -0.36795008123777184,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 2.585404025660642,
+        "total_return": 8.785574360514204
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "fda7bc7f5ff07b65",
@@ -19864,6 +23477,70 @@
       "counts_for_deflation": true,
       "recorded_at": "2026-11-12T22:12:37Z",
       "updated_at": "2026-11-12T22:12:37Z"
+    },
+    {
+      "trial_id": "ff1dae00bb17702a",
+      "study": "spy_upro_trend",
+      "family": "spy_rsi_boost",
+      "name": "rsi15_f50_n05_close",
+      "params": {
+        "threshold": 15.0,
+        "fraction": 0.5,
+        "max_hold": 5,
+        "exit_rsi": 70.0,
+        "regime": "sma200",
+        "fill": "close"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.10269532375120427,
+        "vol": 0.22237227128174447,
+        "sharpe": 0.46413904083357416,
+        "sharpe_per_period": 0.029240174783520746,
+        "max_drawdown": -0.5611960280345426,
+        "worst_year": 2008,
+        "worst_year_return": -0.3679500812377725,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": null,
+        "total_return": 12.757818235277629
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
+    },
+    {
+      "trial_id": "ff5b053a3a9e1005",
+      "study": "spy_upro_trend",
+      "family": "meanrev",
+      "name": "rsi2_10_n03_SSO",
+      "params": {
+        "entry": "rsi2_10",
+        "max_hold": 3,
+        "vehicle": "SSO",
+        "regime": "close_above_sma200"
+      },
+      "sample_start": "2000-01-03",
+      "sample_end": "2026-11-13",
+      "metrics": {
+        "cagr": 0.04017384796103607,
+        "vol": 0.09753106163197729,
+        "sharpe": 0.2547274199561998,
+        "sharpe_per_period": 0.016047506515068817,
+        "max_drawdown": -0.29535867486273315,
+        "worst_year": 2020,
+        "worst_year_return": -0.142969165049867,
+        "n_days": 6758,
+        "start": "2000-01-03",
+        "end": "2026-11-13",
+        "turnover_per_year": 16.332642793725956,
+        "total_return": 1.8756605112106848
+      },
+      "counts_for_deflation": true,
+      "recorded_at": "2026-11-15T23:10:09Z",
+      "updated_at": "2026-11-15T23:10:09Z"
     },
     {
       "trial_id": "ffe0bc94a0d0b02b",

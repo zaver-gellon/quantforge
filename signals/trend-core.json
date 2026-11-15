@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-16",
+  "weights": {
+    "SPY": 0.5,
+    "UPRO": 0.5
+  },
+  "strategy": "trend_core",
+  "strategy_name": "core50_slv50_L3_sma200_band2_daily_quarterly",
+  "generated_at": "2026-11-15T23:10:11Z",
+  "signal_date": "2026-11-13",
+  "trade": false,
+  "trade_reason": "none",
+  "rebalance_mix": false,
+  "diagnostics": {
+    "trend_on": true,
+    "hedge_on": false,
+    "hedge_rule": null,
+    "sleeve_on": true,
+    "dip_on": false,
+    "dip_rule": "3_down_closes",
+    "reference_close": 754.3699951171875,
+    "sma": 729.315171508789,
+    "sma_window": 200,
+    "band": 0.02,
+    "freq": "daily",
+    "rebalance": "quarterly",
+    "core_weight": 0.5,
+    "sleeve_weight": 0.5,
+    "sleeve_symbol": "UPRO",
+    "leverage": 3
+  },
+  "strategy_id": "trend-core",
+  "as_of": "2026-11-13",
+  "levels": {
+    "entry": "SPY close above 743.9015",
+    "entry_level": 743.9014749389648,
+    "entry_value": 754.3699951171875,
+    "exit": "SPY close below 714.7289",
+    "exit_level": 714.7288680786132,
+    "stop": "no trailing stop; the SPY half switches to SSO after three down closes",
+    "stop_level": null,
+    "reference_close": 754.3699951171875
+  },
+  "validated": true,
+  "validated_reason": "approved_live_book",
+  "oos": {
+    "cagr": 0.15428286597563678,
+    "sharpe": 0.6153421067891918,
+    "max_drawdown": -0.4673497902086321,
+    "worst_year": 2022,
+    "worst_year_return": -0.26655201414807905,
+    "start": "2006-01-03",
+    "end": "2026-11-13",
+    "n_days": 5250
+  }
+}

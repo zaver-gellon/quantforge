@@ -21,5 +21,3 @@ mix rebalance is due. A bot that marks to `weights` on every session instead reb
 - Dip-buy on: `False`
 - SPY close 754.37 versus SMA 729.32
 
-
-`signals_flagship.json` is written by `python studies/flagship/run.py` and is not this fixed book.

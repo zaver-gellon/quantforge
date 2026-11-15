@@ -1,0 +1,56 @@
+{
+  "strategy": "rotation",
+  "strategy_id": "rotation",
+  "date": "2026-11-16",
+  "as_of": "2026-11-13",
+  "signal_date": "2026-11-13",
+  "weights": {
+    "BIL": 1.0
+  },
+  "levels": {
+    "entry": "week-ending close, top trailing 63-session return among TQQQ, TMF, and UGL, and only if it beats cash",
+    "entry_level": 0.00990843065781144,
+    "entry_value": {
+      "TQQQ": -0.24356625905216134,
+      "TMF": -0.07033203236062535,
+      "UGL": -0.2528143491428433,
+      "BIL": 0.00990843065781144
+    },
+    "exit": "the next week-ending close, when the ranking is run again",
+    "exit_level": null,
+    "stop": "cash when the best risky sleeve does not beat the T-bill return over the same window",
+    "stop_level": 0.00990843065781144,
+    "reference_close": {
+      "TQQQ": 186.47941171190476,
+      "TMF": 67.84796606228763,
+      "UGL": 1245.3478048049749
+    }
+  },
+  "validated": false,
+  "generated_at": "2026-11-15T23:10:10Z",
+  "diagnostics": {
+    "cell": "TQQQ_L63",
+    "equity": "TQQQ",
+    "lookback": 63,
+    "pick": "BIL",
+    "scores": {
+      "TQQQ": -0.24356625905216134,
+      "TMF": -0.07033203236062535,
+      "UGL": -0.2528143491428433,
+      "BIL": 0.00990843065781144
+    },
+    "rule": "On the last NYSE session of the week, hold the sleeve with the highest 63-session total return among TQQQ, TMF, and UGL, if that return is above the compounded T-bill return. Otherwise hold BIL. Fill the next open. UGL is 2x gold."
+  },
+  "validated_reason": "did_not_clear_materiality_bar",
+  "oos": {
+    "cagr": 0.17495266706540136,
+    "sharpe": 0.5497227195948803,
+    "max_drawdown": -0.7100746389815972,
+    "worst_year": 2022,
+    "worst_year_return": -0.6065479526718562,
+    "start": "2008-01-02",
+    "end": "2026-11-13",
+    "n_days": 4748
+  },
+  "cell": "TQQQ_L63"
+}

@@ -15607,6 +15607,1161 @@
         "dip_hold_live": null,
         "trade_reason": "none"
       }
+    },
+    {
+      "id": "2026-11-13-exposure-gap",
+      "date": "2026-11-13",
+      "title": "Exposure, monthly reset, and QQQ/TQQQ",
+      "hypothesis": "The live book is 50% SPY and 50% UPRO while SPY is inside its 200-day 2% band, so the equity exposure is 2x whenever the trend is on and the dip is off. A 2x book trails SPY over short windows when the market is down or choppy, even if the long-run compound growth is higher. This run measures that at 1.0x, 1.5x, 2.0x, and 2.5x, plus a 100% SPY/BIL band with no dip. Two changes are then scored on the materiality bar. The first replaces the quarterly mix reset with a monthly reset. Daily is on the axis so monthly has a neighbor; quarterly is the live book and is not a new trial. The second replaces SPY/SSO/UPRO with QQQ/QLD/TQQQ under the same dip and a 200-day band of 0%, 2%, or 4%. The 2% cell is the named swap. The live book changes only if a walk-forward path clears the bar.",
+      "status": "tested",
+      "kept": false,
+      "decision": "rejected",
+      "decision_note": "Bill's since-2016 numbers are not replicated on daily bars. He quotes 19.5% a year since 2016 against SPY at 15.4%, with a worst drop of -45% against SPY's -34%, and 17.0% against 11.5% since 2022. He also quotes 72% winning boosts, about 8 a year, about 3 days each, and a standalone 3x version around 11-12% a year. On these prices, since 2016, the next-open fill compounds at 16.2% against close-to-close SPY at 14.6%, max drawdown -35.9% against -33.7%. The close fill, the optimistic stand-in for a 12:50 PT trade, compounds at 17.1% with max drawdown -35.9%. Since 2022 the next-open fill is 12.9% against SPY 11.5%, and the close fill is 14.7% against SPY 11.5%. From 2006 the next-open fill is 12.4% (max drawdown -55.1%, worst year 2008 -36.8%) and the close fill is 12.7%. Next-open boosts since 2016: win rate 77.4% (75.3% beat SPY), 8.6 a year, 3.3 days on average, average P&L 0.8%, worst -7.4%. Close-fill boosts: win rate 74.2%, 8.6 a year, 3.3 days. Standalone UPRO-or-cash since 2016 is 10.4% next-open and 14.5% at the close. The deflated Sharpe of the next-open book's daily gap over SPY, on the 2006-onward window and the full ledger, is 0.311. Over the lead book it is 0.000. Removing 2012, the year the gap over SPY added the most, leaves a strategy compound growth of 11.8% against SPY 10.8%. The walk-forward pick on the next-open grid is rsi15_f50_n10; the published signal stays the named rule. The gap versus his quote is the 12:50 PT price versus a daily close, the fill (this close versus the next open), UPRO's financing and expense ratio in the stitched series, 5 bps per side, and the rule that an exit close does not re-enter. Through the 2026-11-13 close, the live 2x book (50% SPY + 50% UPRO, 200-day 2% band, dip on the SPY half) compounds at 15.4% out of sample with a Sharpe of 0.62, a worst drawdown of -46.7%, and a worst year of 2022 (-26.7%). It trails close-to-close SPY in 39.5% of rolling 21-session windows and 35.6% of rolling 63-session windows. The unlevered 1.0x mix, which is 100% SPY plus the same dip, compounds at 10.5%. SPY/BIL, the band with no leverage and no dip, compounds at 9.2% with a max drawdown of -22.0%. The shortfall versus SPY since late October is what a 2x book does in a soft or choppy stretch: the same down days are larger, and the dip can add SSO on the SPY half while the market is already weak. Moving the mix reset from quarterly to the walk-forward rebalance pick (daily) does not clear the materiality bar. Swapping the vehicles for QQQ/TQQQ (walk-forward pick qqq_band04) does not clear it. The lead book is unchanged. meanrev (ibs_0.2_n03_UPRO) has an out-of-sample compound growth of 8.3%, Sharpe 0.43, worst drawdown -37.2%, worst year 2023 (-13.7%). It is not validated. rotation (TQQQ_L63) has an out-of-sample compound growth of 17.5%, Sharpe 0.55, worst drawdown -71.0%, worst year 2022 (-60.7%). It is not validated. nasdaq-vol (band02_vol30) has an out-of-sample compound growth of 16.3%, Sharpe 0.62, worst drawdown -47.1%, worst year 2008 (-31.3%). It is not validated. btc-trend (sma10_030) has an out-of-sample compound growth of 35.8%, Sharpe 0.83, worst drawdown -66.5%, worst year 2022 (-31.7%). It is not validated. spy-rsi-boost (rsi10_f33_n10) has an out-of-sample compound growth of 12.4%, Sharpe 0.58, worst drawdown -55.1%, worst year 2008 (-36.8%). It is not validated.",
+      "overlay": "exposure_gap",
+      "variants": [
+        {
+          "name": "1.0x",
+          "counts_for_deflation": true,
+          "cagr": 0.10508138888239937,
+          "sharpe": 0.47588403369043814,
+          "max_drawdown": -0.5721154166451132,
+          "years_selected": 0
+        },
+        {
+          "name": "1.5x",
+          "counts_for_deflation": true,
+          "cagr": 0.13171686615722766,
+          "sharpe": 0.5734374607636773,
+          "max_drawdown": -0.5134316405454289,
+          "years_selected": 0
+        },
+        {
+          "name": "2.0x",
+          "counts_for_deflation": false,
+          "cagr": 0.15428286597563678,
+          "sharpe": 0.6153421067891918,
+          "max_drawdown": -0.4673497902086321,
+          "years_selected": 0
+        },
+        {
+          "name": "2.5x",
+          "counts_for_deflation": true,
+          "cagr": 0.17250499196276348,
+          "sharpe": 0.6204099318818894,
+          "max_drawdown": -0.4743442945221419,
+          "years_selected": 0
+        },
+        {
+          "name": "SPY/BIL",
+          "counts_for_deflation": true,
+          "cagr": 0.09165283646494737,
+          "sharpe": 0.6490107775200022,
+          "max_drawdown": -0.21979573984632228,
+          "years_selected": 0
+        }
+      ],
+      "oos": {
+        "current": {
+          "cagr": 0.15428286597563678,
+          "vol": 0.261488577191421,
+          "sharpe": 0.6153421067891918,
+          "sharpe_per_period": 0.038766601418601034,
+          "max_drawdown": -0.4673497902086321,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13"
+        },
+        "candidate": {
+          "cagr": 0.15665608242582807,
+          "vol": 0.2631566274659059,
+          "sharpe": 0.6209382520307327,
+          "sharpe_per_period": 0.03911915901163074,
+          "max_drawdown": -0.4607205396043954,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13"
+        }
+      },
+      "oos_window": {
+        "start": "2006-01-03",
+        "end": "2026-11-13",
+        "n_days": 5250
+      },
+      "materiality": {
+        "pass": false,
+        "bar": {
+          "sharpe_improvement": 0.05,
+          "drawdown_improvement": 0.03,
+          "cagr_slack": 0.005,
+          "improvement_dsr_min": 0.75,
+          "neighbor_sharpe_tol": 0.05,
+          "neighbor_drawdown_tol": 0.03
+        },
+        "checks": [
+          {
+            "name": "a Sharpe +0.05",
+            "pass": false,
+            "detail": "Sharpe 0.615342 -> 0.620938 (delta 0.005596; need >= 0.05)."
+          },
+          {
+            "name": "a drawdown +3pp and CAGR within 0.5pp",
+            "pass": false,
+            "detail": "Max drawdown -0.467350 -> -0.460721 (delta 0.006629; need >= 0.03). CAGR 0.154283 -> 0.156656 (delta 0.002373; floor -0.0050)."
+          },
+          {
+            "name": "a overall",
+            "pass": false,
+            "detail": "Either the Sharpe clause or the drawdown clause is enough."
+          },
+          {
+            "name": "b deflated Sharpe of the improvement >= 0.75",
+            "pass": false,
+            "detail": "Improvement Sharpe 0.212488, deflated Sharpe 0.100915 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351."
+          },
+          {
+            "name": "b still helps with the best improvement year removed",
+            "pass": false,
+            "detail": "Removed 2008 (summed daily improvement 0.037365). Remaining Sharpe delta 0.001733, CAGR delta 0.000722, max-drawdown delta 0.004100."
+          },
+          {
+            "name": "b overall",
+            "pass": false,
+            "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+          },
+          {
+            "name": "c neighboring parameters",
+            "pass": true,
+            "detail": "All 1 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell."
+          }
+        ],
+        "oos": {
+          "current": {
+            "cagr": 0.15428286597563678,
+            "vol": 0.261488577191421,
+            "sharpe": 0.6153421067891918,
+            "sharpe_per_period": 0.038766601418601034,
+            "max_drawdown": -0.4673497902086321,
+            "n_days": 5250,
+            "start": "2006-01-03",
+            "end": "2026-11-13"
+          },
+          "candidate": {
+            "cagr": 0.15665608242582807,
+            "vol": 0.2631566274659059,
+            "sharpe": 0.6209382520307327,
+            "sharpe_per_period": 0.03911915901163074,
+            "max_drawdown": -0.4607205396043954,
+            "n_days": 5250,
+            "start": "2006-01-03",
+            "end": "2026-11-13"
+          }
+        },
+        "criterion_a": {
+          "sharpe_delta": 0.005596145241540951,
+          "cagr_delta": 0.0023732164501912845,
+          "max_drawdown_delta": 0.006629250604236692,
+          "sharpe_pass": false,
+          "drawdown_pass": false,
+          "pass": false
+        },
+        "criterion_b": {
+          "pass": false,
+          "dsr_pass": false,
+          "still_helps": false,
+          "improvement_sharpe": 0.2124880351311899,
+          "improvement_sharpe_per_period": 0.013386763027049881,
+          "improvement_dsr": 0.10091523138800124,
+          "sr0_daily": 0.030351353970967228,
+          "n_trials": 514,
+          "sharpe_dispersion_daily": 0.009916087137713397,
+          "best_year": 2008,
+          "best_year_improvement_sum": 0.03736547821039782,
+          "without_best_year": {
+            "sharpe_delta": 0.0017327294268033588,
+            "cagr_delta": 0.0007223976711814295,
+            "max_drawdown_delta": 0.004100210421165373,
+            "sharpe_pass": false,
+            "drawdown_pass": false,
+            "pass": false
+          }
+        },
+        "criterion_c": {
+          "pass": true,
+          "detail": "All 1 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell.",
+          "cell": {
+            "cagr": 0.15665608242582807,
+            "vol": 0.2631566274659059,
+            "sharpe": 0.6209382520307327,
+            "sharpe_per_period": 0.03911915901163074,
+            "max_drawdown": -0.4607205396043954,
+            "n_days": 5250,
+            "start": "2006-01-03",
+            "end": "2026-11-13"
+          },
+          "neighbors": [
+            {
+              "name": "monthly",
+              "similar": true,
+              "cagr": 0.15483229469992232,
+              "sharpe": 0.6172688250275781,
+              "max_drawdown": -0.47422396251019283,
+              "sharpe_gap": 0.003669427003154646,
+              "max_drawdown_gap": 0.013503422905797424
+            }
+          ]
+        }
+      },
+      "qqq_materiality": {
+        "pass": false,
+        "bar": {
+          "sharpe_improvement": 0.05,
+          "drawdown_improvement": 0.03,
+          "cagr_slack": 0.005,
+          "improvement_dsr_min": 0.75,
+          "neighbor_sharpe_tol": 0.05,
+          "neighbor_drawdown_tol": 0.03
+        },
+        "checks": [
+          {
+            "name": "a Sharpe +0.05",
+            "pass": true,
+            "detail": "Sharpe 0.615342 -> 0.668834 (delta 0.053492; need >= 0.05)."
+          },
+          {
+            "name": "a drawdown +3pp and CAGR within 0.5pp",
+            "pass": false,
+            "detail": "Max drawdown -0.467350 -> -0.554603 (delta -0.087253; need >= 0.03). CAGR 0.154283 -> 0.203128 (delta 0.048845; floor -0.0050)."
+          },
+          {
+            "name": "a overall",
+            "pass": true,
+            "detail": "Either the Sharpe clause or the drawdown clause is enough."
+          },
+          {
+            "name": "b deflated Sharpe of the improvement >= 0.75",
+            "pass": false,
+            "detail": "Improvement Sharpe 0.387095, deflated Sharpe 0.334058 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351."
+          },
+          {
+            "name": "b still helps with the best improvement year removed",
+            "pass": false,
+            "detail": "Removed 2020 (summed daily improvement 0.514554). Remaining Sharpe delta -0.009353, CAGR delta 0.025345, max-drawdown delta -0.087253."
+          },
+          {
+            "name": "b overall",
+            "pass": false,
+            "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+          },
+          {
+            "name": "c neighboring parameters",
+            "pass": true,
+            "detail": "All 1 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell."
+          }
+        ],
+        "oos": {
+          "current": {
+            "cagr": 0.15428286597563678,
+            "vol": 0.261488577191421,
+            "sharpe": 0.6153421067891918,
+            "sharpe_per_period": 0.038766601418601034,
+            "max_drawdown": -0.4673497902086321,
+            "n_days": 5250,
+            "start": "2006-01-03",
+            "end": "2026-11-13"
+          },
+          "candidate": {
+            "cagr": 0.20312819397338222,
+            "vol": 0.3363703338994434,
+            "sharpe": 0.6688337721574178,
+            "sharpe_per_period": 0.04213658056949575,
+            "max_drawdown": -0.5546027580384422,
+            "n_days": 5250,
+            "start": "2006-01-03",
+            "end": "2026-11-13"
+          }
+        },
+        "criterion_a": {
+          "sharpe_delta": 0.05349166536822603,
+          "cagr_delta": 0.048845327997745436,
+          "max_drawdown_delta": -0.08725296782981007,
+          "sharpe_pass": true,
+          "drawdown_pass": false,
+          "pass": true
+        },
+        "criterion_b": {
+          "pass": false,
+          "dsr_pass": false,
+          "still_helps": false,
+          "improvement_sharpe": 0.38709492643379845,
+          "improvement_sharpe_per_period": 0.024387010995434347,
+          "improvement_dsr": 0.33405830348925014,
+          "sr0_daily": 0.030351353970967228,
+          "n_trials": 514,
+          "sharpe_dispersion_daily": 0.009916087137713397,
+          "best_year": 2020,
+          "best_year_improvement_sum": 0.514553759261254,
+          "without_best_year": {
+            "sharpe_delta": -0.009352567154321645,
+            "cagr_delta": 0.0253448273853063,
+            "max_drawdown_delta": -0.08725296782981007,
+            "sharpe_pass": false,
+            "drawdown_pass": false,
+            "pass": false
+          }
+        },
+        "criterion_c": {
+          "pass": true,
+          "detail": "All 1 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell.",
+          "cell": {
+            "cagr": 0.2147043865993412,
+            "vol": 0.3333851807367682,
+            "sharpe": 0.7005076459421922,
+            "sharpe_per_period": 0.04413203712423154,
+            "max_drawdown": -0.5507156850072924,
+            "n_days": 5250,
+            "start": "2006-01-03",
+            "end": "2026-11-13"
+          },
+          "neighbors": [
+            {
+              "name": "qqq_band02",
+              "similar": true,
+              "cagr": 0.21246355360322777,
+              "sharpe": 0.6932751588524936,
+              "max_drawdown": -0.5546027580384422,
+              "sharpe_gap": 0.0072324870896985916,
+              "max_drawdown_gap": 0.003887073031149768
+            }
+          ]
+        }
+      },
+      "n_trials": 514,
+      "sharpe_dispersion_daily": 0.009916087137713397,
+      "last_pick": "daily"
+    },
+    {
+      "id": "2026-11-13-meanrev",
+      "date": "2026-11-13",
+      "title": "meanrev",
+      "hypothesis": "Three additional paper books, none of which replaces the trend account unless its own note says the materiality bar cleared and the desk adopts it. Mean reversion enters at the close while SPY is above its 200-day average, on RSI(2) below 5, 10, or 15, on IBS below 0.2, or on a close below the 5-day lower band, and holds SPY, SSO, or UPRO for 3, 5, or 10 sessions or until SPY closes above its 5-day average. Weekly rotation picks the best of UPRO or TQQQ, TMF, and UGL when that return beats T-bills over 21, 42, or 63 sessions, otherwise BIL. UGL is 2x gold. Nasdaq vol holds TQQQ in a 200-day band of 0% or 2%, sized to 20%, 30%, or 40% realized vol with a 100% cap. Bitcoin, if the coin prints, is long when a fast average is above a slow average (10/30, 20/50, 50/200) and otherwise BIL.",
+      "status": "tested",
+      "kept": false,
+      "decision": "rejected",
+      "decision_note": "meanrev walk-forward cell ibs_0.2_n03_UPRO: OOS CAGR 8.3%, Sharpe 0.435, max drawdown -37.2%, worst year 2023 (-13.7%), deflated Sharpe 0.417. Trades per year 23.856. Average holding days 1.909456740442656. At 10 bps per side, CAGR 6.3%. Correlation with the lead book 0.48978897612884037. A daily 50/50 blend compounds at 12.6% with max drawdown -37.0%. Best year removed (2025): CAGR 6.9%. Materiality against the lead book: fail. The trend book is not replaced. For 2026-11-16, hold BIL 100%. Entry: IBS < 0.2. Exit: SPY close above its 5-day average. Stop: flat after 3 sessions, or when SPY closes at or below its 200-day average.",
+      "overlay": "meanrev",
+      "variants": [],
+      "oos": {
+        "current": {
+          "cagr": 0.15428286597563678,
+          "vol": 0.261488577191421,
+          "sharpe": 0.6153421067891918,
+          "sharpe_per_period": 0.038766601418601034,
+          "max_drawdown": -0.4673497902086321,
+          "worst_year": 2022,
+          "worst_year_return": -0.26655201414807905,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13",
+          "turnover_per_year": 13.166725320291155,
+          "total_return": 18.86880997341037
+        },
+        "candidate": {
+          "cagr": 0.08264433017327355,
+          "vol": 0.1814545851005814,
+          "sharpe": 0.4349363323369547,
+          "sharpe_per_period": 0.027401023352935087,
+          "max_drawdown": -0.37228182801212173,
+          "worst_year": 2023,
+          "worst_year_return": -0.13737431722436644,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13",
+          "turnover_per_year": 35.664,
+          "total_return": 4.229429206419568,
+          "dsr": 0.4165217803439758,
+          "psr": 0.9748726731643066
+        }
+      },
+      "oos_window": {
+        "start": "2006-01-03",
+        "end": "2026-11-13",
+        "n_days": 5250
+      },
+      "materiality": {
+        "checks": [
+          {
+            "name": "a Sharpe +0.05",
+            "pass": false,
+            "detail": "Sharpe 0.615342 -> 0.434936 (delta -0.180406; need >= 0.05)."
+          },
+          {
+            "name": "a drawdown +3pp and CAGR within 0.5pp",
+            "pass": false,
+            "detail": "Max drawdown -0.467350 -> -0.372282 (delta 0.095068; need >= 0.03). CAGR 0.154283 -> 0.082644 (delta -0.071639; floor -0.0050)."
+          },
+          {
+            "name": "a overall",
+            "pass": false,
+            "detail": "Either the Sharpe clause or the drawdown clause is enough."
+          },
+          {
+            "name": "b deflated Sharpe of the improvement >= 0.75",
+            "pass": false,
+            "detail": "Improvement Sharpe -0.350166, deflated Sharpe 0.000083 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351."
+          },
+          {
+            "name": "b still helps with the best improvement year removed",
+            "pass": false,
+            "detail": "Removed 2022 (summed daily improvement 0.233244). Remaining Sharpe delta -0.229812, CAGR delta -0.090703, max-drawdown delta 0.095068."
+          },
+          {
+            "name": "b overall",
+            "pass": false,
+            "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+          },
+          {
+            "name": "c neighboring parameters",
+            "pass": false,
+            "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell."
+          }
+        ],
+        "pass": false
+      },
+      "n_trials": 514,
+      "last_pick": "ibs_0.2_n03_UPRO",
+      "walk_forward_picks": [
+        [
+          "2006-01-03",
+          "rsi2_05_n03_UPRO"
+        ],
+        [
+          "2007-01-03",
+          "rsi2_10_n10_UPRO"
+        ],
+        [
+          "2008-01-02",
+          "rsi2_05_n10_UPRO"
+        ],
+        [
+          "2009-01-02",
+          "rsi2_05_n10_UPRO"
+        ],
+        [
+          "2010-01-04",
+          "rsi2_05_n10_UPRO"
+        ],
+        [
+          "2011-01-03",
+          "rsi2_05_n10_UPRO"
+        ],
+        [
+          "2012-01-03",
+          "ibs_0.2_n03_UPRO"
+        ],
+        [
+          "2013-01-02",
+          "ibs_0.2_n03_UPRO"
+        ],
+        [
+          "2014-01-02",
+          "rsi2_10_n03_UPRO"
+        ],
+        [
+          "2015-01-02",
+          "ibs_0.2_n03_UPRO"
+        ],
+        [
+          "2016-01-04",
+          "rsi2_05_n03_UPRO"
+        ],
+        [
+          "2017-01-03",
+          "ibs_0.2_n03_UPRO"
+        ],
+        [
+          "2018-01-02",
+          "ibs_0.2_n03_UPRO"
+        ],
+        [
+          "2019-01-02",
+          "ibs_0.2_n03_UPRO"
+        ],
+        [
+          "2020-01-02",
+          "ibs_0.2_n03_UPRO"
+        ],
+        [
+          "2021-01-04",
+          "ibs_0.2_n03_UPRO"
+        ],
+        [
+          "2022-01-03",
+          "ibs_0.2_n10_UPRO"
+        ],
+        [
+          "2023-01-03",
+          "ibs_0.2_n10_UPRO"
+        ],
+        [
+          "2024-01-02",
+          "ibs_0.2_n03_UPRO"
+        ],
+        [
+          "2025-01-02",
+          "ibs_0.2_n03_UPRO"
+        ],
+        [
+          "2026-01-02",
+          "ibs_0.2_n03_UPRO"
+        ]
+      ]
+    },
+    {
+      "id": "2026-11-13-rotation",
+      "date": "2026-11-13",
+      "title": "rotation",
+      "hypothesis": "Three additional paper books, none of which replaces the trend account unless its own note says the materiality bar cleared and the desk adopts it. Mean reversion enters at the close while SPY is above its 200-day average, on RSI(2) below 5, 10, or 15, on IBS below 0.2, or on a close below the 5-day lower band, and holds SPY, SSO, or UPRO for 3, 5, or 10 sessions or until SPY closes above its 5-day average. Weekly rotation picks the best of UPRO or TQQQ, TMF, and UGL when that return beats T-bills over 21, 42, or 63 sessions, otherwise BIL. UGL is 2x gold. Nasdaq vol holds TQQQ in a 200-day band of 0% or 2%, sized to 20%, 30%, or 40% realized vol with a 100% cap. Bitcoin, if the coin prints, is long when a fast average is above a slow average (10/30, 20/50, 50/200) and otherwise BIL.",
+      "status": "tested",
+      "kept": false,
+      "decision": "rejected",
+      "decision_note": "rotation walk-forward cell TQQQ_L63: OOS CAGR 17.5%, Sharpe 0.550, max drawdown -71.0%, worst year 2022 (-60.7%), deflated Sharpe 0.615. Trades per year 1.3268744734625104. Average holding days 177.32. At 10 bps per side, CAGR 16.4%. Correlation with the lead book 0.3292953224752682. A daily 50/50 blend compounds at 20.4% with max drawdown -53.4%. Best year removed (2025): CAGR 13.1%. Materiality against the lead book: fail. The trend book is not replaced. For 2026-11-16, hold BIL 100%. Entry: week-ending close, top trailing 63-session return among TQQQ, TMF, and UGL, and only if it beats cash. Exit: the next week-ending close, when the ranking is run again. Stop: cash when the best risky sleeve does not beat the T-bill return over the same window.",
+      "overlay": "rotation",
+      "variants": [],
+      "oos": {
+        "current": {
+          "cagr": 0.15428286597563678,
+          "vol": 0.261488577191421,
+          "sharpe": 0.6153421067891918,
+          "sharpe_per_period": 0.038766601418601034,
+          "max_drawdown": -0.4673497902086321,
+          "worst_year": 2022,
+          "worst_year_return": -0.26655201414807905,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13",
+          "turnover_per_year": 13.166725320291155,
+          "total_return": 18.86880997341037
+        },
+        "candidate": {
+          "cagr": 0.17495266706540136,
+          "vol": 0.4747085480237469,
+          "sharpe": 0.5497227195948803,
+          "sharpe_per_period": 0.03463292363406639,
+          "max_drawdown": -0.7100746389815972,
+          "worst_year": 2022,
+          "worst_year_return": -0.6065479526718562,
+          "n_days": 4748,
+          "start": "2008-01-02",
+          "end": "2026-11-13",
+          "turnover_per_year": 10.614995787700083,
+          "total_return": 19.858002361804495,
+          "dsr": 0.615119456602569,
+          "psr": 0.991045667510644
+        }
+      },
+      "oos_window": {
+        "start": "2008-01-02",
+        "end": "2026-11-13",
+        "n_days": 4748
+      },
+      "materiality": {
+        "checks": [
+          {
+            "name": "a Sharpe +0.05",
+            "pass": false,
+            "detail": "Sharpe 0.675655 -> 0.549723 (delta -0.125933; need >= 0.05)."
+          },
+          {
+            "name": "a drawdown +3pp and CAGR within 0.5pp",
+            "pass": false,
+            "detail": "Max drawdown -0.442860 -> -0.710075 (delta -0.267215; need >= 0.03). CAGR 0.170132 -> 0.174953 (delta 0.004821; floor -0.0050)."
+          },
+          {
+            "name": "a overall",
+            "pass": false,
+            "detail": "Either the Sharpe clause or the drawdown clause is enough."
+          },
+          {
+            "name": "b deflated Sharpe of the improvement >= 0.75",
+            "pass": false,
+            "detail": "Improvement Sharpe 0.179843, deflated Sharpe 0.094683 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351."
+          },
+          {
+            "name": "b still helps with the best improvement year removed",
+            "pass": false,
+            "detail": "Removed 2011 (summed daily improvement 0.818541). Remaining Sharpe delta -0.222891, CAGR delta -0.038949, max-drawdown delta -0.267215."
+          },
+          {
+            "name": "b overall",
+            "pass": false,
+            "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+          },
+          {
+            "name": "c neighboring parameters",
+            "pass": false,
+            "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell."
+          }
+        ],
+        "pass": false
+      },
+      "n_trials": 514,
+      "last_pick": "TQQQ_L63",
+      "walk_forward_picks": [
+        [
+          "2008-01-02",
+          "UPRO_L63"
+        ],
+        [
+          "2009-01-02",
+          "UPRO_L63"
+        ],
+        [
+          "2010-01-04",
+          "UPRO_L63"
+        ],
+        [
+          "2011-01-03",
+          "UPRO_L63"
+        ],
+        [
+          "2012-01-03",
+          "UPRO_L63"
+        ],
+        [
+          "2013-01-02",
+          "UPRO_L63"
+        ],
+        [
+          "2014-01-02",
+          "UPRO_L63"
+        ],
+        [
+          "2015-01-02",
+          "TQQQ_L63"
+        ],
+        [
+          "2016-01-04",
+          "TQQQ_L63"
+        ],
+        [
+          "2017-01-03",
+          "TQQQ_L63"
+        ],
+        [
+          "2018-01-02",
+          "TQQQ_L63"
+        ],
+        [
+          "2019-01-02",
+          "TQQQ_L63"
+        ],
+        [
+          "2020-01-02",
+          "TQQQ_L63"
+        ],
+        [
+          "2021-01-04",
+          "TQQQ_L63"
+        ],
+        [
+          "2022-01-03",
+          "TQQQ_L63"
+        ],
+        [
+          "2023-01-03",
+          "TQQQ_L63"
+        ],
+        [
+          "2024-01-02",
+          "TQQQ_L63"
+        ],
+        [
+          "2025-01-02",
+          "TQQQ_L63"
+        ],
+        [
+          "2026-01-02",
+          "TQQQ_L63"
+        ]
+      ]
+    },
+    {
+      "id": "2026-11-13-nasdaq-vol",
+      "date": "2026-11-13",
+      "title": "nasdaq-vol",
+      "hypothesis": "Three additional paper books, none of which replaces the trend account unless its own note says the materiality bar cleared and the desk adopts it. Mean reversion enters at the close while SPY is above its 200-day average, on RSI(2) below 5, 10, or 15, on IBS below 0.2, or on a close below the 5-day lower band, and holds SPY, SSO, or UPRO for 3, 5, or 10 sessions or until SPY closes above its 5-day average. Weekly rotation picks the best of UPRO or TQQQ, TMF, and UGL when that return beats T-bills over 21, 42, or 63 sessions, otherwise BIL. UGL is 2x gold. Nasdaq vol holds TQQQ in a 200-day band of 0% or 2%, sized to 20%, 30%, or 40% realized vol with a 100% cap. Bitcoin, if the coin prints, is long when a fast average is above a slow average (10/30, 20/50, 50/200) and otherwise BIL.",
+      "status": "tested",
+      "kept": false,
+      "decision": "rejected",
+      "decision_note": "nasdaq-vol walk-forward cell band02_vol30: OOS CAGR 16.3%, Sharpe 0.618, max drawdown -47.1%, worst year 2008 (-31.3%), deflated Sharpe 0.731. Trades per year 1.104. Average holding days 180.91304347826087. At 10 bps per side, CAGR 15.9%. Correlation with the lead book 0.7615422326302107. A daily 50/50 blend compounds at 16.4% with max drawdown -41.0%. Best year removed (2017): CAGR 12.7%. Materiality against the lead book: fail. The trend book is not replaced. For 2026-11-16, hold BIL 100%. Entry: QQQ close above 694.8247 (200-day average times 1.02). Exit: QQQ close below 667.5767 (200-day average times 0.98). Stop: no price stop; the position is resized every session to the vol target and capped at 100% TQQQ.",
+      "overlay": "nasdaq-vol",
+      "variants": [],
+      "oos": {
+        "current": {
+          "cagr": 0.15428286597563678,
+          "vol": 0.261488577191421,
+          "sharpe": 0.6153421067891918,
+          "sharpe_per_period": 0.038766601418601034,
+          "max_drawdown": -0.4673497902086321,
+          "worst_year": 2022,
+          "worst_year_return": -0.26655201414807905,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13",
+          "turnover_per_year": 13.166725320291155,
+          "total_return": 18.86880997341037
+        },
+        "candidate": {
+          "cagr": 0.1625216062701147,
+          "vol": 0.2798324134633432,
+          "sharpe": 0.6183277959522919,
+          "sharpe_per_period": 0.038954700072128416,
+          "max_drawdown": -0.47079425341169834,
+          "worst_year": 2008,
+          "worst_year_return": -0.3125019287770522,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13",
+          "turnover_per_year": 5.222367556234943,
+          "total_return": 22.04207188150473,
+          "dsr": 0.7305008578331552,
+          "psr": 0.9972953338189372
+        }
+      },
+      "oos_window": {
+        "start": "2006-01-03",
+        "end": "2026-11-13",
+        "n_days": 5250
+      },
+      "materiality": {
+        "checks": [
+          {
+            "name": "a Sharpe +0.05",
+            "pass": false,
+            "detail": "Sharpe 0.615342 -> 0.618328 (delta 0.002986; need >= 0.05)."
+          },
+          {
+            "name": "a drawdown +3pp and CAGR within 0.5pp",
+            "pass": false,
+            "detail": "Max drawdown -0.467350 -> -0.470794 (delta -0.003444; need >= 0.03). CAGR 0.154283 -> 0.162522 (delta 0.008239; floor -0.0050)."
+          },
+          {
+            "name": "a overall",
+            "pass": false,
+            "detail": "Either the Sharpe clause or the drawdown clause is enough."
+          },
+          {
+            "name": "b deflated Sharpe of the improvement >= 0.75",
+            "pass": false,
+            "detail": "Improvement Sharpe 0.064545, deflated Sharpe 0.028465 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351."
+          },
+          {
+            "name": "b still helps with the best improvement year removed",
+            "pass": false,
+            "detail": "Removed 2007 (summed daily improvement 0.448312). Remaining Sharpe delta -0.064929, CAGR delta -0.015037, max-drawdown delta -0.035594."
+          },
+          {
+            "name": "b overall",
+            "pass": false,
+            "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+          },
+          {
+            "name": "c neighboring parameters",
+            "pass": false,
+            "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell."
+          }
+        ],
+        "pass": false
+      },
+      "n_trials": 514,
+      "last_pick": "band02_vol30",
+      "walk_forward_picks": [
+        [
+          "2006-01-03",
+          "band02_vol40"
+        ],
+        [
+          "2007-01-03",
+          "band02_vol40"
+        ],
+        [
+          "2008-01-02",
+          "band02_vol40"
+        ],
+        [
+          "2009-01-02",
+          "band02_vol40"
+        ],
+        [
+          "2010-01-04",
+          "band02_vol40"
+        ],
+        [
+          "2011-01-03",
+          "band02_vol40"
+        ],
+        [
+          "2012-01-03",
+          "band02_vol20"
+        ],
+        [
+          "2013-01-02",
+          "band02_vol20"
+        ],
+        [
+          "2014-01-02",
+          "band02_vol20"
+        ],
+        [
+          "2015-01-02",
+          "band02_vol20"
+        ],
+        [
+          "2016-01-04",
+          "band02_vol20"
+        ],
+        [
+          "2017-01-03",
+          "band02_vol40"
+        ],
+        [
+          "2018-01-02",
+          "band02_vol20"
+        ],
+        [
+          "2019-01-02",
+          "band02_vol20"
+        ],
+        [
+          "2020-01-02",
+          "band02_vol20"
+        ],
+        [
+          "2021-01-04",
+          "band02_vol30"
+        ],
+        [
+          "2022-01-03",
+          "band02_vol30"
+        ],
+        [
+          "2023-01-03",
+          "band02_vol30"
+        ],
+        [
+          "2024-01-02",
+          "band02_vol30"
+        ],
+        [
+          "2025-01-02",
+          "band02_vol30"
+        ],
+        [
+          "2026-01-02",
+          "band02_vol30"
+        ]
+      ]
+    },
+    {
+      "id": "2026-11-13-btc-trend",
+      "date": "2026-11-13",
+      "title": "btc-trend",
+      "hypothesis": "Three additional paper books, none of which replaces the trend account unless its own note says the materiality bar cleared and the desk adopts it. Mean reversion enters at the close while SPY is above its 200-day average, on RSI(2) below 5, 10, or 15, on IBS below 0.2, or on a close below the 5-day lower band, and holds SPY, SSO, or UPRO for 3, 5, or 10 sessions or until SPY closes above its 5-day average. Weekly rotation picks the best of UPRO or TQQQ, TMF, and UGL when that return beats T-bills over 21, 42, or 63 sessions, otherwise BIL. UGL is 2x gold. Nasdaq vol holds TQQQ in a 200-day band of 0% or 2%, sized to 20%, 30%, or 40% realized vol with a 100% cap. Bitcoin, if the coin prints, is long when a fast average is above a slow average (10/30, 20/50, 50/200) and otherwise BIL.",
+      "status": "tested",
+      "kept": false,
+      "decision": "rejected",
+      "decision_note": "btc-trend walk-forward cell sma10_030: OOS CAGR 35.8%, Sharpe 0.834, max drawdown -66.5%, worst year 2022 (-31.7%), deflated Sharpe 0.833. Trades per year 4.329459322890349. Average holding days 32.411764705882355. At 10 bps per side, CAGR 35.2%. Correlation with the lead book 0.18947819847134223. A daily 50/50 blend compounds at 32.5% with max drawdown -47.3%. Best year removed (2021): CAGR 26.8%. Materiality against the lead book: fail. The trend book is not replaced. For 2026-11-16, hold BIL 100%. Entry: BTC 10-day average above its 30-day average. Exit: BTC 10-day average at or below its 30-day average. Stop: no price stop; the alternative is BIL.",
+      "overlay": "btc-trend",
+      "variants": [],
+      "oos": {
+        "current": {
+          "cagr": 0.15428286597563678,
+          "vol": 0.261488577191421,
+          "sharpe": 0.6153421067891918,
+          "sharpe_per_period": 0.038766601418601034,
+          "max_drawdown": -0.4673497902086321,
+          "worst_year": 2022,
+          "worst_year_return": -0.26655201414807905,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13",
+          "turnover_per_year": 13.166725320291155,
+          "total_return": 18.86880997341037
+        },
+        "candidate": {
+          "cagr": 0.3579451225640109,
+          "vol": 0.46856320892919995,
+          "sharpe": 0.8336277530674094,
+          "sharpe_per_period": 0.05252688514006888,
+          "max_drawdown": -0.6652554823354339,
+          "worst_year": 2022,
+          "worst_year_return": -0.31654476988085467,
+          "n_days": 1979,
+          "start": "2019-01-02",
+          "end": "2026-11-13",
+          "turnover_per_year": 8.658918645780698,
+          "total_return": 10.054707901511552,
+          "dsr": 0.8333704001784892,
+          "psr": 0.9890434271933046
+        }
+      },
+      "oos_window": {
+        "start": "2019-01-02",
+        "end": "2026-11-13",
+        "n_days": 1979
+      },
+      "materiality": {
+        "checks": [
+          {
+            "name": "a Sharpe +0.05",
+            "pass": true,
+            "detail": "Sharpe 0.732277 -> 0.833628 (delta 0.101351; need >= 0.05)."
+          },
+          {
+            "name": "a drawdown +3pp and CAGR within 0.5pp",
+            "pass": false,
+            "detail": "Max drawdown -0.442860 -> -0.665255 (delta -0.222396; need >= 0.03). CAGR 0.212924 -> 0.357945 (delta 0.145021; floor -0.0050)."
+          },
+          {
+            "name": "a overall",
+            "pass": true,
+            "detail": "Either the Sharpe clause or the drawdown clause is enough."
+          },
+          {
+            "name": "b deflated Sharpe of the improvement >= 0.75",
+            "pass": false,
+            "detail": "Improvement Sharpe 0.371797, deflated Sharpe 0.378820 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351."
+          },
+          {
+            "name": "b still helps with the best improvement year removed",
+            "pass": true,
+            "detail": "Removed 2019 (summed daily improvement 0.443468). Remaining Sharpe delta 0.092540, CAGR delta 0.106394, max-drawdown delta -0.088820."
+          },
+          {
+            "name": "b overall",
+            "pass": false,
+            "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+          },
+          {
+            "name": "c neighboring parameters",
+            "pass": false,
+            "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell."
+          }
+        ],
+        "pass": false
+      },
+      "n_trials": 514,
+      "last_pick": "sma10_030",
+      "walk_forward_picks": [
+        [
+          "2019-01-02",
+          "sma10_030"
+        ],
+        [
+          "2020-01-02",
+          "sma20_050"
+        ],
+        [
+          "2021-01-04",
+          "sma10_030"
+        ],
+        [
+          "2022-01-03",
+          "sma10_030"
+        ],
+        [
+          "2023-01-03",
+          "sma10_030"
+        ],
+        [
+          "2024-01-02",
+          "sma10_030"
+        ],
+        [
+          "2025-01-02",
+          "sma10_030"
+        ],
+        [
+          "2026-01-02",
+          "sma10_030"
+        ]
+      ]
+    },
+    {
+      "id": "2026-11-13-spy-rsi-boost",
+      "date": "2026-11-13",
+      "title": "spy-rsi-boost",
+      "hypothesis": "Three additional paper books, none of which replaces the trend account unless its own note says the materiality bar cleared and the desk adopts it. Mean reversion enters at the close while SPY is above its 200-day average, on RSI(2) below 5, 10, or 15, on IBS below 0.2, or on a close below the 5-day lower band, and holds SPY, SSO, or UPRO for 3, 5, or 10 sessions or until SPY closes above its 5-day average. Weekly rotation picks the best of UPRO or TQQQ, TMF, and UGL when that return beats T-bills over 21, 42, or 63 sessions, otherwise BIL. UGL is 2x gold. Nasdaq vol holds TQQQ in a 200-day band of 0% or 2%, sized to 20%, 30%, or 40% realized vol with a 100% cap. Bitcoin, if the coin prints, is long when a fast average is above a slow average (10/30, 20/50, 50/200) and otherwise BIL.",
+      "status": "tested",
+      "kept": false,
+      "decision": "rejected",
+      "decision_note": "spy-rsi-boost walk-forward cell rsi10_f33_n10: OOS CAGR 12.4%, Sharpe 0.580, max drawdown -55.1%, worst year 2008 (-36.8%), deflated Sharpe 0.311. Trades per year 8.112. Average holding days 3.4437869822485205. At 10 bps per side, CAGR n/a. Correlation with the lead book 0.8613128309586122. A daily 50/50 blend compounds at 14.1% with max drawdown -50.7%. Best year removed (None): CAGR 11.8%. Materiality against the lead book: fail. The trend book is not replaced. For 2026-11-16, hold SPY 100%. Entry: Wilder RSI(2) < 10 and SPY above its 200-day average. Exit: RSI(2) > 70, or SPY close above its 5-day average (754.7820), or 10 sessions. Stop: none.",
+      "overlay": "spy-rsi-boost",
+      "variants": [],
+      "oos": {
+        "current": {
+          "cagr": 0.15428286597563678,
+          "vol": 0.261488577191421,
+          "sharpe": 0.6153421067891918,
+          "sharpe_per_period": 0.038766601418601034,
+          "max_drawdown": -0.4673497902086321,
+          "worst_year": 2022,
+          "worst_year_return": -0.26655201414807905,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13",
+          "turnover_per_year": 13.166725320291155,
+          "total_return": 18.86880997341037
+        },
+        "candidate": {
+          "cagr": 0.12359883736699828,
+          "vol": 0.20927010305178295,
+          "sharpe": 0.5801817862739512,
+          "sharpe_per_period": 0.0365514984439698,
+          "max_drawdown": -0.5512174836327495,
+          "worst_year": 2008,
+          "worst_year_return": -0.3679500812377733,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13",
+          "turnover_per_year": 5.509821860067375,
+          "total_return": 10.334482351374165,
+          "dsr": 0.3108201146571866
+        }
+      },
+      "oos_window": {
+        "start": "2006-01-03",
+        "end": "2026-11-13",
+        "n_days": 5250
+      },
+      "materiality": {
+        "checks": [
+          {
+            "name": "a Sharpe +0.05",
+            "pass": false,
+            "detail": "Sharpe 0.615342 -> 0.580296 (delta -0.035046; need >= 0.05)."
+          },
+          {
+            "name": "a drawdown +3pp and CAGR within 0.5pp",
+            "pass": false,
+            "detail": "Max drawdown -0.467350 -> -0.554086 (delta -0.086737; need >= 0.03). CAGR 0.154283 -> 0.128618 (delta -0.025665; floor -0.0050)."
+          },
+          {
+            "name": "a overall",
+            "pass": false,
+            "detail": "Either the Sharpe clause or the drawdown clause is enough."
+          },
+          {
+            "name": "b deflated Sharpe of the improvement >= 0.75",
+            "pass": false,
+            "detail": "Improvement Sharpe -0.244736, deflated Sharpe 0.000480 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351."
+          },
+          {
+            "name": "b still helps with the best improvement year removed",
+            "pass": false,
+            "detail": "Removed 2015 (summed daily improvement 0.209234). Remaining Sharpe delta -0.087021, CAGR delta -0.040821, max-drawdown delta -0.086737."
+          },
+          {
+            "name": "b overall",
+            "pass": false,
+            "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+          },
+          {
+            "name": "c neighboring parameters",
+            "pass": true,
+            "detail": "All 3 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell."
+          }
+        ],
+        "pass": false
+      },
+      "n_trials": 514,
+      "last_pick": "rsi10_f33_n10",
+      "walk_forward_picks": [
+        [
+          "2006-01-03",
+          "rsi10_f50_n10"
+        ],
+        [
+          "2007-01-03",
+          "rsi10_f50_n10"
+        ],
+        [
+          "2008-01-02",
+          "rsi05_f50_n10"
+        ],
+        [
+          "2009-01-02",
+          "rsi10_f50_n10"
+        ],
+        [
+          "2010-01-04",
+          "rsi10_f50_n10"
+        ],
+        [
+          "2011-01-03",
+          "rsi10_f50_n10"
+        ],
+        [
+          "2012-01-03",
+          "rsi05_f50_n05"
+        ],
+        [
+          "2013-01-02",
+          "rsi10_f50_n05"
+        ],
+        [
+          "2014-01-02",
+          "rsi10_f50_n05"
+        ],
+        [
+          "2015-01-02",
+          "rsi10_f50_n05"
+        ],
+        [
+          "2016-01-04",
+          "rsi10_f50_n05"
+        ],
+        [
+          "2017-01-03",
+          "rsi10_f50_n05"
+        ],
+        [
+          "2018-01-02",
+          "rsi10_f50_n05"
+        ],
+        [
+          "2019-01-02",
+          "rsi10_f50_n05"
+        ],
+        [
+          "2020-01-02",
+          "rsi10_f50_n05"
+        ],
+        [
+          "2021-01-04",
+          "rsi15_f50_n10"
+        ],
+        [
+          "2022-01-03",
+          "rsi15_f50_n10"
+        ],
+        [
+          "2023-01-03",
+          "rsi15_f50_n10"
+        ],
+        [
+          "2024-01-02",
+          "rsi15_f50_n10"
+        ],
+        [
+          "2025-01-02",
+          "rsi15_f50_n10"
+        ],
+        [
+          "2026-01-02",
+          "rsi15_f50_n10"
+        ]
+      ]
     }
   ]
 }
