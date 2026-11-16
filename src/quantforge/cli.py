@@ -27,6 +27,7 @@ from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs
 from quantforge.strategies.sleevediv import kept_sleeve_cash_choice, sleeve_cash_signal_kwargs
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal
 from quantforge.strategies.billgear import align_bill_yield, has_kept_bill, kept_bill_gear
+from quantforge.strategies.pause import has_kept_streak_pause, kept_streak_pause
 from quantforge.strategies.cushion import kept_cushion
 from quantforge.strategies.volgear import kept_vol_gear
 from quantforge.strategies.volscale import kept_sleeve_scale
@@ -182,6 +183,22 @@ def _signals(args) -> int:
             raise DataError("the iteration log kept both a bill-yield gear and a sleeve gear")
         if bill_share is not None and scale is not None:
             raise DataError("the iteration log kept both a bill-yield gear and a sleeve scale")
+        pause_share = None
+        pause_info = None
+        if has_kept_streak_pause(study / "iterations.json"):
+            pause_share, pause_info = kept_streak_pause(
+                study / "iterations.json", close, as_of=close.index[-1],
+            )
+        if pause_share is not None and bill_share is not None:
+            raise DataError("the iteration log kept both a down-streak pause and a bill-yield gear")
+        if pause_share is not None and cushion_share is not None:
+            raise DataError("the iteration log kept both a down-streak pause and a cushion scale")
+        if pause_share is not None and sleeve_upro_share is not None:
+            raise DataError("the iteration log kept both a down-streak pause and a vol gear")
+        if pause_share is not None and sleeve_fast is not None:
+            raise DataError("the iteration log kept both a down-streak pause and a sleeve gear")
+        if pause_share is not None and scale is not None:
+            raise DataError("the iteration log kept both a down-streak pause and a sleeve scale")
         drift_kwargs = {}
         if has_kept_drift(study / "iterations.json"):
             names = ["SPY", "SSO", "UPRO", "^IRX"]
@@ -218,6 +235,7 @@ def _signals(args) -> int:
             sleeve_upro_share=sleeve_upro_share, vol_gear_info=vol_gear_info,
             cushion_share=cushion_share, cushion_info=cushion_info,
             bill_share=bill_share, bill_info=bill_info,
+            pause_share=pause_share, pause_info=pause_info,
             ema_info=ema_info,
             **idle_kwargs,
             **drift_kwargs,

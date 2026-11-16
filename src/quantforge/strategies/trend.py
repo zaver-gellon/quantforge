@@ -249,6 +249,8 @@ def build_trend_signal(
     cushion_info: dict | None = None,
     bill_share: pd.Series | None = None,
     bill_info: dict | None = None,
+    pause_share: pd.Series | None = None,
+    pause_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -300,6 +302,10 @@ def build_trend_signal(
     cleared the bar. It cannot be set together with either of those shares.
     While the sleeve is on and the bill yield is expensive, the share is the
     kept floor and the rest of the sleeve is SPY.
+    ``pause_share`` is that same blend when a walk-forward down-streak pause
+    cleared the bar. It cannot be set together with any of those shares.
+    While the sleeve is on and a short run of down closes is still in force,
+    the share is the kept floor and the rest of the sleeve is SPY.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -409,7 +415,14 @@ def build_trend_signal(
         raise ValueError("a cushion scale and a realized-vol gear cannot both be kept")
     if bill_share is not None and (cushion_share is not None or sleeve_upro_share is not None):
         raise ValueError("a bill-yield gear and another sleeve blend cannot both be kept")
-    if bill_share is not None:
+    if pause_share is not None and (
+        bill_share is not None or cushion_share is not None or sleeve_upro_share is not None
+    ):
+        raise ValueError("a down-streak pause and another sleeve blend cannot both be kept")
+    if pause_share is not None:
+        blend_share = pause_share
+        blend_label = "streak_pause"
+    elif bill_share is not None:
         blend_share = bill_share
         blend_label = "bill_gear"
     else:
@@ -656,7 +669,14 @@ def build_trend_signal(
         if sleeve_cash_info:
             payload["diagnostics"].update(sleeve_cash_info)
         payload["diagnostics"]["sleeve_cash_applied"] = bool(sleeve_cash_now)
-    if bill_info or bill_share is not None:
+    if pause_info or pause_share is not None:
+        if pause_info:
+            payload["diagnostics"].update(pause_info)
+        payload["diagnostics"]["pause_share"] = None if pause_share is None else float(share_now)
+        payload["diagnostics"]["sleeve_leverage_applied"] = (
+            None if not sleeve_on or pause_share is None else float(1.0 + 2.0 * share_now)
+        )
+    elif bill_info or bill_share is not None:
         if bill_info:
             payload["diagnostics"].update(bill_info)
         payload["diagnostics"]["bill_share"] = None if bill_share is None else float(share_now)
