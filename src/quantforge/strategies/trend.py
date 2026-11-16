@@ -254,6 +254,8 @@ def build_trend_signal(
     dip_size_info: dict | None = None,
     drift_mix: pd.Series | None = None,
     drift_info: dict | None = None,
+    sym_mix: pd.Series | None = None,
+    sym_info: dict | None = None,
     sleeve_fast: pd.Series | None = None,
     sleeve_gear_info: dict | None = None,
     ema_info: dict | None = None,
@@ -306,6 +308,9 @@ def build_trend_signal(
     band cleared the materiality bar and the cell in force is not the calendar.
     True at the signal close resets both piles at the next open. Dates after
     ``as_of`` are ignored. A missing value on or before ``as_of`` is an error.
+    ``sym_mix`` is that same replacement when a walk-forward two-sided drift
+    band cleared the bar. It cannot replace the calendar together with
+    ``drift_mix``.
     ``sleeve_fast`` is set only when a walk-forward sleeve-gear rule cleared
     the materiality bar. False at the signal close, while the equity trend is
     on and no credit hedge has moved the sleeve, holds that sleeve in SPY
@@ -580,6 +585,17 @@ def build_trend_signal(
             raise ValueError("drift mix is missing sessions at or before as_of")
         scheduled = bool(aligned_mix.astype(bool).iloc[-1])
         drift_replaced_calendar = True
+    sym_replaced_calendar = False
+    if sym_info is not None and not bool(sym_info.get("sym_calendar", True)):
+        if drift_replaced_calendar:
+            raise ValueError("a one-sided drift band and a two-sided drift band cannot both replace the calendar")
+        if sym_mix is None:
+            raise ValueError("a two-sided drift band requires its mix series")
+        aligned_sym = sym_mix.reindex(visible.index)
+        if aligned_sym.isna().any():
+            raise ValueError("two-sided drift mix is missing sessions at or before as_of")
+        scheduled = bool(aligned_sym.astype(bool).iloc[-1])
+        sym_replaced_calendar = True
     changed = previous is None or on != previous
     dip_changed = abs(boost_now - boost_prev) > 1e-8
     hedge_changed = hedge_now != hedge_prev
@@ -637,7 +653,12 @@ def build_trend_signal(
         reason = "ontrend_slice"
     elif scheduled:
         trade = True
-        reason = "drift_band" if drift_replaced_calendar else "scheduled_rebalance"
+        if sym_replaced_calendar:
+            reason = "sym_drift"
+        elif drift_replaced_calendar:
+            reason = "drift_band"
+        else:
+            reason = "scheduled_rebalance"
     else:
         trade = False
         reason = "none"
@@ -746,6 +767,10 @@ def build_trend_signal(
         payload["diagnostics"].update(drift_info)
         if drift_replaced_calendar:
             payload["diagnostics"]["drift_mix"] = bool(scheduled)
+    if sym_info:
+        payload["diagnostics"].update(sym_info)
+        if sym_replaced_calendar:
+            payload["diagnostics"]["sym_mix"] = bool(scheduled)
     if sleeve_gear_info or sleeve_fast is not None:
         if sleeve_gear_info:
             payload["diagnostics"].update(sleeve_gear_info)
