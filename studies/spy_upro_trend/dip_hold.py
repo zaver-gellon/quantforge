@@ -51,6 +51,7 @@ from quantforge.strategies.diphold import (
 from quantforge.strategies.dipsize import kept_dip_size
 from quantforge.strategies.drawdown import kept_drawdown_scale
 from quantforge.strategies.drift import kept_drift_mix
+from quantforge.strategies.symdrift import kept_sym_drift
 from quantforge.strategies.ema import kept_ema_trend
 from quantforge.strategies.idle import idle_signal_kwargs, kept_idle_choice
 from quantforge.strategies.onslice import kept_ontrend_slice
@@ -364,6 +365,23 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         sso["open"], sso["close"], upro["open"], upro["close"],
         bundle["rf"], as_of=as_of,
     )
+    sym_mix, sym_info = kept_sym_drift(
+        HERE / "iterations.json",
+        bundle["spy_open"], bundle["spy_close"],
+        sso["open"], sso["close"], upro["open"], upro["close"],
+        bundle["rf"], as_of=as_of,
+    )
+    if (
+        sym_mix is not None
+        and drift_info is not None
+        and not drift_info.get("drift_calendar", True)
+    ):
+        raise RuntimeError("the iteration log kept both a one-sided drift band and a two-sided drift band")
+    sym_kwargs = {}
+    if sym_info is not None:
+        sym_kwargs["sym_info"] = sym_info
+    if sym_mix is not None:
+        sym_kwargs["sym_mix"] = sym_mix
     reentry_hold, reentry_info = kept_fast_reentry(
         HERE / "iterations.json", bundle["spy_close"], as_of=as_of,
     )
@@ -429,6 +447,7 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         core_hold=core_hold, core_hold_info=core_hold_info,
         curve_on=curve_on, curve_info=curve_info,
         drift_mix=drift_mix, drift_info=drift_info,
+        **sym_kwargs,
         sleeve_fast=sleeve_fast, sleeve_gear_info=gear_info,
         sleeve_upro_share=sleeve_upro, vol_gear_info=gear_vol_info,
         cushion_share=cushion, cushion_info=cushion_info,

@@ -26,6 +26,7 @@ class BacktestResult:
     turnover: pd.Series
     cost_drag: pd.Series
     exposure: pd.Series
+    sleeve_weight: pd.Series | None = None
 
 
 def _align_frame(frame: pd.DataFrame) -> pd.DataFrame:
@@ -299,14 +300,17 @@ def run_trend_core(
     sso_cost: float = 0.0,
     upro_cost: float = 0.0,
     execution: str = "next_open",
+    record_sleeve: bool = False,
 ) -> BacktestResult:
     """50/50 trend book with the dip overlay on the core only.
 
     ``trend_on[t]`` puts the sleeve in UPRO for the next session; otherwise the
     sleeve is cash. ``dip_on[t]`` swaps the core from SPY to SSO for the next
     session and does not resize the sleeve. ``mix_rebalance[t]`` resets both
-    piles to ``core_weight`` / ``sleeve_weight``. A dip flip leaves the UPRO
+    piles to ``core_weight`` / ``sleeve_weight``.     A dip flip leaves the UPRO
     pile's dollars where they were, apart from its share of any trading cost.
+    ``record_sleeve`` stores the close weight of the sleeve pile on sessions
+    when that pile is UPRO, and leaves the other sessions missing.
     """
     if execution not in ("next_open", "next_close"):
         raise ValueError(f"unknown execution {execution!r}")
@@ -338,6 +342,7 @@ def run_trend_core(
     turn = np.zeros(n)
     drag = np.zeros(n)
     exposure = np.full(n, np.nan)
+    sleeve_w = np.full(n, np.nan)
     for i in range(1, n):
         prev = core + sleeve + resid
         if execution == "next_open":
@@ -371,11 +376,14 @@ def run_trend_core(
         rets[i] = new / prev - 1.0
         invested = core + (sleeve if sleeve_upro else 0.0)
         exposure[i] = invested / new if new else 0.0
+        if record_sleeve and sleeve_upro and new:
+            sleeve_w[i] = sleeve / new
     return BacktestResult(
         returns=pd.Series(rets, index=idx, name="return"),
         turnover=pd.Series(turn, index=idx, name="turnover"),
         cost_drag=pd.Series(drag, index=idx, name="cost_drag"),
         exposure=pd.Series(exposure, index=idx, name="exposure"),
+        sleeve_weight=pd.Series(sleeve_w, index=idx, name="sleeve_weight") if record_sleeve else None,
     )
 
 
@@ -396,20 +404,24 @@ def run_drift_band(
     sso_cost: float = 0.0,
     upro_cost: float = 0.0,
     execution: str = "next_open",
+    sides: str = "above",
 ) -> tuple[BacktestResult, pd.Series]:
-    """Trend-core book that resets the mix only when UPRO is overweight.
+    """Trend-core book that resets the mix when the UPRO sleeve leaves its budget.
 
-    There is no calendar reset. After the close, if the sleeve is in UPRO and
-    its weight is strictly above ``sleeve_weight + band``, the next open resets
-    both piles to ``core_weight`` / ``sleeve_weight``. A sleeve in T-bills is
-    never trimmed, and a sleeve that has fallen below the target is not topped
-    up. A trend flip still swaps the sleeve instrument without resizing the
-    piles. The first session is the initial allocation. The returned series is
-    true on the close that calls for a reset at the next open. A 1e-12
-    tolerance keeps a reset from retriggering on floating-point dust.
+    There is no calendar reset. ``sides="above"`` (the default) resets only
+    when the sleeve is in UPRO and its weight is strictly above
+    ``sleeve_weight + band``. ``sides="absolute"`` resets when that weight is
+    strictly more than ``band`` away from ``sleeve_weight`` in either
+    direction. A sleeve in T-bills is left alone. A trend flip still swaps the
+    sleeve instrument without resizing the piles. The first session is the
+    initial allocation. The returned series is true on the close that calls
+    for a reset at the next open. A 1e-12 tolerance keeps a reset from
+    retriggering on floating-point dust.
     """
     if execution not in ("next_open", "next_close"):
         raise ValueError(f"unknown execution {execution!r}")
+    if sides not in ("above", "absolute"):
+        raise ValueError(f"unknown drift sides {sides!r}")
     width = float(band)
     if not np.isfinite(width) or width < 0.0:
         raise ValueError("drift band must be finite and non-negative")
@@ -477,7 +489,12 @@ def run_drift_band(
         rets[i] = new / prev - 1.0
         invested = core + (sleeve if sleeve_upro else 0.0)
         exposure[i] = invested / new if new else 0.0
-        pending = bool(sleeve_upro and new > 0.0 and sleeve / new > ceiling + 1e-12)
+        if sides == "above":
+            pending = bool(sleeve_upro and new > 0.0 and sleeve / new > ceiling + 1e-12)
+        else:
+            pending = bool(
+                sleeve_upro and new > 0.0 and abs(sleeve / new - float(sleeve_weight)) > width + 1e-12
+            )
         mix_next[i] = pending
     result = BacktestResult(
         returns=pd.Series(rets, index=idx, name="return"),
@@ -486,6 +503,46 @@ def run_drift_band(
         exposure=pd.Series(exposure, index=idx, name="exposure"),
     )
     return result, pd.Series(mix_next, index=idx, name="drift_mix")
+
+
+def run_symmetric_drift(
+    spy_open: pd.Series,
+    spy_close: pd.Series,
+    sso_open: pd.Series,
+    sso_close: pd.Series,
+    upro_open: pd.Series,
+    upro_close: pd.Series,
+    trend_on: pd.Series,
+    dip_on: pd.Series,
+    band: float,
+    core_weight: float,
+    sleeve_weight: float,
+    cash_yield: pd.Series,
+    spy_cost: float = 0.0,
+    sso_cost: float = 0.0,
+    upro_cost: float = 0.0,
+    execution: str = "next_open",
+) -> tuple[BacktestResult, pd.Series]:
+    """Trend-core book that resets the mix when UPRO's weight leaves a band.
+
+    There is no calendar reset. After the close, if the sleeve is in UPRO and
+    the absolute gap between its weight and ``sleeve_weight`` is strictly
+    wider than ``band``, the next open resets both piles to ``core_weight`` /
+    ``sleeve_weight``. That buys the sleeve back after it has shrunk and sells
+    it after it has grown. A sleeve in T-bills is left alone. A trend flip
+    still swaps the sleeve instrument without resizing the piles. The first
+    session is the initial allocation. The returned series is true on the
+    close that calls for a reset at the next open. A 1e-12 tolerance keeps a
+    reset from retriggering on floating-point dust.
+    """
+    result, mix = run_drift_band(
+        spy_open, spy_close, sso_open, sso_close, upro_open, upro_close,
+        trend_on, dip_on, band, core_weight, sleeve_weight, cash_yield,
+        spy_cost=spy_cost, sso_cost=sso_cost, upro_cost=upro_cost, execution=execution,
+        sides="absolute",
+    )
+    mix.name = "sym_mix"
+    return result, mix
 
 
 def run_dip_size(

@@ -20,6 +20,7 @@ from quantforge.strategies.corehold import kept_core_hold
 from quantforge.strategies.credit import kept_hedge_stress
 from quantforge.strategies.drawdown import kept_drawdown_scale
 from quantforge.strategies.drift import has_kept_drift, kept_drift_mix, lagged_tbill
+from quantforge.strategies.symdrift import has_kept_sym, kept_sym_drift
 from quantforge.strategies.reentry import kept_fast_reentry
 from quantforge.strategies.ema import kept_ema_trend
 from quantforge.strategies.sleevegear import kept_sleeve_gear
@@ -223,6 +224,34 @@ def _signals(args) -> int:
                 irx, as_of=spy_frame.index[-1],
             )
             drift_kwargs = {"drift_mix": drift_mix, "drift_info": drift_info}
+        sym_kwargs = {}
+        if has_kept_sym(study / "iterations.json"):
+            if has_kept_drift(study / "iterations.json"):
+                raise DataError(
+                    "the iteration log kept both a one-sided drift band and a two-sided drift band"
+                )
+            names = ["SPY", "SSO", "UPRO", "^IRX"]
+            loaded = load_bars(
+                get_source("yahoo"), names,
+                start=args.start, end=args.end, cache_dir=cache,
+            )
+            spy_frame = loaded["SPY"]
+            irx = lagged_tbill(loaded["^IRX"]["close"], spy_frame.index)
+            synth = {}
+            for symbol, leverage in (("SSO", 2), ("UPRO", 3)):
+                meta = LEVERAGED_ETFS[symbol]
+                synth[leverage] = synthesize_leveraged(
+                    spy_frame["open"], spy_frame["close"], irx,
+                    leverage, meta["expense_ratio"], FINANCING_SPREAD,
+                )
+            sym_mix, sym_info = kept_sym_drift(
+                study / "iterations.json",
+                spy_frame["open"], spy_frame["close"],
+                synth[2]["open"], synth[2]["close"],
+                synth[3]["open"], synth[3]["close"],
+                irx, as_of=spy_frame.index[-1],
+            )
+            sym_kwargs = {"sym_mix": sym_mix, "sym_info": sym_info}
         payload = build_trend_signal(
             TrendCoreSpec(), close, strategy_id="trend_core",
             hedge_on=stress, hedge_rule=rule, hedge_info=info,
@@ -239,6 +268,7 @@ def _signals(args) -> int:
             ema_info=ema_info,
             **idle_kwargs,
             **drift_kwargs,
+            **sym_kwargs,
             **sleeve_cash_kwargs,
         )
         dest = Path(args.out) if args.out else study / "signals.json"
