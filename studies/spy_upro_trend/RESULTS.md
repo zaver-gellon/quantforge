@@ -1420,3 +1420,75 @@ Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample win
 Decision: rejected.
 
 Refreshed lead out-of-sample 2006-01-03 to 2026-11-09 (5246 sessions): CAGR 0.156155, Sharpe 0.619449, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-09 (8503 sessions). SSO ends 2026-11-09, UPRO ends 2026-11-09, ^IRX ends 2026-11-09. That is the Monday 2026-11-09 close. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-06 (5245 sessions) has CAGR 0.153712, Sharpe 0.611631, max drawdown -0.468261, against the stored row CAGR 0.153712, Sharpe 0.611632, max drawdown -0.468259. Candidate versus that refreshed book: Sharpe 0.619449 -> 0.620862 (delta 0.001412), CAGR 0.156155 -> 0.152861 (delta -0.003295), max drawdown -0.468261 -> -0.441649 (delta 0.026612). Last walk-forward pick: vgear_lb021_tv60. Out-of-sample turnover per year 13.17 -> 13.44. Of 4137 out-of-sample sessions with the 200-day band on, the stitched rule set the sleeve's UPRO share below 1 on 489. Mean close-known leverage on band-on sessions was 2.911. A share of 1 matches the trend core (max abs return gap 0.000e+00). The stitched vol gear does not clear the materiality bar. The live book stays the plain trend core. Previous signal 2026-11-09 (close 2026-11-06): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-10 (close 2026-11-09): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.
+
+### 2026-11-10 — Trend-cushion scale of the UPRO sleeve
+
+The live book's maximum drawdown is still about -46.8% because the 3x sleeve stays fully on until SPY closes through the lower side of its 200-day band. The 2026-11-06 write-up recorded the same lag on a quiet tape: SPY closed at 733.00 against a 200-day average of 727.39, inside the band, and the book stayed half UPRO. The 2026-11-09 realized-vol gear was the closest drawdown test so far, and it was rejected. It keys off trailing volatility, so a thin cushion on a calm tape does not cut leverage. The walk-forward pick left the sleeve near 3x, the stitched drawdown improved by less than 3 points, and the daily improvement had a negative Sharpe. Rules that sold the sleeve or the core into T-bills were rejected because the cash stake also sat out the rebound. This test does not sell the sleeve into T-bills while the 200-day band is on, and it does not add a second average. While that band is on, the sleeve stays in equities. Its UPRO share is the floor plus one minus the floor, times the close's percentage gap above the same 200-day average, divided by a width, and clipped to the unit interval. A gap at or below zero leaves the share at the floor. A gap at or above the width leaves the share at 1, which is the current sleeve. The rest of the sleeve is SPY, so a wide cushion stays at 3x and a thin cushion stays invested at lower leverage. While the band is off, the sleeve is T-bills, as in the live book. The core, the three-down-close dip, and the quarterly mix are unchanged. The sleeve's SPY stake is not dipped. A missing average leaves the share at 1. Widths are 4%, 8%, and 12%. Floors are 0 and 1/2, so the sleeve is at least unlevered SPY or at least 2x when the close is not above the average. The six cells are new trials. The current book, which keeps the share at 1 whenever the band is on, is the walk-forward's option to keep the present rule and is not a new trial. Fills stay next-open with 5 bp one-way costs. Cash pays no spread. The blend pays 5 bp on the SPY dollars and the UPRO dollars that trade. The stitched path is kept only when it clears the materiality bar.
+
+- `SPY` from 1993-01-29 to 2026-11-10 (8504 sessions).
+- `SSO` from 2006-06-21 to 2026-11-10 (5130 sessions).
+- `UPRO` from 2009-06-25 to 2026-11-10 (4372 sessions).
+- `^IRX` from 1990-01-02 to 2026-11-10 (9252 sessions).
+
+Refreshed lead book, out of sample, before the candidate is judged. Window 2006-01-03 to 2026-11-10 (5247 sessions): CAGR 15.57%, Sharpe 0.618, max drawdown -46.83%. Prior write-up `2026-11-09-vol-gear` through 2026-11-09: CAGR 15.62%, Sharpe 0.619, max drawdown -46.83%. Deltas versus that row: CAGR -0.04%, Sharpe -0.001, max drawdown 0.00%. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-10 (8504 sessions). SSO ends 2026-11-10, UPRO ends 2026-11-10, ^IRX ends 2026-11-10. That is the Tuesday 2026-11-10 close. The next NYSE session is 2026-11-11. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-09 (5246 sessions) has CAGR 0.156156, Sharpe 0.619450, max drawdown -0.468261, against the stored row CAGR 0.156155, Sharpe 0.619449, max drawdown -0.468261.
+
+Variants tried. Counting rows increment the ledger. The walk-forward stitch is a selection over those rows and is stored as an audit.
+
+| variant | counts | full-sample CAGR | Sharpe | max DD | years selected |
+| --- | --- | --- | --- | --- | --- |
+| cush_off | no | 12.8% | 0.52 | -46.8% | 21 |
+| cush_w04_f00 | yes | 11.5% | 0.49 | -45.3% | 0 |
+| cush_w04_f50 | yes | 12.1% | 0.51 | -46.0% | 0 |
+| cush_w08_f00 | yes | 10.6% | 0.48 | -42.4% | 0 |
+| cush_w08_f50 | yes | 11.7% | 0.50 | -44.6% | 0 |
+| cush_w12_f00 | yes | 9.8% | 0.46 | -40.6% | 0 |
+| cush_w12_f50 | yes | 11.3% | 0.49 | -43.8% | 0 |
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2006-01-03 | cush_off |
+| 2007-01-03 | cush_off |
+| 2008-01-02 | cush_off |
+| 2009-01-02 | cush_off |
+| 2010-01-04 | cush_off |
+| 2011-01-03 | cush_off |
+| 2012-01-03 | cush_off |
+| 2013-01-02 | cush_off |
+| 2014-01-02 | cush_off |
+| 2015-01-02 | cush_off |
+| 2016-01-04 | cush_off |
+| 2017-01-03 | cush_off |
+| 2018-01-02 | cush_off |
+| 2019-01-02 | cush_off |
+| 2020-01-02 | cush_off |
+| 2021-01-04 | cush_off |
+| 2022-01-03 | cush_off |
+| 2023-01-03 | cush_off |
+| 2024-01-02 | cush_off |
+| 2025-01-02 | cush_off |
+| 2026-01-02 | cush_off |
+
+Out-of-sample window: 2006-01-03 to 2026-11-10 (5247 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.57% | 0.618 | n/a | -46.83% |
+| candidate | 15.57% | 0.618 | n/a | -46.83% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.617998 -> 0.617998 (delta 0.000000; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.468261 -> -0.468261 (delta 0.000000; need >= 0.03). CAGR 0.155712 -> 0.155712 (delta 0.000000; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe 0.000000, deflated Sharpe 0.000000 (need >= 0.75). Trials 370, daily-Sharpe dispersion 0.009928, daily multiple-testing benchmark 0.029396. |
+| b still helps with the best improvement year removed | no | Removed 2006 (summed daily improvement 0.000000). Remaining Sharpe delta 0.000000, CAGR delta 0.000000, max-drawdown delta 0.000000. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | no | The last walk-forward pick is the current book, which has no parameter neighbors. |
+
+Decision: rejected.
+
+Refreshed lead out-of-sample 2006-01-03 to 2026-11-10 (5247 sessions): CAGR 0.155712, Sharpe 0.617998, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-10 (8504 sessions). SSO ends 2026-11-10, UPRO ends 2026-11-10, ^IRX ends 2026-11-10. That is the Tuesday 2026-11-10 close. The next NYSE session is 2026-11-11. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-09 (5246 sessions) has CAGR 0.156156, Sharpe 0.619450, max drawdown -0.468261, against the stored row CAGR 0.156155, Sharpe 0.619449, max drawdown -0.468261. Candidate versus that refreshed book: Sharpe 0.617998 -> 0.617998 (delta 0.000000), CAGR 0.155712 -> 0.155712 (delta 0.000000), max drawdown -0.468261 -> -0.468261 (delta 0.000000). Last walk-forward pick: cush_off. Out-of-sample turnover per year 13.17 -> 13.17. Of 4138 out-of-sample sessions with the 200-day band on, the stitched rule set the sleeve's UPRO share below 1 on 0. Mean close-known leverage on band-on sessions was 3.000. Mean close-over-average gap on those sessions was 0.0749. A share of 1 matches the trend core (max abs return gap 0.000e+00). The stitched cushion scale does not clear the materiality bar. The live book stays the plain trend core. Previous signal 2026-11-10 (close 2026-11-09): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-11 (close 2026-11-10): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.

@@ -58,6 +58,7 @@ from quantforge.strategies.ema import kept_ema_trend  # noqa: E402
 from quantforge.strategies.sleevegear import kept_sleeve_gear  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
 from quantforge.strategies.sleevediv import kept_sleeve_cash_choice, sleeve_cash_signal_kwargs  # noqa: E402
+from quantforge.strategies.cushion import kept_cushion
 from quantforge.strategies.volgear import kept_vol_gear
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend  # noqa: E402
@@ -765,6 +766,13 @@ def main() -> None:
         raise RuntimeError("the iteration log kept both a vol gear and a sleeve gear")
     if sleeve_upro_share is not None and sleeve_scale is not None:
         raise RuntimeError("the iteration log kept both a vol gear and a sleeve scale")
+    cushion_share, cushion_info = kept_cushion(HERE / "iterations.json", spy["close"], as_of=as_of)
+    if cushion_share is not None and sleeve_upro_share is not None:
+        raise RuntimeError("the iteration log kept both a cushion scale and a vol gear")
+    if cushion_share is not None and sleeve_fast is not None:
+        raise RuntimeError("the iteration log kept both a cushion scale and a sleeve gear")
+    if cushion_share is not None and sleeve_scale is not None:
+        raise RuntimeError("the iteration log kept both a cushion scale and a sleeve scale")
     curve_on, curve_info = None, None
     if has_kept_curve(HERE / "iterations.json"):
         tnx_frames = load_bars(source, ["^TNX"], start="1990-01-01")
@@ -785,6 +793,7 @@ def main() -> None:
         core_hold=core_hold, core_hold_info=core_hold_info,
         sleeve_fast=sleeve_fast, sleeve_gear_info=gear_info,
         sleeve_upro_share=sleeve_upro_share, vol_gear_info=vol_gear_info,
+        cushion_share=cushion_share, cushion_info=cushion_info,
         ema_info=ema_info,
         curve_on=curve_on, curve_info=curve_info,
         dd_info=dd_info,
@@ -799,7 +808,9 @@ def main() -> None:
         allowed = allowed | frozenset({sleeve_cash_kwargs["sleeve_cash_symbol"]})
     write_signal(desk_signal, HERE / "signals.json", allowed_tickers=allowed)
     signal_title = "Trend-core (2% band, dip overlay on the SPY half)"
-    if vol_gear_info and not vol_gear_info.get("vol_gear_live", True):
+    if cushion_info and not cushion_info.get("cushion_live", True):
+        signal_title = "Trend-core that scales the UPRO sleeve by its cushion over the 200-day average"
+    elif vol_gear_info and not vol_gear_info.get("vol_gear_live", True):
         signal_title = "Trend-core that scales the UPRO sleeve's leverage by realized volatility"
     elif ema_info:
         signal_title = "Trend-core whose UPRO sleeve follows the kept exponential average"

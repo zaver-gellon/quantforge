@@ -26,6 +26,7 @@ from quantforge.strategies.sleevegear import kept_sleeve_gear
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs
 from quantforge.strategies.sleevediv import kept_sleeve_cash_choice, sleeve_cash_signal_kwargs
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal
+from quantforge.strategies.cushion import kept_cushion
 from quantforge.strategies.volgear import kept_vol_gear
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend
@@ -153,6 +154,13 @@ def _signals(args) -> int:
             raise DataError("the iteration log kept both a vol gear and a sleeve gear")
         if sleeve_upro_share is not None and scale is not None:
             raise DataError("the iteration log kept both a vol gear and a sleeve scale")
+        cushion_share, cushion_info = kept_cushion(study / "iterations.json", close, as_of=close.index[-1])
+        if cushion_share is not None and sleeve_upro_share is not None:
+            raise DataError("the iteration log kept both a cushion scale and a vol gear")
+        if cushion_share is not None and sleeve_fast is not None:
+            raise DataError("the iteration log kept both a cushion scale and a sleeve gear")
+        if cushion_share is not None and scale is not None:
+            raise DataError("the iteration log kept both a cushion scale and a sleeve scale")
         drift_kwargs = {}
         if has_kept_drift(study / "iterations.json"):
             names = ["SPY", "SSO", "UPRO", "^IRX"]
@@ -187,6 +195,7 @@ def _signals(args) -> int:
             core_hold=core_hold, core_hold_info=core_hold_info,
             sleeve_fast=sleeve_fast, sleeve_gear_info=gear_info,
             sleeve_upro_share=sleeve_upro_share, vol_gear_info=vol_gear_info,
+            cushion_share=cushion_share, cushion_info=cushion_info,
             ema_info=ema_info,
             **idle_kwargs,
             **drift_kwargs,
