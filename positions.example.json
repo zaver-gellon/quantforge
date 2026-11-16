@@ -1,0 +1,18 @@
+[
+  {
+    "account": "live",
+    "ticker": "SSO",
+    "qty": 0.2952,
+    "fill": 64.34,
+    "stop": 52.76,
+    "equity": 100
+  },
+  {
+    "account": "live",
+    "ticker": "UPRO",
+    "qty": 0.1460,
+    "fill": 130.07,
+    "stop": 113.55,
+    "equity": 100
+  }
+]
