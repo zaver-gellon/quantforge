@@ -26,6 +26,7 @@ from quantforge.strategies.sleevegear import kept_sleeve_gear
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs
 from quantforge.strategies.sleevediv import kept_sleeve_cash_choice, sleeve_cash_signal_kwargs
 from quantforge.strategies.trend import TrendCoreSpec, build_trend_signal
+from quantforge.strategies.billgear import align_bill_yield, has_kept_bill, kept_bill_gear
 from quantforge.strategies.cushion import kept_cushion
 from quantforge.strategies.volgear import kept_vol_gear
 from quantforge.strategies.volscale import kept_sleeve_scale
@@ -161,6 +162,26 @@ def _signals(args) -> int:
             raise DataError("the iteration log kept both a cushion scale and a sleeve gear")
         if cushion_share is not None and scale is not None:
             raise DataError("the iteration log kept both a cushion scale and a sleeve scale")
+        bill_share = None
+        bill_info = None
+        if has_kept_bill(study / "iterations.json"):
+            irx_frames = load_bars(
+                get_source("yahoo"), ["^IRX"],
+                start=args.start, end=args.end, cache_dir=cache,
+            )
+            bill_share, bill_info = kept_bill_gear(
+                study / "iterations.json",
+                align_bill_yield(irx_frames["^IRX"]["close"], close.index),
+                as_of=close.index[-1],
+            )
+        if bill_share is not None and cushion_share is not None:
+            raise DataError("the iteration log kept both a bill-yield gear and a cushion scale")
+        if bill_share is not None and sleeve_upro_share is not None:
+            raise DataError("the iteration log kept both a bill-yield gear and a vol gear")
+        if bill_share is not None and sleeve_fast is not None:
+            raise DataError("the iteration log kept both a bill-yield gear and a sleeve gear")
+        if bill_share is not None and scale is not None:
+            raise DataError("the iteration log kept both a bill-yield gear and a sleeve scale")
         drift_kwargs = {}
         if has_kept_drift(study / "iterations.json"):
             names = ["SPY", "SSO", "UPRO", "^IRX"]
@@ -196,6 +217,7 @@ def _signals(args) -> int:
             sleeve_fast=sleeve_fast, sleeve_gear_info=gear_info,
             sleeve_upro_share=sleeve_upro_share, vol_gear_info=vol_gear_info,
             cushion_share=cushion_share, cushion_info=cushion_info,
+            bill_share=bill_share, bill_info=bill_info,
             ema_info=ema_info,
             **idle_kwargs,
             **drift_kwargs,

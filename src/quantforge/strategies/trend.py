@@ -247,6 +247,8 @@ def build_trend_signal(
     vol_gear_info: dict | None = None,
     cushion_share: pd.Series | None = None,
     cushion_info: dict | None = None,
+    bill_share: pd.Series | None = None,
+    bill_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -294,6 +296,10 @@ def build_trend_signal(
     The share is ignored while the sleeve is off.
     ``cushion_share`` is that same blend when a walk-forward cushion scale
     cleared the bar. It cannot be set together with ``sleeve_upro_share``.
+    ``bill_share`` is that same blend when a walk-forward bill-yield gear
+    cleared the bar. It cannot be set together with either of those shares.
+    While the sleeve is on and the bill yield is expensive, the share is the
+    kept floor and the rest of the sleeve is SPY.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -401,8 +407,14 @@ def build_trend_signal(
     unlevered_prev = bool(prev_sleeve_on and not fast_prev)
     if cushion_share is not None and sleeve_upro_share is not None:
         raise ValueError("a cushion scale and a realized-vol gear cannot both be kept")
-    blend_share = cushion_share if cushion_share is not None else sleeve_upro_share
-    blend_label = "cushion" if cushion_share is not None else "vol_gear"
+    if bill_share is not None and (cushion_share is not None or sleeve_upro_share is not None):
+        raise ValueError("a bill-yield gear and another sleeve blend cannot both be kept")
+    if bill_share is not None:
+        blend_share = bill_share
+        blend_label = "bill_gear"
+    else:
+        blend_share = cushion_share if cushion_share is not None else sleeve_upro_share
+        blend_label = "cushion" if cushion_share is not None else "vol_gear"
     share_now = 1.0
     share_prev = 1.0
     if blend_share is not None:
@@ -644,7 +656,14 @@ def build_trend_signal(
         if sleeve_cash_info:
             payload["diagnostics"].update(sleeve_cash_info)
         payload["diagnostics"]["sleeve_cash_applied"] = bool(sleeve_cash_now)
-    if cushion_info or cushion_share is not None:
+    if bill_info or bill_share is not None:
+        if bill_info:
+            payload["diagnostics"].update(bill_info)
+        payload["diagnostics"]["bill_share"] = None if bill_share is None else float(share_now)
+        payload["diagnostics"]["sleeve_leverage_applied"] = (
+            None if not sleeve_on or bill_share is None else float(1.0 + 2.0 * share_now)
+        )
+    elif cushion_info or cushion_share is not None:
         if cushion_info:
             payload["diagnostics"].update(cushion_info)
         payload["diagnostics"]["cushion_share"] = None if cushion_share is None else float(share_now)
