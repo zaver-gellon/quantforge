@@ -1,0 +1,23 @@
+{
+  "as_of": "2026-11-16T13:35:00-08:00",
+  "note": "broker snapshot, not a signal",
+  "equity": {
+    "live": 100.0
+  },
+  "positions": [
+    {
+      "account": "live",
+      "ticker": "SSO",
+      "qty": 0.295159936,
+      "fill": 64.338,
+      "stop": 52.76
+    },
+    {
+      "account": "live",
+      "ticker": "UPRO",
+      "qty": 0.145996063,
+      "fill": 130.072,
+      "stop": 113.55
+    }
+  ]
+}
