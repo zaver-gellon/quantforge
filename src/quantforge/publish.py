@@ -12,9 +12,11 @@ is not refit here. Re-run ``studies/spy_upro_trend/faster.py`` when a new
 calendar year starts.
 
 The same run writes ``risk.json`` next to those files. ``--positions``
-(default ``<out>/positions.json``) is a JSON list of ``{account, ticker,
-qty, fill, stop}``. A missing file writes an empty list and a note. The
-signal files and their schema are left alone.
+(default ``<out>/positions.json``) is either a JSON list of ``{account,
+ticker, qty, fill, stop}`` or an object with ``positions``, an optional
+``equity`` map, and an optional ``as_of``. A missing file writes an empty
+list and a note. A malformed file is named in ``flags`` and the signal
+files are still written.
 """
 
 from __future__ import annotations
@@ -177,23 +179,61 @@ def _number(row: dict, key: str, index: int, path: Path) -> float:
     return number
 
 
-def load_positions(path: Path) -> list[dict] | None:
-    """Read ``[{account, ticker, qty, fill, stop}]``. ``None`` if it is missing.
+def load_positions(path: Path) -> dict:
+    """Read a positions file without raising.
 
-    ``equity`` is optional and is the account's equity, repeated on any row of
-    that account. A missing file is not an error. A present file that is not
-    that list is.
+    The file is either a JSON list of ``{account, ticker, qty, fill, stop}``
+    or an object whose ``positions`` list holds those rows. An object may also
+    carry ``equity`` (account to dollars) and ``as_of``. Equity may sit on the
+    rows as well; the two must agree. Any other key is ignored. A missing file
+    returns no rows and no error. A malformed file returns an ``error`` string
+    so the publisher can record it and still write the signals.
     """
+    found = {"rows": None, "as_of": None, "error": None}
     if not path.exists():
-        return None
-    if not path.is_file():
-        raise DataError(f"{path} is not a positions file")
+        return found
+    as_of = None
     try:
-        payload = json.loads(path.read_text())
-    except json.JSONDecodeError as exc:
-        raise DataError(f"{path} is not valid JSON ({exc})") from exc
-    if not isinstance(payload, list):
-        raise DataError(f"{path} must be a JSON list of positions")
+        if not path.is_file():
+            raise DataError(f"{path} is not a positions file")
+        try:
+            payload = json.loads(path.read_text())
+        except json.JSONDecodeError as exc:
+            raise DataError(f"{path} is not valid JSON ({exc})") from exc
+        if isinstance(payload, dict):
+            stamp = payload.get("as_of")
+            if isinstance(stamp, str) and stamp.strip():
+                as_of = stamp.strip()
+        found["rows"], found["as_of"] = _positions_payload(payload, path)
+    except DataError as exc:
+        found["rows"] = None
+        found["as_of"] = as_of
+        found["error"] = str(exc)
+    return found
+
+
+def _positions_payload(payload, path: Path) -> tuple[list[dict], str | None]:
+    """Return ``(rows, as_of)`` from a list or from the desk's object wrapper."""
+    if isinstance(payload, list):
+        rows = _parse_rows(payload, path)
+        _reject_mixed_equity(rows)
+        return rows, None
+    if not isinstance(payload, dict):
+        raise DataError(f"{path} must be a JSON list of positions or an object with a positions list")
+    stamp = payload.get("as_of")
+    if stamp is not None and not isinstance(stamp, str):
+        raise DataError(f"{path} as_of must be a string")
+    as_of = stamp.strip() if isinstance(stamp, str) and stamp.strip() else None
+    positions = payload.get("positions")
+    if not isinstance(positions, list):
+        raise DataError(f"{path} positions must be a JSON list")
+    rows = _parse_rows(positions, path)
+    _apply_equity_map(rows, payload.get("equity"), path)
+    _reject_mixed_equity(rows)
+    return rows, as_of
+
+
+def _parse_rows(payload: list, path: Path) -> list[dict]:
     rows = []
     for offset, row in enumerate(payload, start=1):
         if not isinstance(row, dict):
@@ -220,8 +260,33 @@ def load_positions(path: Path) -> list[dict] | None:
                 raise DataError(f"{path} row {offset} equity must be positive")
             parsed["equity"] = equity
         rows.append(parsed)
-    _reject_mixed_equity(rows)
     return rows
+
+
+def _apply_equity_map(rows: list[dict], equity, path: Path) -> None:
+    """Copy a top-level ``{account: dollars}`` map onto the rows."""
+    if equity is None:
+        return
+    if not isinstance(equity, dict):
+        raise DataError(f"{path} equity must be an object of account to dollars")
+    amounts: dict[str, float] = {}
+    for name, value in equity.items():
+        if not isinstance(name, str) or not name.strip():
+            raise DataError(f"{path} equity keys must be account names")
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise DataError(f"{path} equity for {name} must be a number")
+        number = float(value)
+        if not math.isfinite(number) or number <= 0:
+            raise DataError(f"{path} equity for {name} must be a positive number")
+        amounts[name.strip()] = number
+    for row in rows:
+        mapped = amounts.get(row["account"])
+        if mapped is None:
+            continue
+        current = row.get("equity")
+        if current is not None and abs(float(current) - mapped) > 1e-6:
+            raise DataError(f"account {row['account']} lists equity {current} and {mapped}")
+        row["equity"] = mapped
 
 
 def _reject_mixed_equity(rows: list[dict]) -> None:
@@ -352,7 +417,12 @@ def assess_risk(
 
 
 def write_risk(out_dir: Path, lead: dict, positions_path: Path | None = None) -> dict:
-    """Write ``risk.json`` beside the strategy files. A missing positions file is empty."""
+    """Write ``risk.json`` beside the strategy files.
+
+    A missing positions file is an empty list and a note. A malformed file
+    does not raise: the error is a flag, and the caller can still write the
+    signal files.
+    """
     path = Path(positions_path) if positions_path is not None else Path(out_dir) / "positions.json"
     levels = lead.get("levels") or {}
     diagnostics = lead.get("diagnostics") or {}
@@ -362,22 +432,38 @@ def write_risk(out_dir: Path, lead: dict, positions_path: Path | None = None) ->
     exit_level = levels.get("exit_level")
     loaded = load_positions(path)
     notes = []
-    rows = loaded
+    rows = loaded["rows"]
+    error = loaded["error"]
     if rows is None:
         rows = []
-        notes.append(f"no positions file at {path}")
+        if error is None:
+            notes.append(f"no positions file at {path}")
     if rows and _price(spy_close) is None:
         notes.append("SPY close is missing, so implied stop levels were not computed")
     if rows and _price(exit_level) is None:
         notes.append("trend-core exit is missing, so too_tight was not judged")
-    report = assess_risk(
-        rows,
-        spy_close,
-        exit_level,
-        as_of=lead.get("as_of") or lead.get("signal_date"),
-        session=lead.get("date"),
-        note=" ".join(notes) if notes else None,
-    )
+    as_of = loaded["as_of"] or lead.get("as_of") or lead.get("signal_date")
+    try:
+        report = assess_risk(
+            rows,
+            spy_close,
+            exit_level,
+            as_of=as_of,
+            session=lead.get("date"),
+            note=" ".join(notes) if notes else None,
+        )
+    except DataError as exc:
+        error = error or str(exc)
+        report = assess_risk(
+            [],
+            spy_close,
+            exit_level,
+            as_of=as_of,
+            session=lead.get("date"),
+            note=" ".join(notes) if notes else None,
+        )
+    if error:
+        report["flags"] = [error, *report["flags"]]
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "risk.json").write_text(json.dumps(report, indent=2) + "\n")
@@ -425,10 +511,8 @@ def publish(
     cache: str | None = None,
     positions: str | Path | None = None,
 ) -> dict:
-    # A broken positions file fails before any signal file is replaced.
+    # A bad positions file is recorded in risk.json after the signals are written.
     positions_path = Path(positions) if positions is not None else Path(out_dir) / "positions.json"
-    if positions_path.exists():
-        load_positions(positions_path)
     spec = load_spec(spec_path)
     frames = load_bars(YahooSource(), YAHOO_SYMBOLS, start="1993-01-01", cache_dir=cache, refresh=True)
     if (spec.get("strategies") or {}).get("btc-trend"):
@@ -465,7 +549,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--positions",
         default=None,
-        help="JSON list of {account, ticker, qty, fill, stop}; default is <out>/positions.json",
+        help="positions JSON (a list, or {positions, equity, as_of}); default is <out>/positions.json",
     )
     args = parser.parse_args(argv)
     try:

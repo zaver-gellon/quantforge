@@ -14,6 +14,7 @@ from quantforge.publish import (
     assess_risk,
     check_selection_year,
     load_positions,
+    publish,
     write_bundle,
     write_risk,
 )
@@ -118,21 +119,25 @@ def _lead(spy_close, exit_level):
 
 def test_example_upro_stop_is_too_tight_and_total_risk_is_about_5_83(tmp_path):
     """The 2026-11-16 book, with SPY near 738.8 and the exit near 715."""
-    rows = json.loads(Path("positions.example.json").read_text())
+    book = json.loads(Path("positions.example.json").read_text())
+    rows = book["positions"]
+    sso_row, upro_row = rows
     assert [row["ticker"] for row in rows] == ["SSO", "UPRO"]
-    assert rows[0]["qty"] == pytest.approx(0.2952)
-    assert rows[1]["qty"] == pytest.approx(0.1460)
-    assert rows[0]["equity"] == pytest.approx(100)
+    assert book["equity"]["live"] == pytest.approx(100)
+    assert book["as_of"] == "2026-11-16T13:35:00-08:00"
     path = tmp_path / "positions.json"
-    path.write_text(json.dumps(rows))
+    path.write_text(json.dumps(book))
     report = write_risk(tmp_path, _lead(738.8, 715.0), path)
     stored = json.loads((tmp_path / "risk.json").read_text())
     assert stored["spy_close"] == pytest.approx(738.8)
     assert stored["exit_level"] == pytest.approx(715)
+    assert stored["as_of"] == book["as_of"]
+    assert stored["note"] is None
+    assert book["note"] not in json.dumps(stored["flags"])
     upro = next(row for row in report["positions"] if row["ticker"] == "UPRO")
     sso = next(row for row in report["positions"] if row["ticker"] == "SSO")
-    upro_move = ((130.07 - 113.55) / 130.07) / 3
-    assert upro["dollar_risk"] == pytest.approx(0.1460 * (130.07 - 113.55))
+    upro_move = ((upro_row["fill"] - upro_row["stop"]) / upro_row["fill"]) / 3
+    assert upro["dollar_risk"] == pytest.approx(upro_row["qty"] * (upro_row["fill"] - upro_row["stop"]))
     assert upro["leverage"] == 3
     assert upro["implied_spy"] == pytest.approx(738.8 * (1.0 - upro_move))
     assert upro["too_tight"] is True
@@ -140,7 +145,10 @@ def test_example_upro_stop_is_too_tight_and_total_risk_is_about_5_83(tmp_path):
     assert sso["too_tight"] is False
     assert any(flag.startswith("UPRO ") for flag in report["flags"])
     assert not any(flag.startswith("SSO ") for flag in report["flags"])
-    expected = 0.2952 * (64.34 - 52.76) + 0.1460 * (130.07 - 113.55)
+    expected = (
+        sso_row["qty"] * (sso_row["fill"] - sso_row["stop"])
+        + upro_row["qty"] * (upro_row["fill"] - upro_row["stop"])
+    )
     assert report["accounts"][0]["account"] == "live"
     assert report["accounts"][0]["dollar_risk"] == pytest.approx(5.83, abs=0.01)
     assert report["accounts"][0]["dollar_risk"] == pytest.approx(expected)
@@ -148,6 +156,36 @@ def test_example_upro_stop_is_too_tight_and_total_risk_is_about_5_83(tmp_path):
     assert report["accounts"][0]["risk_pct"] == pytest.approx(expected / 100, abs=1e-6)
     assert stored["positions"][1]["too_tight"] is True
     assert not (tmp_path / "trend-core.json").exists()
+
+
+def test_a_bare_position_list_still_loads(tmp_path):
+    path = tmp_path / "positions.json"
+    path.write_text(json.dumps([
+        {"account": "live", "ticker": "SPY", "qty": 1, "fill": 100, "stop": 90, "equity": 1000},
+    ]))
+    loaded = load_positions(path)
+    assert loaded["error"] is None
+    assert loaded["as_of"] is None
+    assert loaded["rows"][0]["equity"] == pytest.approx(1000)
+    report = write_risk(tmp_path, _lead(100.0, 80.0), path)
+    assert report["as_of"] == "2026-11-13"
+    assert report["accounts"][0]["dollar_risk"] == pytest.approx(10)
+    assert report["accounts"][0]["equity"] == pytest.approx(1000)
+
+
+def test_equity_on_a_row_must_match_the_map(tmp_path):
+    path = tmp_path / "positions.json"
+    path.write_text(json.dumps({
+        "as_of": "2026-11-16T13:35:00-08:00",
+        "equity": {"live": 100},
+        "positions": [
+            {"account": "live", "ticker": "SPY", "qty": 1, "fill": 10, "stop": 9, "equity": 50},
+        ],
+    }))
+    report = write_risk(tmp_path, _lead(100.0, 80.0), path)
+    assert report["positions"] == []
+    assert report["as_of"] == "2026-11-16T13:35:00-08:00"
+    assert any("equity" in flag for flag in report["flags"])
 
 
 def test_stop_on_the_two_percent_boundary_is_too_tight():
@@ -227,24 +265,61 @@ def test_missing_positions_file_writes_an_empty_list_and_a_note(tmp_path):
     assert report["exit_level"] == pytest.approx(715)
 
 
-def test_broken_positions_file_is_refused_and_writes_nothing(tmp_path):
+def test_malformed_positions_are_a_flag_and_do_not_raise(tmp_path):
     path = tmp_path / "positions.json"
     path.write_text("[")
-    lead = _lead(738.8, 715.0)
-    try:
-        write_risk(tmp_path, lead, path)
-    except DataError as exc:
-        assert "JSON" in str(exc)
-    else:
-        raise AssertionError("broken positions JSON must be refused")
-    assert not (tmp_path / "risk.json").exists()
-    path.write_text('{"account": "live"}')
-    try:
-        load_positions(path)
-    except DataError as exc:
-        assert "list" in str(exc)
-    else:
-        raise AssertionError("a positions object must be refused")
+    report = write_risk(tmp_path, _lead(738.8, 715.0), path)
+    stored = json.loads((tmp_path / "risk.json").read_text())
+    assert report["positions"] == []
+    assert stored["positions"] == []
+    assert any("JSON" in flag for flag in stored["flags"])
+    path.write_text('{"account": "live", "note": "unused"}')
+    report = write_risk(tmp_path, _lead(738.8, 715.0), path)
+    assert report["positions"] == []
+    assert any("positions" in flag for flag in report["flags"])
+
+
+def test_publish_writes_signals_when_positions_are_malformed(tmp_path, monkeypatch):
+    import pandas as pd
+
+    spec = tmp_path / "spec.json"
+    spec.write_text(json.dumps({"selection_year": 2026, "strategies": {}, "lead": {"validated": True}}))
+    study = tmp_path / "study"
+    study.mkdir()
+    out = tmp_path / "out"
+    bad = tmp_path / "positions.json"
+    bad.write_text("{")
+    lead = {
+        "date": "2026-11-16",
+        "weights": {"SPY": 0.5, "UPRO": 0.5},
+        "strategy": "trend_core",
+        "signal_date": "2026-11-13",
+        "diagnostics": {
+            "trend_on": True,
+            "dip_on": False,
+            "reference_close": 738.8,
+            "sma": 729.0,
+            "band": 0.02,
+        },
+    }
+    monkeypatch.setattr("quantforge.publish.load_bars", lambda *args, **kwargs: {})
+    monkeypatch.setattr(
+        "quantforge.publish.build_panel",
+        lambda frames: {"clock": [pd.Timestamp("2026-11-13")]},
+    )
+    monkeypatch.setattr("quantforge.publish._lead_payload", lambda *args, **kwargs: dict(lead))
+    monkeypatch.setattr("quantforge.publish.build_fast_signals", lambda panel, spec: {})
+    combined = publish(out, spec, study, positions=bad)
+    assert (out / "trend-core.json").is_file()
+    assert (out / "signals.json").is_file()
+    assert (study / "signals.json").is_file()
+    stored = json.loads((out / "trend-core.json").read_text())
+    assert stored["weights"] == {"SPY": 0.5, "UPRO": 0.5}
+    assert "too_tight" not in stored
+    risk = json.loads((out / "risk.json").read_text())
+    assert risk["positions"] == []
+    assert any("JSON" in flag for flag in risk["flags"])
+    assert combined["strategies"]["trend-core"]["weights"]["UPRO"] == 0.5
 
 
 def test_risk_file_does_not_change_the_signal_schema(tmp_path):
