@@ -88,7 +88,11 @@ The paper-trading bot reads a JSON object:
 python studies/spy_upro_trend/run.py
 python studies/flagship/run.py
 python studies/apex/run.py
+python studies/spy_upro_trend/faster.py
+python -m quantforge.publish --out signals/
 ```
+
+`faster.py` refreshes prices and scores the exposure grid, the monthly-reset and QQQ/TQQQ changes, and the faster books (mean reversion, weekly rotation, Nasdaq vol target, the RSI(2) boost, and Bitcoin when the coin prints). It writes `studies/faster/results.json` and `studies/faster/live.json`. The publisher reads that spec, refreshes prices again, and writes one JSON per strategy plus `signals/signals.json`. `signals/trend-core.json` keeps the `{date, weights, diagnostics}` object the trend bot reads. A faster book's `validated` flag is true only when its walk-forward path clears the materiality bar. The RSI boost file is the named rule (RSI(2) below 10, one third into UPRO, 10-session cap), filled at the next open.
 
 or `quantforge study spy-upro-trend`, `quantforge study flagship`, and `quantforge study apex`.
 

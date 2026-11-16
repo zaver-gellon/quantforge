@@ -1,0 +1,48 @@
+{
+  "strategy": "meanrev",
+  "strategy_id": "meanrev",
+  "date": "2026-11-16",
+  "as_of": "2026-11-13",
+  "signal_date": "2026-11-13",
+  "weights": {
+    "BIL": 1.0
+  },
+  "levels": {
+    "entry": "IBS < 0.2",
+    "entry_level": 0.2,
+    "entry_value": 0.5302283833649147,
+    "exit": "SPY close above its 5-day average",
+    "exit_level": 754.7819946289062,
+    "stop": "flat after 3 sessions, or when SPY closes at or below its 200-day average",
+    "stop_level": 729.315171508789,
+    "reference_close": 754.3699951171875
+  },
+  "validated": false,
+  "generated_at": "2026-11-15T23:10:10Z",
+  "diagnostics": {
+    "cell": "ibs_0.2_n03_UPRO",
+    "entry": "ibs_0.2",
+    "max_hold": 3,
+    "vehicle": "UPRO",
+    "regime_on": true,
+    "in_position": false,
+    "sma200": 729.315171508789,
+    "sma5": 754.7819946289062,
+    "rsi2": 42.82782351308247,
+    "ibs": 0.5302283833649147,
+    "lower_band": 751.3488505128632,
+    "rule": "Enter at the close while SPY is above its 200-day average. Exit at the next open after SPY closes above its 5-day average, after 3 sessions, or after a close at or below the 200-day average. Cash is BIL."
+  },
+  "validated_reason": "did_not_clear_materiality_bar",
+  "oos": {
+    "cagr": 0.08264433017327355,
+    "sharpe": 0.4349363323369547,
+    "max_drawdown": -0.37228182801212173,
+    "worst_year": 2023,
+    "worst_year_return": -0.13737431722436644,
+    "start": "2006-01-03",
+    "end": "2026-11-13",
+    "n_days": 5250
+  },
+  "cell": "ibs_0.2_n03_UPRO"
+}

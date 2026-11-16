@@ -1899,3 +1899,296 @@ Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample win
 Decision: rejected.
 
 Refreshed lead out-of-sample 2006-01-03 to 2026-11-13 (5250 sessions): CAGR 0.156212, Sharpe 0.619599, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-13 (8507 sessions). SSO ends 2026-11-13, UPRO ends 2026-11-13, ^IRX ends 2026-11-13, ^VIX ends 2026-11-13, ^VIX3M ends 2026-11-13, GLD ends 2026-11-13, IEF ends 2026-11-13, TLT ends 2026-11-13. That is the Friday 2026-11-13 close. The next NYSE session is 2026-11-16. The 2026-11-15 close is not in the refreshed SPY series. The latest available close is 2026-11-13. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book matches the prior row. On these prices, the lead book cut at the prior end 2026-11-13 (5250 sessions) has CAGR 0.156212, Sharpe 0.619599, max drawdown -0.468261, against the stored row CAGR 0.156212, Sharpe 0.619600, max drawdown -0.468261. Candidate versus that refreshed book: Sharpe 0.619599 -> 0.591448 (delta -0.028152), CAGR 0.156212 -> 0.149286 (delta -0.006925), max drawdown -0.468261 -> -0.568090 (delta -0.099829). Last walk-forward pick: zhold_up_n10. Out-of-sample turnover per year 13.16 -> 12.87. Of 5250 out-of-sample decision closes, the stitched exit differed from the live dip on 258. The live exit matches the trend core (max abs return gap 0.000e+00). Measured on the live exit before any new cell was scored. The live rule produced 444 episodes. 59.0% lasted one session, 1.8% reached the five-session cap, and the mean length was 1.62 sessions. Out of sample, the overlay was held on 443 of 5250 sessions, and 41.1% of those held sessions closed below the prior SPY close. The stitched dip exit does not clear the materiality bar. The live book stays the plain trend core. SPY close 754.3700 versus the 200-day average 729.3152 (+3.44% versus the average), above the upper band. Previous signal 2026-11-16 (close 2026-11-13): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-16 (close 2026-11-13): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.
+
+### 2026-11-13 — Exposure, monthly reset, and QQQ/TQQQ
+
+The live book is 50% SPY and 50% UPRO while SPY is inside its 200-day 2% band, so the equity exposure is 2x whenever the trend is on and the dip is off. A 2x book trails SPY over short windows when the market is down or choppy, even if the long-run compound growth is higher. This run measures that at 1.0x, 1.5x, 2.0x, and 2.5x, plus a 100% SPY/BIL band with no dip. Two changes are then scored on the materiality bar. The first replaces the quarterly mix reset with a monthly reset. Daily is on the axis so monthly has a neighbor; quarterly is the live book and is not a new trial. The second replaces SPY/SSO/UPRO with QQQ/QLD/TQQQ under the same dip and a 200-day band of 0%, 2%, or 4%. The 2% cell is the named swap. The live book changes only if a walk-forward path clears the bar.
+
+Variants tried. Counting rows increment the ledger. The walk-forward stitch is a selection over those rows and is stored as an audit.
+
+| variant | counts | full-sample CAGR | Sharpe | max DD | years selected |
+| --- | --- | --- | --- | --- | --- |
+| 1.0x | yes | 10.5% | 0.48 | -57.2% | 0 |
+| 1.5x | yes | 13.2% | 0.57 | -51.3% | 0 |
+| 2.0x | no | 15.4% | 0.62 | -46.7% | 0 |
+| 2.5x | yes | 17.3% | 0.62 | -47.4% | 0 |
+| SPY/BIL | yes | 9.2% | 0.65 | -22.0% | 0 |
+
+Out-of-sample window: 2006-01-03 to 2026-11-13 (5250 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.43% | 0.615 | n/a | -46.73% |
+| candidate | 15.67% | 0.621 | n/a | -46.07% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.615342 -> 0.620938 (delta 0.005596; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.467350 -> -0.460721 (delta 0.006629; need >= 0.03). CAGR 0.154283 -> 0.156656 (delta 0.002373; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe 0.212488, deflated Sharpe 0.100915 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351. |
+| b still helps with the best improvement year removed | no | Removed 2008 (summed daily improvement 0.037365). Remaining Sharpe delta 0.001733, CAGR delta 0.000722, max-drawdown delta 0.004100. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | yes | All 1 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell. |
+
+Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample window.
+
+| neighbor | similar | CAGR | Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| monthly | yes | 15.48% | 0.617 | -47.42% |
+
+Decision: rejected.
+
+Bill's since-2016 numbers are not replicated on daily bars. He quotes 19.5% a year since 2016 against SPY at 15.4%, with a worst drop of -45% against SPY's -34%, and 17.0% against 11.5% since 2022. He also quotes 72% winning boosts, about 8 a year, about 3 days each, and a standalone 3x version around 11-12% a year. On these prices, since 2016, the next-open fill compounds at 16.2% against close-to-close SPY at 14.6%, max drawdown -35.9% against -33.7%. The close fill, the optimistic stand-in for a 12:50 PT trade, compounds at 17.1% with max drawdown -35.9%. Since 2022 the next-open fill is 12.9% against SPY 11.5%, and the close fill is 14.7% against SPY 11.5%. From 2006 the next-open fill is 12.4% (max drawdown -55.1%, worst year 2008 -36.8%) and the close fill is 12.7%. Next-open boosts since 2016: win rate 77.4% (75.3% beat SPY), 8.6 a year, 3.3 days on average, average P&L 0.8%, worst -7.4%. Close-fill boosts: win rate 74.2%, 8.6 a year, 3.3 days. Standalone UPRO-or-cash since 2016 is 10.4% next-open and 14.5% at the close. The deflated Sharpe of the next-open book's daily gap over SPY, on the 2006-onward window and the full ledger, is 0.311. Over the lead book it is 0.000. Removing 2012, the year the gap over SPY added the most, leaves a strategy compound growth of 11.8% against SPY 10.8%. The walk-forward pick on the next-open grid is rsi15_f50_n10; the published signal stays the named rule. The gap versus his quote is the 12:50 PT price versus a daily close, the fill (this close versus the next open), UPRO's financing and expense ratio in the stitched series, 5 bps per side, and the rule that an exit close does not re-enter. Through the 2026-11-13 close, the live 2x book (50% SPY + 50% UPRO, 200-day 2% band, dip on the SPY half) compounds at 15.4% out of sample with a Sharpe of 0.62, a worst drawdown of -46.7%, and a worst year of 2022 (-26.7%). It trails close-to-close SPY in 39.5% of rolling 21-session windows and 35.6% of rolling 63-session windows. The unlevered 1.0x mix, which is 100% SPY plus the same dip, compounds at 10.5%. SPY/BIL, the band with no leverage and no dip, compounds at 9.2% with a max drawdown of -22.0%. The shortfall versus SPY since late October is what a 2x book does in a soft or choppy stretch: the same down days are larger, and the dip can add SSO on the SPY half while the market is already weak. Moving the mix reset from quarterly to the walk-forward rebalance pick (daily) does not clear the materiality bar. Swapping the vehicles for QQQ/TQQQ (walk-forward pick qqq_band04) does not clear it. The lead book is unchanged. meanrev (ibs_0.2_n03_UPRO) has an out-of-sample compound growth of 8.3%, Sharpe 0.43, worst drawdown -37.2%, worst year 2023 (-13.7%). It is not validated. rotation (TQQQ_L63) has an out-of-sample compound growth of 17.5%, Sharpe 0.55, worst drawdown -71.0%, worst year 2022 (-60.7%). It is not validated. nasdaq-vol (band02_vol30) has an out-of-sample compound growth of 16.3%, Sharpe 0.62, worst drawdown -47.1%, worst year 2008 (-31.3%). It is not validated. btc-trend (sma10_030) has an out-of-sample compound growth of 35.8%, Sharpe 0.83, worst drawdown -66.5%, worst year 2022 (-31.7%). It is not validated. spy-rsi-boost (rsi10_f33_n10) has an out-of-sample compound growth of 12.4%, Sharpe 0.58, worst drawdown -55.1%, worst year 2008 (-36.8%). It is not validated.
+
+### 2026-11-13 — meanrev
+
+Three additional paper books, none of which replaces the trend account unless its own note says the materiality bar cleared and the desk adopts it. Mean reversion enters at the close while SPY is above its 200-day average, on RSI(2) below 5, 10, or 15, on IBS below 0.2, or on a close below the 5-day lower band, and holds SPY, SSO, or UPRO for 3, 5, or 10 sessions or until SPY closes above its 5-day average. Weekly rotation picks the best of UPRO or TQQQ, TMF, and UGL when that return beats T-bills over 21, 42, or 63 sessions, otherwise BIL. UGL is 2x gold. Nasdaq vol holds TQQQ in a 200-day band of 0% or 2%, sized to 20%, 30%, or 40% realized vol with a 100% cap. Bitcoin, if the coin prints, is long when a fast average is above a slow average (10/30, 20/50, 50/200) and otherwise BIL.
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2006-01-03 | rsi2_05_n03_UPRO |
+| 2007-01-03 | rsi2_10_n10_UPRO |
+| 2008-01-02 | rsi2_05_n10_UPRO |
+| 2009-01-02 | rsi2_05_n10_UPRO |
+| 2010-01-04 | rsi2_05_n10_UPRO |
+| 2011-01-03 | rsi2_05_n10_UPRO |
+| 2012-01-03 | ibs_0.2_n03_UPRO |
+| 2013-01-02 | ibs_0.2_n03_UPRO |
+| 2014-01-02 | rsi2_10_n03_UPRO |
+| 2015-01-02 | ibs_0.2_n03_UPRO |
+| 2016-01-04 | rsi2_05_n03_UPRO |
+| 2017-01-03 | ibs_0.2_n03_UPRO |
+| 2018-01-02 | ibs_0.2_n03_UPRO |
+| 2019-01-02 | ibs_0.2_n03_UPRO |
+| 2020-01-02 | ibs_0.2_n03_UPRO |
+| 2021-01-04 | ibs_0.2_n03_UPRO |
+| 2022-01-03 | ibs_0.2_n10_UPRO |
+| 2023-01-03 | ibs_0.2_n10_UPRO |
+| 2024-01-02 | ibs_0.2_n03_UPRO |
+| 2025-01-02 | ibs_0.2_n03_UPRO |
+| 2026-01-02 | ibs_0.2_n03_UPRO |
+
+Out-of-sample window: 2006-01-03 to 2026-11-13 (5250 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.43% | 0.615 | n/a | -46.73% |
+| candidate | 8.26% | 0.435 | 0.417 | -37.23% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.615342 -> 0.434936 (delta -0.180406; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.467350 -> -0.372282 (delta 0.095068; need >= 0.03). CAGR 0.154283 -> 0.082644 (delta -0.071639; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe -0.350166, deflated Sharpe 0.000083 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351. |
+| b still helps with the best improvement year removed | no | Removed 2022 (summed daily improvement 0.233244). Remaining Sharpe delta -0.229812, CAGR delta -0.090703, max-drawdown delta 0.095068. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | no | At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell. |
+
+Decision: rejected.
+
+meanrev walk-forward cell ibs_0.2_n03_UPRO: OOS CAGR 8.3%, Sharpe 0.435, max drawdown -37.2%, worst year 2023 (-13.7%), deflated Sharpe 0.417. Trades per year 23.856. Average holding days 1.909456740442656. At 10 bps per side, CAGR 6.3%. Correlation with the lead book 0.48978897612884037. A daily 50/50 blend compounds at 12.6% with max drawdown -37.0%. Best year removed (2025): CAGR 6.9%. Materiality against the lead book: fail. The trend book is not replaced. For 2026-11-16, hold BIL 100%. Entry: IBS < 0.2. Exit: SPY close above its 5-day average. Stop: flat after 3 sessions, or when SPY closes at or below its 200-day average.
+
+### 2026-11-13 — rotation
+
+Three additional paper books, none of which replaces the trend account unless its own note says the materiality bar cleared and the desk adopts it. Mean reversion enters at the close while SPY is above its 200-day average, on RSI(2) below 5, 10, or 15, on IBS below 0.2, or on a close below the 5-day lower band, and holds SPY, SSO, or UPRO for 3, 5, or 10 sessions or until SPY closes above its 5-day average. Weekly rotation picks the best of UPRO or TQQQ, TMF, and UGL when that return beats T-bills over 21, 42, or 63 sessions, otherwise BIL. UGL is 2x gold. Nasdaq vol holds TQQQ in a 200-day band of 0% or 2%, sized to 20%, 30%, or 40% realized vol with a 100% cap. Bitcoin, if the coin prints, is long when a fast average is above a slow average (10/30, 20/50, 50/200) and otherwise BIL.
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2008-01-02 | UPRO_L63 |
+| 2009-01-02 | UPRO_L63 |
+| 2010-01-04 | UPRO_L63 |
+| 2011-01-03 | UPRO_L63 |
+| 2012-01-03 | UPRO_L63 |
+| 2013-01-02 | UPRO_L63 |
+| 2014-01-02 | UPRO_L63 |
+| 2015-01-02 | TQQQ_L63 |
+| 2016-01-04 | TQQQ_L63 |
+| 2017-01-03 | TQQQ_L63 |
+| 2018-01-02 | TQQQ_L63 |
+| 2019-01-02 | TQQQ_L63 |
+| 2020-01-02 | TQQQ_L63 |
+| 2021-01-04 | TQQQ_L63 |
+| 2022-01-03 | TQQQ_L63 |
+| 2023-01-03 | TQQQ_L63 |
+| 2024-01-02 | TQQQ_L63 |
+| 2025-01-02 | TQQQ_L63 |
+| 2026-01-02 | TQQQ_L63 |
+
+Out-of-sample window: 2008-01-02 to 2026-11-13 (4748 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.43% | 0.615 | n/a | -46.73% |
+| candidate | 17.50% | 0.550 | 0.615 | -71.01% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.675655 -> 0.549723 (delta -0.125933; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.442860 -> -0.710075 (delta -0.267215; need >= 0.03). CAGR 0.170132 -> 0.174953 (delta 0.004821; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe 0.179843, deflated Sharpe 0.094683 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351. |
+| b still helps with the best improvement year removed | no | Removed 2011 (summed daily improvement 0.818541). Remaining Sharpe delta -0.222891, CAGR delta -0.038949, max-drawdown delta -0.267215. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | no | At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell. |
+
+Decision: rejected.
+
+rotation walk-forward cell TQQQ_L63: OOS CAGR 17.5%, Sharpe 0.550, max drawdown -71.0%, worst year 2022 (-60.7%), deflated Sharpe 0.615. Trades per year 1.3268744734625104. Average holding days 177.32. At 10 bps per side, CAGR 16.4%. Correlation with the lead book 0.3292953224752682. A daily 50/50 blend compounds at 20.4% with max drawdown -53.4%. Best year removed (2025): CAGR 13.1%. Materiality against the lead book: fail. The trend book is not replaced. For 2026-11-16, hold BIL 100%. Entry: week-ending close, top trailing 63-session return among TQQQ, TMF, and UGL, and only if it beats cash. Exit: the next week-ending close, when the ranking is run again. Stop: cash when the best risky sleeve does not beat the T-bill return over the same window.
+
+### 2026-11-13 — nasdaq-vol
+
+Three additional paper books, none of which replaces the trend account unless its own note says the materiality bar cleared and the desk adopts it. Mean reversion enters at the close while SPY is above its 200-day average, on RSI(2) below 5, 10, or 15, on IBS below 0.2, or on a close below the 5-day lower band, and holds SPY, SSO, or UPRO for 3, 5, or 10 sessions or until SPY closes above its 5-day average. Weekly rotation picks the best of UPRO or TQQQ, TMF, and UGL when that return beats T-bills over 21, 42, or 63 sessions, otherwise BIL. UGL is 2x gold. Nasdaq vol holds TQQQ in a 200-day band of 0% or 2%, sized to 20%, 30%, or 40% realized vol with a 100% cap. Bitcoin, if the coin prints, is long when a fast average is above a slow average (10/30, 20/50, 50/200) and otherwise BIL.
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2006-01-03 | band02_vol40 |
+| 2007-01-03 | band02_vol40 |
+| 2008-01-02 | band02_vol40 |
+| 2009-01-02 | band02_vol40 |
+| 2010-01-04 | band02_vol40 |
+| 2011-01-03 | band02_vol40 |
+| 2012-01-03 | band02_vol20 |
+| 2013-01-02 | band02_vol20 |
+| 2014-01-02 | band02_vol20 |
+| 2015-01-02 | band02_vol20 |
+| 2016-01-04 | band02_vol20 |
+| 2017-01-03 | band02_vol40 |
+| 2018-01-02 | band02_vol20 |
+| 2019-01-02 | band02_vol20 |
+| 2020-01-02 | band02_vol20 |
+| 2021-01-04 | band02_vol30 |
+| 2022-01-03 | band02_vol30 |
+| 2023-01-03 | band02_vol30 |
+| 2024-01-02 | band02_vol30 |
+| 2025-01-02 | band02_vol30 |
+| 2026-01-02 | band02_vol30 |
+
+Out-of-sample window: 2006-01-03 to 2026-11-13 (5250 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.43% | 0.615 | n/a | -46.73% |
+| candidate | 16.25% | 0.618 | 0.731 | -47.08% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.615342 -> 0.618328 (delta 0.002986; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.467350 -> -0.470794 (delta -0.003444; need >= 0.03). CAGR 0.154283 -> 0.162522 (delta 0.008239; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe 0.064545, deflated Sharpe 0.028465 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351. |
+| b still helps with the best improvement year removed | no | Removed 2007 (summed daily improvement 0.448312). Remaining Sharpe delta -0.064929, CAGR delta -0.015037, max-drawdown delta -0.035594. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | no | At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell. |
+
+Decision: rejected.
+
+nasdaq-vol walk-forward cell band02_vol30: OOS CAGR 16.3%, Sharpe 0.618, max drawdown -47.1%, worst year 2008 (-31.3%), deflated Sharpe 0.731. Trades per year 1.104. Average holding days 180.91304347826087. At 10 bps per side, CAGR 15.9%. Correlation with the lead book 0.7615422326302107. A daily 50/50 blend compounds at 16.4% with max drawdown -41.0%. Best year removed (2017): CAGR 12.7%. Materiality against the lead book: fail. The trend book is not replaced. For 2026-11-16, hold BIL 100%. Entry: QQQ close above 694.8247 (200-day average times 1.02). Exit: QQQ close below 667.5767 (200-day average times 0.98). Stop: no price stop; the position is resized every session to the vol target and capped at 100% TQQQ.
+
+### 2026-11-13 — btc-trend
+
+Three additional paper books, none of which replaces the trend account unless its own note says the materiality bar cleared and the desk adopts it. Mean reversion enters at the close while SPY is above its 200-day average, on RSI(2) below 5, 10, or 15, on IBS below 0.2, or on a close below the 5-day lower band, and holds SPY, SSO, or UPRO for 3, 5, or 10 sessions or until SPY closes above its 5-day average. Weekly rotation picks the best of UPRO or TQQQ, TMF, and UGL when that return beats T-bills over 21, 42, or 63 sessions, otherwise BIL. UGL is 2x gold. Nasdaq vol holds TQQQ in a 200-day band of 0% or 2%, sized to 20%, 30%, or 40% realized vol with a 100% cap. Bitcoin, if the coin prints, is long when a fast average is above a slow average (10/30, 20/50, 50/200) and otherwise BIL.
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2019-01-02 | sma10_030 |
+| 2020-01-02 | sma20_050 |
+| 2021-01-04 | sma10_030 |
+| 2022-01-03 | sma10_030 |
+| 2023-01-03 | sma10_030 |
+| 2024-01-02 | sma10_030 |
+| 2025-01-02 | sma10_030 |
+| 2026-01-02 | sma10_030 |
+
+Out-of-sample window: 2019-01-02 to 2026-11-13 (1979 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.43% | 0.615 | n/a | -46.73% |
+| candidate | 35.79% | 0.834 | 0.833 | -66.53% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | yes | Sharpe 0.732277 -> 0.833628 (delta 0.101351; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.442860 -> -0.665255 (delta -0.222396; need >= 0.03). CAGR 0.212924 -> 0.357945 (delta 0.145021; floor -0.0050). |
+| a overall | yes | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe 0.371797, deflated Sharpe 0.378820 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351. |
+| b still helps with the best improvement year removed | yes | Removed 2019 (summed daily improvement 0.443468). Remaining Sharpe delta 0.092540, CAGR delta 0.106394, max-drawdown delta -0.088820. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | no | At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell. |
+
+Decision: rejected.
+
+btc-trend walk-forward cell sma10_030: OOS CAGR 35.8%, Sharpe 0.834, max drawdown -66.5%, worst year 2022 (-31.7%), deflated Sharpe 0.833. Trades per year 4.329459322890349. Average holding days 32.411764705882355. At 10 bps per side, CAGR 35.2%. Correlation with the lead book 0.18947819847134223. A daily 50/50 blend compounds at 32.5% with max drawdown -47.3%. Best year removed (2021): CAGR 26.8%. Materiality against the lead book: fail. The trend book is not replaced. For 2026-11-16, hold BIL 100%. Entry: BTC 10-day average above its 30-day average. Exit: BTC 10-day average at or below its 30-day average. Stop: no price stop; the alternative is BIL.
+
+### 2026-11-13 — spy-rsi-boost
+
+Three additional paper books, none of which replaces the trend account unless its own note says the materiality bar cleared and the desk adopts it. Mean reversion enters at the close while SPY is above its 200-day average, on RSI(2) below 5, 10, or 15, on IBS below 0.2, or on a close below the 5-day lower band, and holds SPY, SSO, or UPRO for 3, 5, or 10 sessions or until SPY closes above its 5-day average. Weekly rotation picks the best of UPRO or TQQQ, TMF, and UGL when that return beats T-bills over 21, 42, or 63 sessions, otherwise BIL. UGL is 2x gold. Nasdaq vol holds TQQQ in a 200-day band of 0% or 2%, sized to 20%, 30%, or 40% realized vol with a 100% cap. Bitcoin, if the coin prints, is long when a fast average is above a slow average (10/30, 20/50, 50/200) and otherwise BIL.
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2006-01-03 | rsi10_f50_n10 |
+| 2007-01-03 | rsi10_f50_n10 |
+| 2008-01-02 | rsi05_f50_n10 |
+| 2009-01-02 | rsi10_f50_n10 |
+| 2010-01-04 | rsi10_f50_n10 |
+| 2011-01-03 | rsi10_f50_n10 |
+| 2012-01-03 | rsi05_f50_n05 |
+| 2013-01-02 | rsi10_f50_n05 |
+| 2014-01-02 | rsi10_f50_n05 |
+| 2015-01-02 | rsi10_f50_n05 |
+| 2016-01-04 | rsi10_f50_n05 |
+| 2017-01-03 | rsi10_f50_n05 |
+| 2018-01-02 | rsi10_f50_n05 |
+| 2019-01-02 | rsi10_f50_n05 |
+| 2020-01-02 | rsi10_f50_n05 |
+| 2021-01-04 | rsi15_f50_n10 |
+| 2022-01-03 | rsi15_f50_n10 |
+| 2023-01-03 | rsi15_f50_n10 |
+| 2024-01-02 | rsi15_f50_n10 |
+| 2025-01-02 | rsi15_f50_n10 |
+| 2026-01-02 | rsi15_f50_n10 |
+
+Out-of-sample window: 2006-01-03 to 2026-11-13 (5250 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.43% | 0.615 | n/a | -46.73% |
+| candidate | 12.36% | 0.580 | 0.311 | -55.12% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.615342 -> 0.580296 (delta -0.035046; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.467350 -> -0.554086 (delta -0.086737; need >= 0.03). CAGR 0.154283 -> 0.128618 (delta -0.025665; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe -0.244736, deflated Sharpe 0.000480 (need >= 0.75). Trials 514, daily-Sharpe dispersion 0.009916, daily multiple-testing benchmark 0.030351. |
+| b still helps with the best improvement year removed | no | Removed 2015 (summed daily improvement 0.209234). Remaining Sharpe delta -0.087021, CAGR delta -0.040821, max-drawdown delta -0.086737. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | yes | All 3 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell. |
+
+Decision: rejected.
+
+spy-rsi-boost walk-forward cell rsi10_f33_n10: OOS CAGR 12.4%, Sharpe 0.580, max drawdown -55.1%, worst year 2008 (-36.8%), deflated Sharpe 0.311. Trades per year 8.112. Average holding days 3.4437869822485205. At 10 bps per side, CAGR n/a. Correlation with the lead book 0.8613128309586122. A daily 50/50 blend compounds at 14.1% with max drawdown -50.7%. Best year removed (None): CAGR 11.8%. Materiality against the lead book: fail. The trend book is not replaced. For 2026-11-16, hold SPY 100%. Entry: Wilder RSI(2) < 10 and SPY above its 200-day average. Exit: RSI(2) > 70, or SPY close above its 5-day average (754.7820), or 10 sessions. Stop: none.
