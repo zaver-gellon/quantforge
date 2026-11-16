@@ -115,6 +115,24 @@ def trend_state(close: pd.Series, window: int, band: float = 0.0, freq: str = "d
     return pd.Series(out, index=series.index, name="trend_on")
 
 
+def _take_sleeve_slice(weights: dict[str, float], sleeve_symbol: str, symbol: str, weight: float) -> dict[str, float]:
+    """Move ``weight`` of the book from the leveraged sleeve into ``symbol``."""
+    take = round(float(weight), 6)
+    if take <= 0.0:
+        return dict(weights)
+    out = dict(weights)
+    held = float(out.get(sleeve_symbol, 0.0))
+    if held + 1e-8 < take:
+        raise ValueError("the leveraged sleeve is smaller than the diversifier slice")
+    left = round(held - take, 6)
+    if left > 1e-12:
+        out[sleeve_symbol] = left
+    else:
+        out.pop(sleeve_symbol, None)
+    out[symbol] = round(float(out.get(symbol, 0.0)) + take, 6)
+    return out
+
+
 def _relocate_sleeve_cash(
     weights: dict[str, float],
     cash_symbol: str,
@@ -253,6 +271,10 @@ def build_trend_signal(
     pause_info: dict | None = None,
     term_share: pd.Series | None = None,
     term_info: dict | None = None,
+    slice_symbol: str | None = None,
+    slice_weight: float | None = None,
+    slice_ready: pd.Series | None = None,
+    slice_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -312,6 +334,10 @@ def build_trend_signal(
     gate cleared the bar. It cannot be set together with any of those shares.
     While the sleeve is on and the kept ratio threshold is still in force,
     the share is the kept floor and the rest of the sleeve is SPY.
+    ``slice_symbol`` is set only when a walk-forward on-trend slice cleared
+    the materiality bar. While the sleeve is on and ``slice_ready`` is true,
+    ``slice_weight`` of the book is moved from the leveraged sleeve into that
+    asset. The slice is not held while the sleeve is off.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -496,6 +522,30 @@ def build_trend_signal(
         and bool(on) == bool(previous)
         and sleeve_cash_now != sleeve_cash_prev
     )
+    slice_now = False
+    slice_prev = False
+    slice_ready_now = False
+    if slice_symbol is not None:
+        if slice_weight is None or slice_ready is None:
+            raise ValueError("an on-trend slice requires its weight and ready series")
+        if slice_weight <= 0.0 or slice_weight > float(spec.sleeve_weight) + 1e-8:
+            raise ValueError("slice weight must lie inside the sleeve budget")
+        if idle_symbol is not None:
+            raise ValueError("an on-trend slice and a whole-book diversifier cannot both be kept")
+        if sleeve_cash_symbol is not None:
+            raise ValueError("an on-trend slice and an off-trend sleeve diversifier cannot both be kept")
+        if blend_share is not None or sleeve_fast is not None:
+            raise ValueError("an on-trend slice and another sleeve blend cannot both be kept")
+        aligned_slice_ready = slice_ready.reindex(visible.index)
+        if aligned_slice_ready.isna().any():
+            raise ValueError("on-trend slice ready series is missing sessions at or before as_of")
+        aligned_slice_ready = aligned_slice_ready.astype(bool)
+        slice_ready_now = bool(aligned_slice_ready.iloc[-1])
+        slice_ready_prev = bool(aligned_slice_ready.iloc[-2]) if len(aligned_slice_ready) > 1 else False
+        prev_sleeve_for_slice = bool(previous) and not hedge_prev
+        slice_now = bool(sleeve_on and slice_ready_now)
+        slice_prev = bool(prev_sleeve_for_slice and slice_ready_prev)
+    slice_changed = bool(slice_symbol is not None and slice_now != slice_prev)
     scale_changed = False
     if sleeve_scale is not None:
         prev_fraction = 1.0 if (bool(previous) and not hedge_prev) else 0.0
@@ -568,6 +618,9 @@ def build_trend_signal(
     elif sleeve_cash_changed:
         trade = True
         reason = "sleeve_diversifier"
+    elif slice_changed:
+        trade = True
+        reason = "ontrend_slice"
     elif scheduled:
         trade = True
         reason = "drift_band" if drift_replaced_calendar else "scheduled_rebalance"
@@ -614,6 +667,8 @@ def build_trend_signal(
         )
         if sleeve_cash_now:
             weights = _relocate_sleeve_cash(weights, spec.cash_symbol, spec.sleeve_weight, sleeve_cash_symbol)
+        if slice_now:
+            weights = _take_sleeve_slice(weights, spec.sleeve_symbol, slice_symbol, float(slice_weight))
     average = close.rolling(spec.window, min_periods=spec.window).mean().loc[as_of_ts]
     payload = {
         "date": next_nyse_session(as_of_ts).strftime("%Y-%m-%d"),
@@ -726,10 +781,17 @@ def build_trend_signal(
         payload["diagnostics"]["idle_symbol"] = idle_symbol
         payload["diagnostics"]["idle_on"] = bool(idle_now)
         payload["diagnostics"]["idle_ready"] = bool(ready_now)
+    if slice_info or slice_symbol is not None:
+        if slice_info:
+            payload["diagnostics"].update(slice_info)
+        payload["diagnostics"]["slice_applied"] = bool(slice_now)
+        payload["diagnostics"]["slice_ready"] = bool(slice_ready_now)
     allowed = set(ALLOWED_TREND_TICKERS)
     if idle_symbol is not None:
         allowed.add(idle_symbol)
     if sleeve_cash_symbol is not None:
         allowed.add(sleeve_cash_symbol)
+    if slice_now and slice_symbol is not None:
+        allowed.add(slice_symbol)
     validate_signal(payload, allowed_tickers=frozenset(allowed))
     return payload
