@@ -9153,5 +9153,533 @@
       "sleeve_leverage_applied": null,
       "trade_reason": "none"
     }
+  },
+  {
+    "id": "2026-11-13-term-gate",
+    "date": "2026-11-13",
+    "title": "VIX term-structure gate on the UPRO sleeve",
+    "hypothesis": "The live book's maximum drawdown is still about -46.8%, and the book trails SPY in the fast 2020 and 2022 breaks, because the 3x sleeve stays fully invested until SPY closes through the lower side of its 200-day band. The sleeve rules tried since 2026-11-06 were rejected. An exponential average, a shorter trend that swaps UPRO for SPY, realized volatility, the gap of price over the 200-day average, the T-bill yield, and a short run of down closes all read SPY's own path or a slow rate level. The 2026-11-09 realized-vol gear was on for 489 of 4137 band-on sessions and the daily improvement had a negative Sharpe. The 2026-11-10 cushion scale was never selected. The 2026-11-11 bill-yield gear was on for 1249 of 4139 band-on sessions and gave up about 2.7 points of CAGR. The 2026-11-12 down-streak pause was on for 24 of 4140 band-on sessions, and the stitched Sharpe fell. Those clocks are the same equity path the 200-day band already uses, either faster or shorter, and they either cut bull markets or almost never leave the current book. This test does not add another average of SPY, does not read realized volatility, the bill, the cushion, or consecutive down closes, and does not sell the sleeve into T-bills while the band is on. It reads the CBOE implied-volatility term structure. The input is the same-session close of ^VIX divided by the same-session close of ^VIX3M. In a calm market the one-month index sits below the three-month index. The curve inverts when near-term protection is the scarce one, which has clustered at the start of the fast breaks the 200-day band exits late. A session missing either print does not invert the curve and does not cut the sleeve. There is no forward fill. VIX3M begins when that index was published, in 2006. Sessions before the first joint close keep a share of 1, so they match the current book. While the 200-day 2% band is on and the ratio is at or above a threshold, the sleeve's UPRO share for the next session drops to a floor and the rest of the sleeve is SPY. When the ratio is back below the threshold, or the band is off, the share is 1. The core's three-down-close dip is unchanged. The quarterly mix is unchanged. Thresholds are 1.00, 1.05, and 1.10. Floors are 0 and 1/2, so the sleeve goes to SPY or to 2x. The six cells are new trials. The current book, which keeps the share at 1 whenever the band is on, is the walk-forward's option to keep the present rule and is not a new trial. Ties in the trailing excess Sharpe break alphabetically, so the current book wins a tie. Fills stay next-open with 5 bp one-way costs. Cash pays no spread. The blend pays 5 bp on the SPY dollars and the UPRO dollars that trade. The stitched path is kept only when it clears the materiality bar.",
+    "status": "tested",
+    "kept": false,
+    "overlay": "term_gate",
+    "decision": "rejected",
+    "decision_note": "Refreshed lead out-of-sample 2006-01-03 to 2026-11-13 (5250 sessions): CAGR 0.156212, Sharpe 0.619599, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-13 (8507 sessions). SSO ends 2026-11-13, UPRO ends 2026-11-13, ^IRX ends 2026-11-13, ^VIX ends 2026-11-13, ^VIX3M ends 2026-11-13. That is the Friday 2026-11-13 close. The next NYSE session is 2026-11-16. The 2026-11-13 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-12 (5249 sessions) has CAGR 0.156652, Sharpe 0.621038, max drawdown -0.468261, against the stored row CAGR 0.156651, Sharpe 0.621038, max drawdown -0.468261. Candidate versus that refreshed book: Sharpe 0.619599 -> 0.640955 (delta 0.021356), CAGR 0.156212 -> 0.156022 (delta -0.000190), max drawdown -0.468261 -> -0.468277 (delta -0.000015). Last walk-forward pick: term_t100_f00. Out-of-sample turnover per year 13.16 -> 16.31. Joint VIX/VIX3M closes on the SPY calendar run from 2006-07-17 to 2026-11-13 (5116 sessions). Of 4141 out-of-sample sessions with the 200-day band on, 4030 had a same-session ratio and the stitched rule set the sleeve's UPRO share below 1 on 152. Mean ratio on band-on sessions with a print was 0.8878. Mean ratio on gated sessions was 1.0530. Mean close-known leverage on band-on sessions was 2.927. Of those gated sessions, 39 also had the core's three-down-close dip on. A share of 1 matches the trend core (max abs return gap 0.000e+00). At the signal close, VIX was 19.3000, VIX3M was 20.6200, and the ratio was 0.9360. The stitched VIX term-structure gate does not clear the materiality bar. The live book stays the plain trend core. SPY close 754.3700 versus the 200-day average 729.3152 (+3.44% versus the average), above the upper band. Previous signal 2026-11-13 (close 2026-11-12): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-16 (close 2026-11-13): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. Weights changed: False. Trend state changed: False. Dip state changed: False.",
+    "data": {
+      "thresholds": [
+        1.0,
+        1.05,
+        1.1
+      ],
+      "floors": [
+        0.0,
+        0.5
+      ],
+      "ratio": "VIX_close_over_VIX3M_close",
+      "missing": "gate_off",
+      "residual": "SPY",
+      "live_cell": "term_off",
+      "applies_to": "sleeve_only_when_trend_on",
+      "price_sample_end": "2026-11-13",
+      "spy_close_end": "2026-11-13",
+      "coverage": [
+        {
+          "symbol": "SPY",
+          "start": "1993-01-29",
+          "end": "2026-11-13",
+          "n_obs": 8507
+        },
+        {
+          "symbol": "SSO",
+          "start": "2006-06-21",
+          "end": "2026-11-13",
+          "n_obs": 5133
+        },
+        {
+          "symbol": "UPRO",
+          "start": "2009-06-25",
+          "end": "2026-11-13",
+          "n_obs": 4375
+        },
+        {
+          "symbol": "^IRX",
+          "start": "1990-01-02",
+          "end": "2026-11-13",
+          "n_obs": 9255
+        },
+        {
+          "symbol": "^VIX",
+          "start": "1990-01-02",
+          "end": "2026-11-13",
+          "n_obs": 9288
+        },
+        {
+          "symbol": "^VIX3M",
+          "start": "2006-07-17",
+          "end": "2026-11-13",
+          "n_obs": 5116
+        }
+      ],
+      "identity_max_abs_return_gap": 0.0,
+      "joint_ratio": {
+        "start": "2006-07-17",
+        "end": "2026-11-13",
+        "n_obs": 5116
+      },
+      "lead_oos_before_judgment": {
+        "cagr": 0.15621165275928917,
+        "sharpe": 0.6195990298838481,
+        "max_drawdown": -0.4682614711021734,
+        "n_days": 5250,
+        "start": "2006-01-03",
+        "end": "2026-11-13"
+      },
+      "oos_band_on": {
+        "sessions": 5250,
+        "band_on": 4141,
+        "band_on_with_ratio": 4030,
+        "upro_share_below_one": 152,
+        "mean_ratio_when_band_on": 0.8877659835587726,
+        "mean_ratio_when_gated": 1.0530475109254902,
+        "mean_leverage_when_band_on": 2.9270707558560733,
+        "gated_and_core_dip_on": 39
+      },
+      "signal_close_ratio": {
+        "vix": 19.299999237060547,
+        "vix3m": 20.6200008392334,
+        "ratio": 0.9359844059918124
+      },
+      "oos_turnover_per_year": {
+        "current": 13.160152022164473,
+        "candidate": 16.306196691300645
+      }
+    },
+    "variants": [
+      {
+        "name": "term_off",
+        "counts_for_deflation": false,
+        "threshold": null,
+        "floor": null,
+        "cagr": 0.12791830551411087,
+        "sharpe": 0.5191860532750073,
+        "max_drawdown": -0.46826147110217387,
+        "turnover_per_year": 13.60942241866718,
+        "dsr": null,
+        "years_selected": 2,
+        "note": "The current book. The on-trend sleeve stays at 3x. Already counted."
+      },
+      {
+        "name": "term_t100_f00",
+        "counts_for_deflation": true,
+        "threshold": 1.0,
+        "floor": 0.0,
+        "cagr": 0.13104150999858843,
+        "sharpe": 0.5459674828088437,
+        "max_drawdown": -0.4274958988452432,
+        "turnover_per_year": 16.698402199939284,
+        "dsr": 0.6723422085372994,
+        "years_selected": 18,
+        "note": null
+      },
+      {
+        "name": "term_t100_f50",
+        "counts_for_deflation": true,
+        "threshold": 1.0,
+        "floor": 0.5,
+        "cagr": 0.12990694322064944,
+        "sharpe": 0.5345664341896925,
+        "max_drawdown": -0.4429948131174709,
+        "turnover_per_year": 15.152506156681454,
+        "dsr": 0.6508044287179419,
+        "years_selected": 0,
+        "note": null
+      },
+      {
+        "name": "term_t105_f00",
+        "counts_for_deflation": true,
+        "threshold": 1.05,
+        "floor": 0.0,
+        "cagr": 0.13122072945044194,
+        "sharpe": 0.5383431494389455,
+        "max_drawdown": -0.4658385830429388,
+        "turnover_per_year": 14.646300437837027,
+        "dsr": 0.6578489011049591,
+        "years_selected": 0,
+        "note": null
+      },
+      {
+        "name": "term_t105_f50",
+        "counts_for_deflation": true,
+        "threshold": 1.05,
+        "floor": 0.5,
+        "cagr": 0.12966947404200369,
+        "sharpe": 0.5294224127891426,
+        "max_drawdown": -0.4663014973638939,
+        "turnover_per_year": 14.125477332889362,
+        "dsr": 0.640855808360951,
+        "years_selected": 1,
+        "note": null
+      },
+      {
+        "name": "term_t110_f00",
+        "counts_for_deflation": true,
+        "threshold": 1.1,
+        "floor": 0.0,
+        "cagr": 0.1332746582910007,
+        "sharpe": 0.5431155929146643,
+        "max_drawdown": -0.4648927482344207,
+        "turnover_per_year": 14.179070161024997,
+        "dsr": 0.6668020964841044,
+        "years_selected": 0,
+        "note": null
+      },
+      {
+        "name": "term_t110_f50",
+        "counts_for_deflation": true,
+        "threshold": 1.1,
+        "floor": 0.5,
+        "cagr": 0.13063779876366688,
+        "sharpe": 0.5315187203851831,
+        "max_drawdown": -0.46625051986110744,
+        "turnover_per_year": 13.894101735811478,
+        "dsr": 0.6448740141194232,
+        "years_selected": 0,
+        "note": null
+      }
+    ],
+    "walk_forward_picks": [
+      [
+        "2006-01-03",
+        "term_off"
+      ],
+      [
+        "2007-01-03",
+        "term_off"
+      ],
+      [
+        "2008-01-02",
+        "term_t100_f00"
+      ],
+      [
+        "2009-01-02",
+        "term_t100_f00"
+      ],
+      [
+        "2010-01-04",
+        "term_t105_f50"
+      ],
+      [
+        "2011-01-03",
+        "term_t100_f00"
+      ],
+      [
+        "2012-01-03",
+        "term_t100_f00"
+      ],
+      [
+        "2013-01-02",
+        "term_t100_f00"
+      ],
+      [
+        "2014-01-02",
+        "term_t100_f00"
+      ],
+      [
+        "2015-01-02",
+        "term_t100_f00"
+      ],
+      [
+        "2016-01-04",
+        "term_t100_f00"
+      ],
+      [
+        "2017-01-03",
+        "term_t100_f00"
+      ],
+      [
+        "2018-01-02",
+        "term_t100_f00"
+      ],
+      [
+        "2019-01-02",
+        "term_t100_f00"
+      ],
+      [
+        "2020-01-02",
+        "term_t100_f00"
+      ],
+      [
+        "2021-01-04",
+        "term_t100_f00"
+      ],
+      [
+        "2022-01-03",
+        "term_t100_f00"
+      ],
+      [
+        "2023-01-03",
+        "term_t100_f00"
+      ],
+      [
+        "2024-01-02",
+        "term_t100_f00"
+      ],
+      [
+        "2025-01-02",
+        "term_t100_f00"
+      ],
+      [
+        "2026-01-02",
+        "term_t100_f00"
+      ]
+    ],
+    "oos_window": {
+      "start": "2006-01-03",
+      "end": "2026-11-13",
+      "n_days": 5250
+    },
+    "oos": {
+      "current": {
+        "cagr": 0.15621165275928917,
+        "vol": 0.2630048786376077,
+        "sharpe": 0.6195990298838481,
+        "sharpe_per_period": 0.03903478791040684,
+        "max_drawdown": -0.4682614711021734,
+        "n_days": 5250,
+        "start": "2006-01-03",
+        "end": "2026-11-13"
+      },
+      "candidate": {
+        "cagr": 0.15602174209011488,
+        "vol": 0.24770463415446936,
+        "sharpe": 0.6409550674534331,
+        "sharpe_per_period": 0.040380219967154414,
+        "max_drawdown": -0.4682766977804115,
+        "n_days": 5250,
+        "start": "2006-01-03",
+        "end": "2026-11-13"
+      }
+    },
+    "lead_oos": {
+      "before": {
+        "cagr": 0.15621165275928917,
+        "vol": 0.2630048786376077,
+        "sharpe": 0.6195990298838481,
+        "sharpe_per_period": 0.03903478791040684,
+        "max_drawdown": -0.4682614711021734,
+        "n_days": 5250,
+        "start": "2006-01-03",
+        "end": "2026-11-13"
+      },
+      "after": {
+        "cagr": 0.15621165275928917,
+        "vol": 0.2630048786376077,
+        "sharpe": 0.6195990298838481,
+        "sharpe_per_period": 0.03903478791040684,
+        "max_drawdown": -0.4682614711021734,
+        "n_days": 5250,
+        "start": "2006-01-03",
+        "end": "2026-11-13"
+      }
+    },
+    "lead_refresh": {
+      "prior_id": "2026-11-12-streak-pause",
+      "prior": {
+        "cagr": 0.15665132288413752,
+        "vol": 0.26302393976499533,
+        "sharpe": 0.6210376739244248,
+        "sharpe_per_period": 0.03912542330882912,
+        "max_drawdown": -0.46826139068648887,
+        "n_days": 5249,
+        "start": "2006-01-03",
+        "end": "2026-11-12"
+      },
+      "refreshed": {
+        "cagr": 0.15621165275928917,
+        "vol": 0.2630048786376077,
+        "sharpe": 0.6195990298838481,
+        "sharpe_per_period": 0.03903478791040684,
+        "max_drawdown": -0.4682614711021734,
+        "n_days": 5250,
+        "start": "2006-01-03",
+        "end": "2026-11-13"
+      },
+      "cagr_delta": -0.000439670124848357,
+      "sharpe_delta": -0.0014386440405766976,
+      "max_drawdown_delta": -8.041568455574577e-08,
+      "display_unchanged": false,
+      "through_prior_end": {
+        "cagr": 0.15665155601177783,
+        "sharpe": 0.6210383033360839,
+        "max_drawdown": -0.4682614711021734,
+        "n_days": 5249,
+        "start": "2006-01-03",
+        "end": "2026-11-12"
+      },
+      "note": "After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-13 (8507 sessions). SSO ends 2026-11-13, UPRO ends 2026-11-13, ^IRX ends 2026-11-13, ^VIX ends 2026-11-13, ^VIX3M ends 2026-11-13. That is the Friday 2026-11-13 close. The next NYSE session is 2026-11-16. The 2026-11-13 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-12 (5249 sessions) has CAGR 0.156652, Sharpe 0.621038, max drawdown -0.468261, against the stored row CAGR 0.156651, Sharpe 0.621038, max drawdown -0.468261."
+    },
+    "materiality": {
+      "pass": false,
+      "bar": {
+        "sharpe_improvement": 0.05,
+        "drawdown_improvement": 0.03,
+        "cagr_slack": 0.005,
+        "improvement_dsr_min": 0.75,
+        "neighbor_sharpe_tol": 0.05,
+        "neighbor_drawdown_tol": 0.03
+      },
+      "checks": [
+        {
+          "name": "a Sharpe +0.05",
+          "pass": false,
+          "detail": "Sharpe 0.619599 -> 0.640955 (delta 0.021356; need >= 0.05)."
+        },
+        {
+          "name": "a drawdown +3pp and CAGR within 0.5pp",
+          "pass": false,
+          "detail": "Max drawdown -0.468261 -> -0.468277 (delta -0.000015; need >= 0.03). CAGR 0.156212 -> 0.156022 (delta -0.000190; floor -0.0050)."
+        },
+        {
+          "name": "a overall",
+          "pass": false,
+          "detail": "Either the Sharpe clause or the drawdown clause is enough."
+        },
+        {
+          "name": "b deflated Sharpe of the improvement >= 0.75",
+          "pass": false,
+          "detail": "Improvement Sharpe -0.089821, deflated Sharpe 0.006811 (need >= 0.75). Trials 388, daily-Sharpe dispersion 0.009720, daily multiple-testing benchmark 0.028922."
+        },
+        {
+          "name": "b still helps with the best improvement year removed",
+          "pass": false,
+          "detail": "Removed 2020 (summed daily improvement 0.134589). Remaining Sharpe delta -0.017081, CAGR delta -0.009767, max-drawdown delta -0.000015."
+        },
+        {
+          "name": "b overall",
+          "pass": false,
+          "detail": "The deflated-Sharpe cutoff and the best-year check both have to pass."
+        },
+        {
+          "name": "c neighboring parameters",
+          "pass": false,
+          "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell."
+        }
+      ],
+      "oos": {
+        "current": {
+          "cagr": 0.15621165275928917,
+          "vol": 0.2630048786376077,
+          "sharpe": 0.6195990298838481,
+          "sharpe_per_period": 0.03903478791040684,
+          "max_drawdown": -0.4682614711021734,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13"
+        },
+        "candidate": {
+          "cagr": 0.15602174209011488,
+          "vol": 0.24770463415446936,
+          "sharpe": 0.6409550674534331,
+          "sharpe_per_period": 0.040380219967154414,
+          "max_drawdown": -0.4682766977804115,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13"
+        }
+      },
+      "criterion_a": {
+        "sharpe_delta": 0.02135603756958504,
+        "cagr_delta": -0.0001899106691742869,
+        "max_drawdown_delta": -1.5226678238056124e-05,
+        "sharpe_pass": false,
+        "drawdown_pass": false,
+        "pass": false
+      },
+      "criterion_b": {
+        "pass": false,
+        "dsr_pass": false,
+        "still_helps": false,
+        "improvement_sharpe": -0.08982098403211844,
+        "improvement_sharpe_per_period": -0.005658729101391677,
+        "improvement_dsr": 0.006811104341466645,
+        "sr0_daily": 0.028922386106328045,
+        "n_trials": 388,
+        "sharpe_dispersion_daily": 0.009720324604821416,
+        "best_year": 2020,
+        "best_year_improvement_sum": 0.1345891166710479,
+        "without_best_year": {
+          "sharpe_delta": -0.017081155894713262,
+          "cagr_delta": -0.009766643747714854,
+          "max_drawdown_delta": -1.5226678238056124e-05,
+          "sharpe_pass": false,
+          "drawdown_pass": false,
+          "pass": false
+        }
+      },
+      "criterion_c": {
+        "pass": false,
+        "detail": "At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell.",
+        "cell": {
+          "cagr": 0.16033444607691072,
+          "vol": 0.2441411775561144,
+          "sharpe": 0.6619624672965223,
+          "sharpe_per_period": 0.0417036878195457,
+          "max_drawdown": -0.42749589884524286,
+          "n_days": 5250,
+          "start": "2006-01-03",
+          "end": "2026-11-13"
+        },
+        "neighbors": [
+          {
+            "name": "term_t100_f50",
+            "similar": true,
+            "cagr": 0.1588363798931287,
+            "sharpe": 0.6434622486559979,
+            "max_drawdown": -0.4429948131174698,
+            "sharpe_gap": 0.018500218640524424,
+            "max_drawdown_gap": 0.015498914272226938
+          },
+          {
+            "name": "term_t105_f00",
+            "similar": false,
+            "cagr": 0.16057112443756405,
+            "sharpe": 0.6478840627140394,
+            "max_drawdown": -0.46583858304293935,
+            "sharpe_gap": 0.014078404582482884,
+            "max_drawdown_gap": 0.038342684197696486
+          }
+        ]
+      }
+    },
+    "n_trials": 388,
+    "sharpe_dispersion_daily": 0.009720324604821416,
+    "last_pick": "term_t100_f00",
+    "previous_signal": {
+      "date": "2026-11-13",
+      "weights": {
+        "SPY": 0.5,
+        "UPRO": 0.5
+      },
+      "trend_on": true,
+      "dip_on": false,
+      "signal_date": "2026-11-12"
+    },
+    "signal": {
+      "date": "2026-11-16",
+      "signal_date": "2026-11-13",
+      "weights": {
+        "SPY": 0.5,
+        "UPRO": 0.5
+      },
+      "trend_on": true,
+      "dip_on": false,
+      "reference_close": 754.3699951171875,
+      "sma": 729.315171508789,
+      "term_rule": null,
+      "term_share": null,
+      "term_on": null,
+      "term_ratio": null,
+      "sleeve_leverage_applied": null,
+      "trade_reason": "none"
+    }
   }
 ]
