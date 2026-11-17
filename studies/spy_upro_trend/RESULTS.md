@@ -2277,3 +2277,88 @@ Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample win
 Decision: rejected.
 
 Refreshed lead out-of-sample 2006-01-03 to 2026-11-16 (5251 sessions): CAGR 0.154053, Sharpe 0.612327, max drawdown -0.468260. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-16 (8508 sessions). SSO ends 2026-11-16, UPRO ends 2026-11-16, ^IRX ends 2026-11-16, ^VIX ends 2026-11-16, ^VIX3M ends 2026-11-16, GLD ends 2026-11-16, IEF ends 2026-11-16, TLT ends 2026-11-16. That is the Monday 2026-11-16 close. The next NYSE session is 2026-11-17. The 2026-11-16 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-13 (5250 sessions) has CAGR 0.156212, Sharpe 0.619599, max drawdown -0.468260, against the stored row CAGR 0.156212, Sharpe 0.619599, max drawdown -0.468261. The comparison row is the last trend-core lead, `2026-11-13-dip-hold`, not the later faster-book rows. Candidate versus that refreshed book: Sharpe 0.612327 -> 0.607736 (delta -0.004592), CAGR 0.154053 -> 0.152849 (delta -0.001204), max drawdown -0.468260 -> -0.459879 (delta 0.008381). Last walk-forward pick: zsym_b08. Out-of-sample turnover per year 13.16 -> 12.89. The quarterly calendar calls a mix on 83 closes in the out-of-sample window. The stitched rule calls a mix on 22 closes. Band calls on that window: {'zsym_b02': 130, 'zsym_b04': 42, 'zsym_b06': 17, 'zsym_b08': 14, 'zsym_b10': 5}. Measured on the live quarterly book before any new cell was scored. Of 5251 out-of-sample sessions, the sleeve was in UPRO on 4142. The mean absolute gap from one half on those sessions was 0.0153. The share beyond each band was zsym_b02 29.6%, zsym_b04 5.3%, zsym_b06 1.2%, zsym_b08 0.1%, zsym_b10 0.0%. Quarter-end decisions with the sleeve in UPRO: 65, of which 35 had a gap of 2 percentage points or less and 30 were wider. The stitched two-sided drift band does not clear the materiality bar. The live book stays the plain trend core. SPY close 739.9500 versus the 200-day average 729.5819 (+1.42% versus the average), inside the 2% band. Previous signal 2026-11-16 (close 2026-11-13): SPY 0.5000, UPRO 0.5000; trend on True; dip on False. This signal 2026-11-17 (close 2026-11-16): UPRO 0.5000, SSO 0.5000; trend on True; dip on True. Weights changed: True. Trend state changed: False. Dip state changed: True.
+
+### 2026-11-17 — Re-entry delay on the UPRO sleeve
+
+The live sleeve turns on at the first close above 1.02 times the 200-day average and turns off at the first close below 0.98 times that average. The original grid already scored that 2% band. The 2026-10-31 test then required N consecutive closes beyond the band before either transition, so the exit waited as well as the re-entry and the sleeve stayed at 3x through the first closes of a break. The walk-forward preferred a wider band with an immediate flip and missed the materiality bar. Static mix ratios of 30/70 through 70/30 are already trials in that original grid, including the live 200-day 2% filter with a quarterly reset, so this test does not rescore them. The sized dip, the dip-exit grid, and the shorter-filter re-entry of the SPY core are already scored as well. This test does not change the exit. The sleeve still turns off on the first close below 0.98 times the average. After it is off, it turns back on only after N consecutive closes above 1.02 times the average. A close that is not above that upper band resets the count, and the sleeve stays in T-bills until the count is met. N of 1 is the live filter, already counted, and is the walk-forward's option to keep the current book. Its name sorts first, so a tie in the trailing excess Sharpe keeps it. The new trials are N of 2, 3, 5, 8, and 10, fixed before this sample is scored. The SPY core, the three-down-close dip, and the quarterly mix are unchanged. Fills stay next-open with 5 bp one-way costs. Cash pays no spread. The study counts, on the live filter and before any new cell is scored, how often the sleeve re-enters and how many of those re-entries would still complete under each longer count. The stitched path is kept only when it clears the materiality bar.
+
+Measured on the live 2% filter before any new cell was scored. Of 5252 out-of-sample sessions, the sleeve re-entered 17 times. The median run of closes above the upper band, starting at that re-entry, was 3.0 sessions. The share of those re-entries whose run still reaches each count was zre_n02 76.5%, zre_n03 58.8%, zre_n05 35.3%, zre_n08 29.4%, zre_n10 29.4%. Completed on-spells that started in the window: 16, of which 1 ended within 5 sessions, 3 within 10, and 4 within 21. 1 spell was still open at the sample end (156 sessions).
+
+- `SPY` from 1993-01-29 to 2026-11-17 (8509 sessions).
+- `SSO` from 2006-06-21 to 2026-11-17 (5135 sessions).
+- `UPRO` from 2009-06-25 to 2026-11-17 (4377 sessions).
+- `^IRX` from 1990-01-02 to 2026-11-17 (9257 sessions).
+- `^VIX` from 1990-01-02 to 2026-11-17 (9290 sessions).
+- `^VIX3M` from 2006-07-17 to 2026-11-17 (5118 sessions).
+- `GLD` from 2004-11-18 to 2026-11-17 (5534 sessions).
+- `IEF` from 2002-07-30 to 2026-11-17 (6116 sessions).
+- `TLT` from 2002-07-30 to 2026-11-17 (6116 sessions).
+
+Refreshed lead book, out of sample, before the candidate is judged. Window 2006-01-03 to 2026-11-17 (5252 sessions): CAGR 15.26%, Sharpe 0.608, max drawdown -46.83%. Prior write-up `2026-11-16-sym-drift` through 2026-11-16: CAGR 15.41%, Sharpe 0.612, max drawdown -46.83%. Deltas versus that row: CAGR -0.14%, Sharpe -0.005, max drawdown -0.00%. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-17 (8509 sessions). SSO ends 2026-11-17, UPRO ends 2026-11-17, ^IRX ends 2026-11-17, ^VIX ends 2026-11-17, ^VIX3M ends 2026-11-17, GLD ends 2026-11-17, IEF ends 2026-11-17, TLT ends 2026-11-17. That is the Tuesday 2026-11-17 close. The next NYSE session is 2026-11-18. The 2026-11-17 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-16 (5251 sessions) has CAGR 0.154053, Sharpe 0.612328, max drawdown -0.468261, against the stored row CAGR 0.154053, Sharpe 0.612327, max drawdown -0.468260. The comparison row is the last trend-core lead, `2026-11-16-sym-drift`, not the later faster-book rows.
+
+Variants tried. Counting rows increment the ledger. The walk-forward stitch is a selection over those rows and is stored as an audit.
+
+| variant | counts | full-sample CAGR | Sharpe | max DD | years selected |
+| --- | --- | --- | --- | --- | --- |
+| re_live | no | 12.5% | 0.51 | -46.8% | 0 |
+| zre_n02 | yes | 12.9% | 0.53 | -46.7% | 5 |
+| zre_n03 | yes | 12.7% | 0.52 | -49.3% | 0 |
+| zre_n05 | yes | 13.2% | 0.54 | -45.4% | 7 |
+| zre_n08 | yes | 13.0% | 0.54 | -46.3% | 9 |
+| zre_n10 | yes | 12.7% | 0.53 | -47.1% | 0 |
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2006-01-03 | zre_n02 |
+| 2007-01-03 | zre_n05 |
+| 2008-01-02 | zre_n05 |
+| 2009-01-02 | zre_n05 |
+| 2010-01-04 | zre_n05 |
+| 2011-01-03 | zre_n05 |
+| 2012-01-03 | zre_n05 |
+| 2013-01-02 | zre_n02 |
+| 2014-01-02 | zre_n02 |
+| 2015-01-02 | zre_n02 |
+| 2016-01-04 | zre_n02 |
+| 2017-01-03 | zre_n08 |
+| 2018-01-02 | zre_n08 |
+| 2019-01-02 | zre_n08 |
+| 2020-01-02 | zre_n08 |
+| 2021-01-04 | zre_n08 |
+| 2022-01-03 | zre_n08 |
+| 2023-01-03 | zre_n08 |
+| 2024-01-02 | zre_n08 |
+| 2025-01-02 | zre_n08 |
+| 2026-01-02 | zre_n05 |
+
+Out-of-sample window: 2006-01-03 to 2026-11-17 (5252 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 15.26% | 0.608 | n/a | -46.83% |
+| candidate | 15.76% | 0.636 | n/a | -45.37% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.607582 -> 0.636241 (delta 0.028659; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.468261 -> -0.453722 (delta 0.014539; need >= 0.03). CAGR 0.152633 -> 0.157606 (delta 0.004973; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe 0.042096, deflated Sharpe 0.022131 (need >= 0.75). Trials 524, daily-Sharpe dispersion 0.009833, daily multiple-testing benchmark 0.030155. |
+| b still helps with the best improvement year removed | no | Removed 2022 (summed daily improvement 0.104059). Remaining Sharpe delta 0.009377, CAGR delta -0.001180, max-drawdown delta 0.014539. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | no | At least one neighbor is more than 0.05 Sharpe or 3% drawdown away from the selected cell. |
+
+Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample window.
+
+| neighbor | similar | CAGR | Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| zre_n03 | no | 15.74% | 0.631 | -49.28% |
+| zre_n08 | yes | 15.97% | 0.647 | -46.29% |
+
+Decision: rejected.
+
+Refreshed lead out-of-sample 2006-01-03 to 2026-11-17 (5252 sessions): CAGR 0.152633, Sharpe 0.607582, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-17 (8509 sessions). SSO ends 2026-11-17, UPRO ends 2026-11-17, ^IRX ends 2026-11-17, ^VIX ends 2026-11-17, ^VIX3M ends 2026-11-17, GLD ends 2026-11-17, IEF ends 2026-11-17, TLT ends 2026-11-17. That is the Tuesday 2026-11-17 close. The next NYSE session is 2026-11-18. The 2026-11-17 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-16 (5251 sessions) has CAGR 0.154053, Sharpe 0.612328, max drawdown -0.468261, against the stored row CAGR 0.154053, Sharpe 0.612327, max drawdown -0.468260. The comparison row is the last trend-core lead, `2026-11-16-sym-drift`, not the later faster-book rows. Candidate versus that refreshed book: Sharpe 0.607582 -> 0.636241 (delta 0.028659), CAGR 0.152633 -> 0.157606 (delta 0.004973), max drawdown -0.468261 -> -0.453722 (delta 0.014539). Last walk-forward pick: zre_n05. Out-of-sample turnover per year 13.18 -> 13.08. Trend-state changes on that window 34 -> 26. Sessions where a frozen count differs from the live filter: {'zre_n02': 38, 'zre_n03': 70, 'zre_n05': 128, 'zre_n08': 214, 'zre_n10': 272}. Measured on the live 2% filter before any new cell was scored. Of 5252 out-of-sample sessions, the sleeve re-entered 17 times. The median run of closes above the upper band, starting at that re-entry, was 3.0 sessions. The share of those re-entries whose run still reaches each count was zre_n02 76.5%, zre_n03 58.8%, zre_n05 35.3%, zre_n08 29.4%, zre_n10 29.4%. Completed on-spells that started in the window: 16, of which 1 ended within 5 sessions, 3 within 10, and 4 within 21. 1 spell was still open at the sample end (156 sessions). The stitched re-entry delay does not clear the materiality bar. The live book stays the plain trend core. SPY close 732.4400 versus the 200-day average 729.7940 (+0.36% versus the average), inside the 2% band. Previous signal 2026-11-17 (close 2026-11-16): UPRO 0.5000, SSO 0.5000; trend on True; dip on True. This signal 2026-11-18 (close 2026-11-17): UPRO 0.5000, SSO 0.5000; trend on True; dip on True. Weights changed: False. Trend state changed: False. Dip state changed: False.

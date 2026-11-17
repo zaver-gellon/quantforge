@@ -1,8 +1,8 @@
 {
-  "date": "2026-11-17",
+  "date": "2026-11-18",
   "as_of": "2026-11-16T13:35:00-08:00",
-  "spy_close": 739.9500122070312,
-  "exit_level": 714.9902470703124,
+  "spy_close": 732.4400024414062,
+  "exit_level": 715.1981028930663,
   "tight_band": 0.02,
   "note": null,
   "positions": [
@@ -16,9 +16,9 @@
       "stop_pct": 0.179956,
       "leverage": 2,
       "implied_spy_move": 0.089978,
-      "implied_spy": 673.370842,
-      "exit_gap": -41.619405,
-      "exit_gap_pct": -0.05821,
+      "implied_spy": 666.536568,
+      "exit_gap": -48.661535,
+      "exit_gap_pct": -0.068039,
       "too_tight": false
     },
     {
@@ -31,9 +31,9 @@
       "stop_pct": 0.127022,
       "leverage": 3,
       "implied_spy_move": 0.042341,
-      "implied_spy": 708.620046,
-      "exit_gap": -6.370201,
-      "exit_gap_pct": -0.008909,
+      "implied_spy": 701.428015,
+      "exit_gap": -13.770088,
+      "exit_gap_pct": -0.019254,
       "too_tight": true
     }
   ],
@@ -46,6 +46,6 @@
     }
   ],
   "flags": [
-    "UPRO live: hard stop implies SPY 708.62, within 2% below the trend-core exit 714.99"
+    "UPRO live: hard stop implies SPY 701.43, within 2% below the trend-core exit 715.20"
   ]
 }
