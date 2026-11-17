@@ -279,6 +279,7 @@ def build_trend_signal(
     slice_info: dict | None = None,
     dip_hold_flag: pd.Series | None = None,
     dip_hold_info: dict | None = None,
+    reentry_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -348,6 +349,9 @@ def build_trend_signal(
     ``dip_hold_flag`` replaces the three-down overlay's exit when a walk-forward
     hold rule cleared the materiality bar. It is the decision to hold SSO in
     the core on the next session. It cannot be set together with a sized dip.
+    ``reentry_info`` records a kept delay of the sleeve's re-entry. The delayed
+    state is ``trend_override``. The exit is still the first close below the
+    lower band. It does not change the weights by itself.
     """
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
@@ -748,6 +752,8 @@ def build_trend_signal(
         payload["diagnostics"].update(confirm_info)
         if confirm_info.get("confirm_band") is not None:
             payload["diagnostics"]["band"] = float(confirm_info["confirm_band"])
+    if reentry_info:
+        payload["diagnostics"].update(reentry_info)
     if core_hold_info:
         payload["diagnostics"].update(core_hold_info)
         payload["diagnostics"]["core_hold"] = hold_now

@@ -21,6 +21,7 @@ from quantforge.strategies.credit import kept_hedge_stress
 from quantforge.strategies.drawdown import kept_drawdown_scale
 from quantforge.strategies.drift import has_kept_drift, kept_drift_mix, lagged_tbill
 from quantforge.strategies.symdrift import has_kept_sym, kept_sym_drift
+from quantforge.strategies.reconfirm import kept_reentry_confirm
 from quantforge.strategies.reentry import kept_fast_reentry
 from quantforge.strategies.ema import kept_ema_trend
 from quantforge.strategies.sleevegear import kept_sleeve_gear
@@ -121,6 +122,13 @@ def _signals(args) -> int:
             raise DataError("the iteration log kept both an exponential filter and another trend override")
         if ema_trend is not None:
             vote_trend = ema_trend
+        reentry_trend, reentry_info = kept_reentry_confirm(
+            study / "iterations.json", close, as_of=close.index[-1],
+        )
+        if reentry_trend is not None and vote_trend is not None:
+            raise DataError("the iteration log kept both a re-entry delay and another trend override")
+        if reentry_trend is not None:
+            vote_trend, vote_info = reentry_trend, None
         idle_choice = kept_idle_choice(study / "iterations.json", close.index[-1])
         idle_closes = {}
         if idle_choice is not None:
@@ -266,6 +274,7 @@ def _signals(args) -> int:
             bill_share=bill_share, bill_info=bill_info,
             pause_share=pause_share, pause_info=pause_info,
             ema_info=ema_info,
+            reentry_info=reentry_info,
             **idle_kwargs,
             **drift_kwargs,
             **sym_kwargs,

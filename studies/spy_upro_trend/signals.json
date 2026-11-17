@@ -1,15 +1,15 @@
 {
-  "date": "2026-11-17",
+  "date": "2026-11-18",
   "weights": {
     "SSO": 0.5,
     "UPRO": 0.5
   },
   "strategy": "trend_core",
   "strategy_name": "core50_slv50_L3_sma200_band2_daily_quarterly",
-  "generated_at": "2026-11-16T22:11:07Z",
-  "signal_date": "2026-11-16",
-  "trade": true,
-  "trade_reason": "dip_overlay",
+  "generated_at": "2026-11-17T22:10:56Z",
+  "signal_date": "2026-11-17",
+  "trade": false,
+  "trade_reason": "none",
   "rebalance_mix": false,
   "diagnostics": {
     "trend_on": true,
@@ -18,8 +18,8 @@
     "sleeve_on": true,
     "dip_on": true,
     "dip_rule": "3_down_closes",
-    "reference_close": 739.9500122070312,
-    "sma": 729.581884765625,
+    "reference_close": 732.4400024414062,
+    "sma": 729.7939825439453,
     "sma_window": 200,
     "band": 0.02,
     "freq": "daily",
@@ -30,16 +30,16 @@
     "leverage": 3
   },
   "strategy_id": "trend-core",
-  "as_of": "2026-11-16",
+  "as_of": "2026-11-17",
   "levels": {
-    "entry": "SPY close above 744.1735",
-    "entry_level": 744.1735224609375,
-    "entry_value": 739.9500122070312,
-    "exit": "SPY close below 714.9902",
-    "exit_level": 714.9902470703124,
+    "entry": "SPY close above 744.3899",
+    "entry_level": 744.3898621948242,
+    "entry_value": 732.4400024414062,
+    "exit": "SPY close below 715.1981",
+    "exit_level": 715.1981028930663,
     "stop": "no trailing stop; the SPY half switches to SSO after three down closes",
     "stop_level": null,
-    "reference_close": 739.9500122070312
+    "reference_close": 732.4400024414062
   },
   "validated": true,
   "validated_reason": "approved_live_book",

@@ -56,6 +56,7 @@ from quantforge.strategies.ema import kept_ema_trend
 from quantforge.strategies.idle import idle_signal_kwargs, kept_idle_choice
 from quantforge.strategies.onslice import kept_ontrend_slice
 from quantforge.strategies.pause import kept_streak_pause
+from quantforge.strategies.reconfirm import kept_reentry_confirm
 from quantforge.strategies.reentry import kept_fast_reentry
 from quantforge.strategies.sleevediv import ASSETS as SLEEVE_ASSETS
 from quantforge.strategies.sleevediv import sleeve_cash_signal_kwargs
@@ -328,6 +329,14 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
     if ema_trend is not None:
         trend_override = ema_trend
         vote_info = None
+    reentry_trend, reentry_info = kept_reentry_confirm(
+        HERE / "iterations.json", bundle["spy_close"], as_of=as_of,
+    )
+    if reentry_trend is not None and trend_override is not None:
+        raise RuntimeError("the iteration log kept both a re-entry delay and another trend override")
+    if reentry_trend is not None:
+        trend_override = reentry_trend
+        vote_info = None
     idle_choice = kept_idle_choice(HERE / "iterations.json", as_of)
     idle_kwargs = {}
     if idle_choice is not None:
@@ -455,6 +464,7 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         pause_share=pause, pause_info=pause_info,
         term_share=term, term_info=term_info,
         ema_info=ema_info,
+        reentry_info=reentry_info,
         **slice_kwargs,
         **dip_kwargs,
         **idle_kwargs,
