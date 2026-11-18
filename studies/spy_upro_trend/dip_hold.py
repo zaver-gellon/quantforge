@@ -35,6 +35,7 @@ from quantforge.strategies.billgear import kept_bill_gear
 from quantforge.strategies.confirm import kept_confirm_trend
 from quantforge.strategies.corehold import kept_core_hold
 from quantforge.strategies.credit import kept_hedge_stress
+from quantforge.strategies.creditregime import has_kept_credit_regime, kept_credit_regime, merge_hedge
 from quantforge.strategies.cushion import kept_cushion
 from quantforge.strategies.curve import kept_curve_clock
 from quantforge.strategies.dipbuy import dip_active
@@ -312,6 +313,17 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
     hedge_stress, hedge_rule, hedge_info = kept_hedge_stress(
         HERE / "iterations.json", bundle["spy_close"].index, as_of=as_of,
     )
+    regime = (None, None, None)
+    if has_kept_credit_regime(HERE / "iterations.json"):
+        credit_frames = load_bars(YahooSource(), ["HYG", "LQD", "IEF"], start="1993-01-01")
+        regime = kept_credit_regime(
+            HERE / "iterations.json", bundle["spy_close"].index,
+            credit_frames["HYG"]["close"], credit_frames["LQD"]["close"], credit_frames["IEF"]["close"],
+            as_of=as_of,
+        )
+    hedge_stress, hedge_rule, hedge_info = merge_hedge(
+        (hedge_stress, hedge_rule, hedge_info), regime,
+    )
     scale, vol_info = kept_sleeve_scale(HERE / "iterations.json", bundle["spy_close"], as_of=as_of)
     dd_scale, dd_info = kept_drawdown_scale(HERE / "iterations.json", bundle["spy_close"], as_of=as_of)
     if dd_scale is not None:
@@ -484,6 +496,8 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         title = "Trend-core that holds a fixed gold or Treasury slice in the on-trend sleeve"
     elif dip_info:
         title = "Trend-core with the kept sized dip overlay"
+    elif (payload.get("diagnostics") or {}).get("credit_rule"):
+        title = "Trend-core with the kept credit-regime gate on the UPRO sleeve"
     else:
         title = "Trend-core (2% band, dip overlay on the SPY half)"
     write_signals_note(HERE / "signals.md", [("signals.json", title, payload)])

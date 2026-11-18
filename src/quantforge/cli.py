@@ -18,6 +18,7 @@ from quantforge.strategies.dipbuy import build_dip_signal
 from quantforge.strategies.confirm import kept_confirm_trend
 from quantforge.strategies.corehold import kept_core_hold
 from quantforge.strategies.credit import kept_hedge_stress
+from quantforge.strategies.creditregime import has_kept_credit_regime, kept_credit_regime, merge_hedge
 from quantforge.strategies.drawdown import kept_drawdown_scale
 from quantforge.strategies.drift import has_kept_drift, kept_drift_mix, lagged_tbill
 from quantforge.strategies.symdrift import has_kept_sym, kept_sym_drift
@@ -107,6 +108,18 @@ def _signals(args) -> int:
     study = Path(args.study_dir)
     if args.strategy == "trend-core":
         stress, rule, info = kept_hedge_stress(study / "iterations.json", close.index)
+        regime = (None, None, None)
+        if has_kept_credit_regime(study / "iterations.json"):
+            credit_frames = load_bars(
+                get_source("yahoo"), ["HYG", "LQD", "IEF"],
+                start=args.start, end=args.end, cache_dir=cache,
+            )
+            regime = kept_credit_regime(
+                study / "iterations.json", close.index,
+                credit_frames["HYG"]["close"], credit_frames["LQD"]["close"], credit_frames["IEF"]["close"],
+                as_of=close.index[-1],
+            )
+        stress, rule, info = merge_hedge((stress, rule, info), regime)
         scale, vol_info = kept_sleeve_scale(study / "iterations.json", close, as_of=close.index[-1])
         dd_scale, dd_info = kept_drawdown_scale(study / "iterations.json", close, as_of=close.index[-1])
         if dd_scale is not None:
