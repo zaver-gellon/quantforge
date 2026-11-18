@@ -1,43 +1,43 @@
 {
   "strategy": "rotation",
   "strategy_id": "rotation",
-  "date": "2026-11-18",
-  "as_of": "2026-11-17",
-  "signal_date": "2026-11-17",
+  "date": "2026-11-19",
+  "as_of": "2026-11-18",
+  "signal_date": "2026-11-18",
   "weights": {
     "BIL": 1.0
   },
   "levels": {
     "entry": "week-ending close, top trailing 63-session return among TQQQ, TMF, and UGL, and only if it beats cash",
-    "entry_level": 0.009942049543832487,
+    "entry_level": 0.009959600720091277,
     "entry_value": {
-      "TQQQ": -0.27962544947558643,
-      "TMF": -0.11764358042789824,
-      "UGL": -0.2936217018793188,
-      "BIL": 0.009942049543832487
+      "TQQQ": -0.25452043713936257,
+      "TMF": -0.07477722176553536,
+      "UGL": -0.34298197793406326,
+      "BIL": 0.009959600720091277
     },
     "exit": "the next week-ending close, when the ranking is run again",
     "exit_level": null,
     "stop": "cash when the best risky sleeve does not beat the T-bill return over the same window",
-    "stop_level": 0.009942049543832487,
+    "stop_level": 0.009959600720091277,
     "reference_close": {
-      "TQQQ": 167.5023757178755,
-      "TMF": 68.1944032373942,
-      "UGL": 1225.6308918373375
+      "TQQQ": 169.5376635946786,
+      "TMF": 69.87776448225546,
+      "UGL": 1147.717125652816
     }
   },
   "validated": false,
-  "generated_at": "2026-11-17T22:10:56Z",
+  "generated_at": "2026-11-18T22:06:49Z",
   "diagnostics": {
     "cell": "TQQQ_L63",
     "equity": "TQQQ",
     "lookback": 63,
     "pick": "BIL",
     "scores": {
-      "TQQQ": -0.27962544947558643,
-      "TMF": -0.11764358042789824,
-      "UGL": -0.2936217018793188,
-      "BIL": 0.009942049543832487
+      "TQQQ": -0.25452043713936257,
+      "TMF": -0.07477722176553536,
+      "UGL": -0.34298197793406326,
+      "BIL": 0.009959600720091277
     },
     "rule": "On the last NYSE session of the week, hold the sleeve with the highest 63-session total return among TQQQ, TMF, and UGL, if that return is above the compounded T-bill return. Otherwise hold BIL. Fill the next open. UGL is 2x gold."
   },

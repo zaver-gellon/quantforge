@@ -51,6 +51,7 @@ from quantforge.strategies.confirm import kept_confirm_trend
 from quantforge.strategies.corehold import kept_core_hold
 from quantforge.strategies.curve import has_kept_curve, kept_curve_clock, treasury_spread
 from quantforge.strategies.credit import kept_hedge_stress  # noqa: E402
+from quantforge.strategies.creditregime import has_kept_credit_regime, kept_credit_regime, merge_hedge  # noqa: E402
 from quantforge.strategies.drawdown import kept_drawdown_scale  # noqa: E402
 from quantforge.strategies.drift import kept_drift_mix  # noqa: E402
 from quantforge.strategies.reentry import kept_fast_reentry  # noqa: E402
@@ -727,6 +728,17 @@ def main() -> None:
 
     as_of = spy.index[-1]
     hedge_stress, hedge_rule, hedge_info = kept_hedge_stress(HERE / "iterations.json", spy.index, as_of=as_of)
+    regime = (None, None, None)
+    if has_kept_credit_regime(HERE / "iterations.json"):
+        credit_frames = load_bars(source, ["HYG", "LQD", "IEF"], start="1993-01-01")
+        regime = kept_credit_regime(
+            HERE / "iterations.json", spy.index,
+            credit_frames["HYG"]["close"], credit_frames["LQD"]["close"], credit_frames["IEF"]["close"],
+            as_of=as_of,
+        )
+    hedge_stress, hedge_rule, hedge_info = merge_hedge(
+        (hedge_stress, hedge_rule, hedge_info), regime,
+    )
     sleeve_scale, vol_info = kept_sleeve_scale(HERE / "iterations.json", spy["close"], as_of=as_of)
     dd_scale, dd_info = kept_drawdown_scale(HERE / "iterations.json", spy["close"], as_of=as_of)
     if dd_scale is not None:
