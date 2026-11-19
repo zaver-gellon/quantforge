@@ -53,6 +53,7 @@ from quantforge.strategies.curve import has_kept_curve, kept_curve_clock, treasu
 from quantforge.strategies.credit import kept_hedge_stress  # noqa: E402
 from quantforge.strategies.creditregime import has_kept_credit_regime, kept_credit_regime, merge_hedge  # noqa: E402
 from quantforge.strategies.drawdown import kept_drawdown_scale  # noqa: E402
+from quantforge.strategies.bookbreaker import has_kept_book_breaker, kept_book_breaker  # noqa: E402
 from quantforge.strategies.drift import kept_drift_mix  # noqa: E402
 from quantforge.strategies.reentry import kept_fast_reentry  # noqa: E402
 from quantforge.strategies.ema import kept_ema_trend  # noqa: E402
@@ -848,6 +849,25 @@ def main() -> None:
         tnx_frames = load_bars(source, ["^TNX"], start="1990-01-01")
         curve_spread = treasury_spread(tnx_frames["^TNX"]["close"], frames["^IRX"]["close"], spy.index)
         curve_on, curve_info = kept_curve_clock(HERE / "iterations.json", curve_spread, as_of=as_of)
+    breaker_info = None
+    if has_kept_book_breaker(HERE / "iterations.json"):
+        breaker_scale, breaker_info = kept_book_breaker(
+            HERE / "iterations.json",
+            spy["open"], spy["close"],
+            sso_px["open"], sso_px["close"], upro_px["open"], upro_px["close"],
+            rf, as_of=as_of,
+        )
+        if breaker_scale is not None and sleeve_scale is not None:
+            raise RuntimeError("the iteration log kept both a book drawdown breaker and another sleeve scale")
+        if breaker_scale is not None and (
+            sleeve_upro_share is not None or sleeve_fast is not None or cushion_share is not None
+            or bill_share is not None or pause_share is not None or slice_kwargs.get("slice_symbol") is not None
+        ):
+            raise RuntimeError("the iteration log kept both a book drawdown breaker and another sleeve rule")
+        if breaker_scale is not None:
+            sleeve_scale = breaker_scale
+            vol_info = None
+            dd_info = None
     drift_mix, drift_info = kept_drift_mix(
         HERE / "iterations.json",
         spy["open"], spy["close"],
@@ -870,6 +890,7 @@ def main() -> None:
         **slice_kwargs,
         curve_on=curve_on, curve_info=curve_info,
         dd_info=dd_info,
+        breaker_info=breaker_info,
         drift_mix=drift_mix, drift_info=drift_info,
         **idle_kwargs,
         **sleeve_cash_kwargs,
@@ -909,6 +930,8 @@ def main() -> None:
         signal_title = "Trend-core that invests the off-trend sleeve in the kept bond or gold trend"
     elif idle_kwargs.get("idle_info"):
         signal_title = "Trend-core that leaves equities for the kept bond or gold trend"
+    elif breaker_info:
+        signal_title = "Trend-core with the kept book-drawdown breaker on the UPRO sleeve"
     elif dd_info:
         signal_title = "Trend-core with the kept trailing-peak stop on the UPRO sleeve"
     elif vote_info:

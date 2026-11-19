@@ -51,6 +51,7 @@ from quantforge.strategies.diphold import (
 )
 from quantforge.strategies.dipsize import kept_dip_size
 from quantforge.strategies.drawdown import kept_drawdown_scale
+from quantforge.strategies.bookbreaker import has_kept_book_breaker, kept_book_breaker
 from quantforge.strategies.drift import kept_drift_mix
 from quantforge.strategies.symdrift import kept_sym_drift
 from quantforge.strategies.ema import kept_ema_trend
@@ -458,6 +459,25 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         }
     elif slice_info is not None:
         slice_kwargs = {"slice_info": slice_info}
+    breaker_info = None
+    if has_kept_book_breaker(HERE / "iterations.json"):
+        breaker_scale, breaker_info = kept_book_breaker(
+            HERE / "iterations.json",
+            bundle["spy_open"], bundle["spy_close"],
+            sso["open"], sso["close"], upro["open"], upro["close"],
+            bundle["rf"], as_of=as_of,
+        )
+        if breaker_scale is not None and scale is not None:
+            raise RuntimeError("the iteration log kept both a book drawdown breaker and another sleeve scale")
+        if breaker_scale is not None and (
+            sleeve_upro is not None or sleeve_fast is not None or cushion is not None
+            or bill is not None or pause is not None or term is not None or slice_symbol is not None
+        ):
+            raise RuntimeError("the iteration log kept both a book drawdown breaker and another sleeve rule")
+        if breaker_scale is not None:
+            scale = breaker_scale
+            vol_info = None
+            dd_info = None
     payload = build_trend_signal(
         TrendCoreSpec(), bundle["spy_close"], as_of=as_of, strategy_id="trend_core",
         hedge_on=hedge_stress, hedge_rule=hedge_rule, hedge_info=hedge_info,
@@ -477,6 +497,7 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         term_share=term, term_info=term_info,
         ema_info=ema_info,
         reentry_info=reentry_info,
+        breaker_info=breaker_info,
         **slice_kwargs,
         **dip_kwargs,
         **idle_kwargs,
@@ -496,6 +517,8 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         title = "Trend-core that holds a fixed gold or Treasury slice in the on-trend sleeve"
     elif dip_info:
         title = "Trend-core with the kept sized dip overlay"
+    elif (payload.get("diagnostics") or {}).get("book_breaker_rule"):
+        title = "Trend-core with the kept book-drawdown breaker on the UPRO sleeve"
     elif (payload.get("diagnostics") or {}).get("credit_rule"):
         title = "Trend-core with the kept credit-regime gate on the UPRO sleeve"
     else:
