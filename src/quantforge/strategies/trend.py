@@ -280,6 +280,7 @@ def build_trend_signal(
     dip_hold_flag: pd.Series | None = None,
     dip_hold_info: dict | None = None,
     reentry_info: dict | None = None,
+    breaker_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -352,7 +353,13 @@ def build_trend_signal(
     ``reentry_info`` records a kept delay of the sleeve's re-entry. The delayed
     state is ``trend_override``. The exit is still the first close below the
     lower band. It does not change the weights by itself.
+    ``breaker_info`` records a kept book-level drawdown breaker. The sleeve
+    scale is ``sleeve_scale``: 0 while the breaker is on, so the UPRO budget
+    is cash, and 1 otherwise. It cannot be set together with a trailing-peak
+    stop.
     """
+    if breaker_info and dd_info:
+        raise ValueError("a trailing-peak stop and a book drawdown breaker cannot both be kept")
     close = spy_close.dropna().astype(float).sort_index()
     if close.empty:
         raise ValueError("SPY close series is empty")
@@ -603,7 +610,12 @@ def build_trend_signal(
     changed = previous is None or on != previous
     dip_changed = abs(boost_now - boost_prev) > 1e-8
     hedge_changed = hedge_now != hedge_prev
-    scale_label = "drawdown_stop" if dd_info else "vol_scale"
+    if breaker_info:
+        scale_label = "book_breaker"
+    elif dd_info:
+        scale_label = "drawdown_stop"
+    else:
+        scale_label = "vol_scale"
     if spec.rebalance == "daily":
         trade = True
         reason = "trend_change" if changed else "daily_target"
@@ -745,6 +757,9 @@ def build_trend_signal(
         payload["diagnostics"]["sleeve_scale"] = fraction
     if dd_info:
         payload["diagnostics"].update(dd_info)
+        payload["diagnostics"]["sleeve_scale"] = fraction
+    if breaker_info:
+        payload["diagnostics"].update(breaker_info)
         payload["diagnostics"]["sleeve_scale"] = fraction
     if vote_info:
         payload["diagnostics"].update(vote_info)

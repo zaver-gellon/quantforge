@@ -20,6 +20,7 @@ from quantforge.strategies.corehold import kept_core_hold
 from quantforge.strategies.credit import kept_hedge_stress
 from quantforge.strategies.creditregime import has_kept_credit_regime, kept_credit_regime, merge_hedge
 from quantforge.strategies.drawdown import kept_drawdown_scale
+from quantforge.strategies.bookbreaker import has_kept_book_breaker, kept_book_breaker
 from quantforge.strategies.drift import has_kept_drift, kept_drift_mix, lagged_tbill
 from quantforge.strategies.symdrift import has_kept_sym, kept_sym_drift
 from quantforge.strategies.reconfirm import kept_reentry_confirm
@@ -221,6 +222,40 @@ def _signals(args) -> int:
             raise DataError("the iteration log kept both a down-streak pause and a sleeve gear")
         if pause_share is not None and scale is not None:
             raise DataError("the iteration log kept both a down-streak pause and a sleeve scale")
+        breaker_info = None
+        if has_kept_book_breaker(study / "iterations.json"):
+            names = ["SPY", "^IRX"]
+            loaded = load_bars(
+                get_source("yahoo"), names,
+                start=args.start, end=args.end, cache_dir=cache,
+            )
+            spy_frame = loaded["SPY"]
+            irx = lagged_tbill(loaded["^IRX"]["close"], spy_frame.index)
+            synth = {}
+            for symbol, leverage in (("SSO", 2), ("UPRO", 3)):
+                meta = LEVERAGED_ETFS[symbol]
+                synth[leverage] = synthesize_leveraged(
+                    spy_frame["open"], spy_frame["close"], irx,
+                    leverage, meta["expense_ratio"], FINANCING_SPREAD,
+                )
+            breaker_scale, breaker_info = kept_book_breaker(
+                study / "iterations.json",
+                spy_frame["open"], spy_frame["close"],
+                synth[2]["open"], synth[2]["close"],
+                synth[3]["open"], synth[3]["close"],
+                irx, as_of=spy_frame.index[-1],
+            )
+            if breaker_scale is not None and scale is not None:
+                raise DataError("the iteration log kept both a book drawdown breaker and another sleeve scale")
+            if breaker_scale is not None and (
+                sleeve_upro_share is not None or sleeve_fast is not None or cushion_share is not None
+                or bill_share is not None or pause_share is not None
+            ):
+                raise DataError("the iteration log kept both a book drawdown breaker and another sleeve rule")
+            if breaker_scale is not None:
+                scale = breaker_scale
+                vol_info = None
+                dd_info = None
         drift_kwargs = {}
         if has_kept_drift(study / "iterations.json"):
             names = ["SPY", "SSO", "UPRO", "^IRX"]
@@ -288,6 +323,7 @@ def _signals(args) -> int:
             pause_share=pause_share, pause_info=pause_info,
             ema_info=ema_info,
             reentry_info=reentry_info,
+            breaker_info=breaker_info,
             **idle_kwargs,
             **drift_kwargs,
             **sym_kwargs,

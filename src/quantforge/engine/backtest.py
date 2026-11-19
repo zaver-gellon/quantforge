@@ -387,6 +387,144 @@ def run_trend_core(
     )
 
 
+def run_book_breaker(
+    spy_open: pd.Series,
+    spy_close: pd.Series,
+    sso_open: pd.Series,
+    sso_close: pd.Series,
+    upro_open: pd.Series,
+    upro_close: pd.Series,
+    trend_on: pd.Series,
+    dip_on: pd.Series,
+    mix_rebalance: pd.Series,
+    cut: float,
+    mode: str,
+    core_weight: float,
+    sleeve_weight: float,
+    cash_yield: pd.Series,
+    spy_cost: float = 0.0,
+    sso_cost: float = 0.0,
+    upro_cost: float = 0.0,
+    execution: str = "next_open",
+    reentry_fraction: float = 0.5,
+) -> tuple[BacktestResult, pd.Series, pd.Series, pd.Series]:
+    """Trend-core book that moves the UPRO sleeve to cash after its own drawdown.
+
+    The account's equity is marked at each close. The running peak starts at
+    the inception cash value of 1. When equity / peak - 1 is at or below
+    ``cut``, the sleeve earns the cash yield on the next session even if
+    ``trend_on`` is still true. ``mode="recover"`` clears that state only
+    once the drawdown has healed to ``reentry_fraction * cut`` and the trend
+    is on. ``mode="confirm"`` clears it only after the trend has been off and
+    then on again. The core, the dip, and the mix are unchanged. A cut that
+    never binds is the ordinary trend-core book. The returned series are the
+    breaker state after each close (the next session's decision), whether the
+    sleeve was in UPRO through that close, and the drawdown at that close.
+    """
+    from quantforge.strategies.bookbreaker import step_breaker
+
+    if execution not in ("next_open", "next_close"):
+        raise ValueError(f"unknown execution {execution!r}")
+    if core_weight < 0 or sleeve_weight < 0 or core_weight + sleeve_weight > 1 + 1e-8:
+        raise ValueError("core and sleeve weights must be non-negative and sum to at most 1")
+    threshold = float(cut)
+    if not np.isfinite(threshold) or not 0.0 < threshold < 1.0:
+        raise ValueError("book drawdown cut must be in (0, 1)")
+    fraction = float(reentry_fraction)
+    if not np.isfinite(fraction) or not 0.0 <= fraction < 1.0:
+        raise ValueError("reentry_fraction must be in [0, 1)")
+    heal = threshold * fraction
+    idx = spy_close.index
+    prices = {
+        "spy_o": spy_open.reindex(idx).to_numpy(dtype=float),
+        "spy_c": spy_close.reindex(idx).to_numpy(dtype=float),
+        "sso_o": sso_open.reindex(idx).to_numpy(dtype=float),
+        "sso_c": sso_close.reindex(idx).to_numpy(dtype=float),
+        "upro_o": upro_open.reindex(idx).to_numpy(dtype=float),
+        "upro_c": upro_close.reindex(idx).to_numpy(dtype=float),
+    }
+    stacked = np.column_stack(list(prices.values()))
+    if np.any(~np.isfinite(stacked)) or np.any(stacked <= 0):
+        raise ValueError("SPY, SSO, and UPRO prices must be finite and positive")
+    trend = trend_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    dip = dip_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    mix = mix_rebalance.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    rf = cash_yield.reindex(idx).astype(float).fillna(0.0).to_numpy(dtype=float)
+    n = len(idx)
+    core = 0.0
+    sleeve = 0.0
+    resid = 1.0
+    core_sso = False
+    sleeve_upro = False
+    tripped = False
+    seen_off = False
+    peak = 1.0
+    rets = np.full(n, np.nan)
+    turn = np.zeros(n)
+    drag = np.zeros(n)
+    exposure = np.full(n, np.nan)
+    breaker = np.zeros(n, dtype=bool)
+    held_upro = np.zeros(n, dtype=bool)
+    drawdown = np.zeros(n, dtype=float)
+    for i in range(1, n):
+        prev = core + sleeve + resid
+        want_trend = bool(trend[i - 1]) and not tripped
+        if execution == "next_open":
+            core = _mark(core, prices["sso_o"][i], prices["sso_c"][i - 1], prices["spy_o"][i], prices["spy_c"][i - 1], core_sso)
+            if sleeve_upro:
+                sleeve *= prices["upro_o"][i] / prices["upro_c"][i - 1]
+            else:
+                sleeve *= 1.0 + rf[i]
+            resid *= 1.0 + rf[i]
+            core, sleeve, resid, core_sso, sleeve_upro, turn[i], drag[i] = _allocate_trend(
+                core + sleeve + resid, core, sleeve, resid, core_sso, sleeve_upro,
+                bool(dip[i - 1]), want_trend, bool(i == 1 or mix[i - 1]),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+            )
+            core = _mark(core, prices["sso_c"][i], prices["sso_o"][i], prices["spy_c"][i], prices["spy_o"][i], core_sso)
+            if sleeve_upro:
+                sleeve *= prices["upro_c"][i] / prices["upro_o"][i]
+        else:
+            core = _mark(core, prices["sso_c"][i], prices["sso_c"][i - 1], prices["spy_c"][i], prices["spy_c"][i - 1], core_sso)
+            if sleeve_upro:
+                sleeve *= prices["upro_c"][i] / prices["upro_c"][i - 1]
+            else:
+                sleeve *= 1.0 + rf[i]
+            resid *= 1.0 + rf[i]
+            core, sleeve, resid, core_sso, sleeve_upro, turn[i], drag[i] = _allocate_trend(
+                core + sleeve + resid, core, sleeve, resid, core_sso, sleeve_upro,
+                bool(dip[i - 1]), want_trend, bool(i == 1 or mix[i - 1]),
+                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+            )
+        new = core + sleeve + resid
+        rets[i] = new / prev - 1.0
+        invested = core + (sleeve if sleeve_upro else 0.0)
+        exposure[i] = invested / new if new else 0.0
+        if new > peak:
+            peak = new
+        if peak <= 0.0 or not np.isfinite(new):
+            raise ValueError("book equity is not a positive finite number")
+        loss = new / peak - 1.0
+        tripped, seen_off = step_breaker(
+            tripped, seen_off, loss, bool(trend[i]), threshold, mode, heal,
+        )
+        breaker[i] = tripped
+        held_upro[i] = sleeve_upro
+        drawdown[i] = loss
+    result = BacktestResult(
+        returns=pd.Series(rets, index=idx, name="return"),
+        turnover=pd.Series(turn, index=idx, name="turnover"),
+        cost_drag=pd.Series(drag, index=idx, name="cost_drag"),
+        exposure=pd.Series(exposure, index=idx, name="exposure"),
+    )
+    return (
+        result,
+        pd.Series(breaker, index=idx, name="book_breaker"),
+        pd.Series(held_upro, index=idx, name="sleeve_upro"),
+        pd.Series(drawdown, index=idx, name="book_drawdown"),
+    )
+
+
 def run_drift_band(
     spy_open: pd.Series,
     spy_close: pd.Series,
