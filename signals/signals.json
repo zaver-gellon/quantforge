@@ -1,29 +1,29 @@
 {
-  "date": "2026-11-20",
-  "as_of": "2026-11-19",
+  "date": "2026-11-23",
+  "as_of": "2026-11-20",
   "strategies": {
     "trend-core": {
-      "date": "2026-11-20",
+      "date": "2026-11-23",
       "weights": {
         "SSO": 0.5,
-        "UPRO": 0.5
+        "BIL": 0.5
       },
       "strategy": "trend_core",
       "strategy_name": "core50_slv50_L3_sma200_band2_daily_quarterly",
-      "generated_at": "2026-11-19T22:08:25Z",
-      "signal_date": "2026-11-19",
-      "trade": false,
-      "trade_reason": "none",
+      "generated_at": "2026-11-20T22:04:46Z",
+      "signal_date": "2026-11-20",
+      "trade": true,
+      "trade_reason": "trend_change",
       "rebalance_mix": false,
       "diagnostics": {
-        "trend_on": true,
+        "trend_on": false,
         "hedge_on": false,
         "hedge_rule": null,
-        "sleeve_on": true,
+        "sleeve_on": false,
         "dip_on": true,
         "dip_rule": "3_down_closes",
-        "reference_close": 715.8699951171875,
-        "sma": 730.1990441894532,
+        "reference_close": 689.8099975585938,
+        "sma": 730.2862509155274,
         "sma_window": 200,
         "band": 0.02,
         "freq": "daily",
@@ -34,16 +34,16 @@
         "leverage": 3
       },
       "strategy_id": "trend-core",
-      "as_of": "2026-11-19",
+      "as_of": "2026-11-20",
       "levels": {
-        "entry": "SPY close above 744.8030",
-        "entry_level": 744.8030250732422,
-        "entry_value": 715.8699951171875,
-        "exit": "SPY close below 715.5951",
-        "exit_level": 715.5950633056641,
+        "entry": "SPY close above 744.8920",
+        "entry_level": 744.8919759338379,
+        "entry_value": 689.8099975585938,
+        "exit": "SPY close below 715.6805",
+        "exit_level": 715.6805258972169,
         "stop": "no trailing stop; the SPY half switches to SSO after three down closes",
         "stop_level": null,
-        "reference_close": 715.8699951171875
+        "reference_close": 689.8099975585938
       },
       "validated": true,
       "validated_reason": "approved_live_book",
@@ -61,24 +61,24 @@
     "meanrev": {
       "strategy": "meanrev",
       "strategy_id": "meanrev",
-      "date": "2026-11-20",
-      "as_of": "2026-11-19",
-      "signal_date": "2026-11-19",
+      "date": "2026-11-23",
+      "as_of": "2026-11-20",
+      "signal_date": "2026-11-20",
       "weights": {
         "BIL": 1.0
       },
       "levels": {
         "entry": "IBS < 0.2",
         "entry_level": 0.2,
-        "entry_value": 0.009071002491757066,
+        "entry_value": 0.09696197926141532,
         "exit": "SPY close above its 5-day average",
-        "exit_level": 734.5660034179688,
+        "exit_level": 721.65400390625,
         "stop": "flat after 3 sessions, or when SPY closes at or below its 200-day average",
-        "stop_level": 730.1990438842773,
-        "reference_close": 715.8699951171875
+        "stop_level": 730.2862496948242,
+        "reference_close": 689.8099975585938
       },
       "validated": false,
-      "generated_at": "2026-11-19T22:08:25Z",
+      "generated_at": "2026-11-20T22:04:46Z",
       "diagnostics": {
         "cell": "ibs_0.2_n03_UPRO",
         "entry": "ibs_0.2",
@@ -86,11 +86,11 @@
         "vehicle": "UPRO",
         "regime_on": false,
         "in_position": false,
-        "sma200": 730.1990438842773,
-        "sma5": 734.5660034179688,
-        "rsi2": 1.1877752741008862,
-        "ibs": 0.009071002491757066,
-        "lower_band": 721.9619713357134,
+        "sma200": 730.2862496948242,
+        "sma5": 721.65400390625,
+        "rsi2": 0.3255112129329092,
+        "ibs": 0.09696197926141532,
+        "lower_band": 703.9248672100587,
         "rule": "Enter at the close while SPY is above its 200-day average. Exit at the next open after SPY closes above its 5-day average, after 3 sessions, or after a close at or below the 200-day average. Cash is BIL."
       },
       "validated_reason": "did_not_clear_materiality_bar",
@@ -109,43 +109,43 @@
     "rotation": {
       "strategy": "rotation",
       "strategy_id": "rotation",
-      "date": "2026-11-20",
-      "as_of": "2026-11-19",
-      "signal_date": "2026-11-19",
+      "date": "2026-11-23",
+      "as_of": "2026-11-20",
+      "signal_date": "2026-11-20",
       "weights": {
         "BIL": 1.0
       },
       "levels": {
         "entry": "week-ending close, top trailing 63-session return among TQQQ, TMF, and UGL, and only if it beats cash",
-        "entry_level": 0.009977312484704681,
+        "entry_level": 0.009994824187599116,
         "entry_value": {
-          "TQQQ": -0.3100355087166058,
-          "TMF": -0.05890903039933515,
-          "UGL": -0.39061130105899444,
-          "BIL": 0.009977312484704681
+          "TQQQ": -0.4018306408788297,
+          "TMF": -0.040337466204452666,
+          "UGL": -0.4429287099544891,
+          "BIL": 0.009994824187599116
         },
         "exit": "the next week-ending close, when the ranking is run again",
         "exit_level": null,
         "stop": "cash when the best risky sleeve does not beat the T-bill return over the same window",
-        "stop_level": 0.009977312484704681,
+        "stop_level": 0.009994824187599116,
         "reference_close": {
-          "TQQQ": 158.44986822996074,
-          "TMF": 70.22420951429767,
-          "UGL": 1106.3751644058862
+          "TQQQ": 133.20002180085032,
+          "TMF": 72.9719776459737,
+          "UGL": 1025.9172178058247
         }
       },
       "validated": false,
-      "generated_at": "2026-11-19T22:08:25Z",
+      "generated_at": "2026-11-20T22:04:46Z",
       "diagnostics": {
         "cell": "TQQQ_L63",
         "equity": "TQQQ",
         "lookback": 63,
         "pick": "BIL",
         "scores": {
-          "TQQQ": -0.3100355087166058,
-          "TMF": -0.05890903039933515,
-          "UGL": -0.39061130105899444,
-          "BIL": 0.009977312484704681
+          "TQQQ": -0.4018306408788297,
+          "TMF": -0.040337466204452666,
+          "UGL": -0.4429287099544891,
+          "BIL": 0.009994824187599116
         },
         "rule": "On the last NYSE session of the week, hold the sleeve with the highest 63-session total return among TQQQ, TMF, and UGL, if that return is above the compounded T-bill return. Otherwise hold BIL. Fill the next open. UGL is 2x gold."
       },
@@ -165,34 +165,34 @@
     "nasdaq-vol": {
       "strategy": "nasdaq-vol",
       "strategy_id": "nasdaq-vol",
-      "date": "2026-11-20",
-      "as_of": "2026-11-19",
-      "signal_date": "2026-11-19",
+      "date": "2026-11-23",
+      "as_of": "2026-11-20",
+      "signal_date": "2026-11-20",
       "weights": {
         "BIL": 1.0
       },
       "levels": {
-        "entry": "QQQ close above 695.6476 (200-day average times 1.02)",
-        "entry_level": 695.647599572754,
-        "entry_value": 645.0399780273438,
-        "exit": "QQQ close below 668.3673 (200-day average times 0.98)",
-        "exit_level": 668.367301550293,
+        "entry": "QQQ close above 695.7162 (200-day average times 1.02)",
+        "entry_level": 695.7161731567384,
+        "entry_value": 608.4500122070312,
+        "exit": "QQQ close below 668.4332 (200-day average times 0.98)",
+        "exit_level": 668.4331859741211,
         "stop": "no price stop; the position is resized every session to the vol target and capped at 100% TQQQ",
         "stop_level": null,
-        "reference_close": 645.0399780273438,
+        "reference_close": 608.4500122070312,
         "vol_target": 0.3,
-        "realized_vol": 1.0326943628342762
+        "realized_vol": 1.1544170360923347
       },
       "validated": false,
-      "generated_at": "2026-11-19T22:08:25Z",
+      "generated_at": "2026-11-20T22:04:46Z",
       "diagnostics": {
         "cell": "band02_vol30",
         "band": 0.02,
         "vol_target": 0.3,
         "trend_on": false,
         "tqqq_weight": 0.0,
-        "realized_vol": 1.0326943628342762,
-        "sma200": 682.0074505615235,
+        "realized_vol": 1.1544170360923347,
+        "sma200": 682.0746795654297,
         "rule": "Hold TQQQ only while the 200-day band is on. Size it to 30% / 20-day realized vol of TQQQ, capped at 100%. The rest is BIL. TQQQ before its listing is a daily-reset 3x QQQ with financing and the expense ratio."
       },
       "validated_reason": "did_not_clear_materiality_bar",
@@ -211,9 +211,9 @@
     "spy-rsi-boost": {
       "strategy": "spy-rsi-boost",
       "strategy_id": "spy-rsi-boost",
-      "date": "2026-11-20",
-      "as_of": "2026-11-19",
-      "signal_date": "2026-11-19",
+      "date": "2026-11-23",
+      "as_of": "2026-11-20",
+      "signal_date": "2026-11-20",
       "weights": {
         "SPY": 0.666667,
         "UPRO": 0.333333
@@ -221,20 +221,20 @@
       "levels": {
         "entry": "Wilder RSI(2) < 10 and SPY above its 200-day average",
         "entry_level": 10.0,
-        "entry_value": 1.1877752741008862,
-        "exit": "RSI(2) > 70, or SPY close above its 5-day average (734.5660), or 10 sessions",
-        "exit_level": 734.5660034179688,
+        "entry_value": 0.3255112129329092,
+        "exit": "RSI(2) > 70, or SPY close above its 5-day average (721.6540), or 10 sessions",
+        "exit_level": 721.65400390625,
         "exit_rsi": 70.0,
         "stop": "none",
         "stop_level": null,
-        "reference_close": 715.8699951171875,
-        "rsi2": 1.1877752741008862,
+        "reference_close": 689.8099975585938,
+        "rsi2": 0.3255112129329092,
         "boost_on": true,
-        "sma200": 730.1990438842773,
-        "sessions_held": 3
+        "sma200": 730.2862496948242,
+        "sessions_held": 4
       },
       "validated": false,
-      "generated_at": "2026-11-19T22:08:25Z",
+      "generated_at": "2026-11-20T22:04:46Z",
       "diagnostics": {
         "cell": "rsi10_f33_n10",
         "fill": "next_open",
@@ -242,8 +242,8 @@
         "max_hold": 10,
         "threshold": 10.0,
         "boost_on": true,
-        "rsi2": 1.1877752741008862,
-        "sessions_held": 3,
+        "rsi2": 0.3255112129329092,
+        "sessions_held": 4,
         "rule": "Hold SPY. After the close, if Wilder RSI(2) is below the threshold and SPY is above its 200-day average, move that fraction from SPY into UPRO at the next open. Return to SPY when RSI(2) is above 70, SPY closes above its 5-day average, or the hold expires. No stop. This daily signal is not the 12:50 PT check."
       },
       "validated_reason": "did_not_clear_materiality_bar",
@@ -262,31 +262,31 @@
     "btc-trend": {
       "strategy": "btc-trend",
       "strategy_id": "btc-trend",
-      "date": "2026-11-20",
-      "as_of": "2026-11-19",
-      "signal_date": "2026-11-19",
+      "date": "2026-11-23",
+      "as_of": "2026-11-20",
+      "signal_date": "2026-11-20",
       "weights": {
         "BIL": 1.0
       },
       "levels": {
         "entry": "BTC 10-day average above its 30-day average",
-        "entry_level": 76792.918,
-        "entry_value": 69258.81199999999,
+        "entry_level": 76014.96633333334,
+        "entry_value": 67606.324,
         "exit": "BTC 10-day average at or below its 30-day average",
-        "exit_level": 76792.918,
+        "exit_level": 76014.96633333334,
         "stop": "no price stop; the alternative is BIL",
         "stop_level": null,
-        "reference_close": 61694.18
+        "reference_close": 58987.11
       },
       "validated": false,
-      "generated_at": "2026-11-19T22:08:25Z",
+      "generated_at": "2026-11-20T22:04:46Z",
       "diagnostics": {
         "cell": "sma10_030",
         "fast": 10,
         "slow": 30,
         "trend_on": false,
-        "sma_fast": 69258.81199999999,
-        "sma_slow": 76792.918,
+        "sma_fast": 67606.324,
+        "sma_slow": 76014.96633333334,
         "rule": "Hold BTC-USD when its 10-day average is above its 30-day average. Otherwise hold BIL. The decision is the NYSE close; fill the next NYSE open."
       },
       "validated_reason": "did_not_clear_materiality_bar",

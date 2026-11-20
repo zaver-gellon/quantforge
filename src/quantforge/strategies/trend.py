@@ -281,6 +281,7 @@ def build_trend_signal(
     dip_hold_info: dict | None = None,
     reentry_info: dict | None = None,
     breaker_info: dict | None = None,
+    mom_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -357,6 +358,8 @@ def build_trend_signal(
     scale is ``sleeve_scale``: 0 while the breaker is on, so the UPRO budget
     is cash, and 1 otherwise. It cannot be set together with a trailing-peak
     stop.
+    ``mom_info`` records a kept absolute-momentum ensemble. The sleeve state
+    is ``trend_override``. It does not change the weights by itself.
     """
     if breaker_info and dd_info:
         raise ValueError("a trailing-peak stop and a book drawdown breaker cannot both be kept")
@@ -769,6 +772,8 @@ def build_trend_signal(
             payload["diagnostics"]["band"] = float(confirm_info["confirm_band"])
     if reentry_info:
         payload["diagnostics"].update(reentry_info)
+    if mom_info:
+        payload["diagnostics"].update(mom_info)
     if core_hold_info:
         payload["diagnostics"].update(core_hold_info)
         payload["diagnostics"]["core_hold"] = hold_now

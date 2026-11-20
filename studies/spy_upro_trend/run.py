@@ -56,6 +56,7 @@ from quantforge.strategies.drawdown import kept_drawdown_scale  # noqa: E402
 from quantforge.strategies.bookbreaker import has_kept_book_breaker, kept_book_breaker  # noqa: E402
 from quantforge.strategies.drift import kept_drift_mix  # noqa: E402
 from quantforge.strategies.reentry import kept_fast_reentry  # noqa: E402
+from quantforge.strategies.absmom import kept_abs_momentum  # noqa: E402
 from quantforge.strategies.ema import kept_ema_trend  # noqa: E402
 from quantforge.strategies.sleevegear import kept_sleeve_gear  # noqa: E402
 from quantforge.strategies.idle import kept_idle_choice, idle_signal_kwargs  # noqa: E402
@@ -756,6 +757,12 @@ def main() -> None:
     if ema_trend is not None:
         vote_trend = ema_trend
         vote_info = None
+    mom_trend, mom_info = kept_abs_momentum(HERE / "iterations.json", spy["close"], as_of=as_of)
+    if mom_trend is not None and vote_trend is not None:
+        raise RuntimeError("the iteration log kept both an absolute-momentum filter and another trend override")
+    if mom_trend is not None:
+        vote_trend = mom_trend
+        vote_info = None
     idle_choice = kept_idle_choice(HERE / "iterations.json", as_of)
     idle_closes = {}
     if idle_choice is not None:
@@ -887,6 +894,7 @@ def main() -> None:
         bill_share=bill_share, bill_info=bill_info,
         pause_share=pause_share, pause_info=pause_info,
         ema_info=ema_info,
+        mom_info=mom_info,
         **slice_kwargs,
         curve_on=curve_on, curve_info=curve_info,
         dd_info=dd_info,
