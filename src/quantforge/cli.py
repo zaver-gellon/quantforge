@@ -36,6 +36,7 @@ from quantforge.strategies.cushion import kept_cushion
 from quantforge.strategies.volgear import kept_vol_gear
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend
+from quantforge.strategies.absmom import kept_abs_momentum
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -143,6 +144,11 @@ def _signals(args) -> int:
             raise DataError("the iteration log kept both a re-entry delay and another trend override")
         if reentry_trend is not None:
             vote_trend, vote_info = reentry_trend, None
+        mom_trend, mom_info = kept_abs_momentum(study / "iterations.json", close, as_of=close.index[-1])
+        if mom_trend is not None and vote_trend is not None:
+            raise DataError("the iteration log kept both an absolute-momentum filter and another trend override")
+        if mom_trend is not None:
+            vote_trend, vote_info = mom_trend, None
         idle_choice = kept_idle_choice(study / "iterations.json", close.index[-1])
         idle_closes = {}
         if idle_choice is not None:
@@ -324,6 +330,7 @@ def _signals(args) -> int:
             ema_info=ema_info,
             reentry_info=reentry_info,
             breaker_info=breaker_info,
+            mom_info=mom_info,
             **idle_kwargs,
             **drift_kwargs,
             **sym_kwargs,
