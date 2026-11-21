@@ -37,6 +37,7 @@ from quantforge.strategies.volgear import kept_vol_gear
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend
 from quantforge.strategies.absmom import kept_abs_momentum
+from quantforge.strategies.dipcut import kept_dip_cut
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -179,6 +180,17 @@ def _signals(args) -> int:
             raise DataError("the iteration log kept both an off-trend core hold and a fast re-entry")
         if reentry_hold is not None:
             core_hold, core_hold_info = reentry_hold, reentry_info
+        cut_hold, cut_boost, cut_info = kept_dip_cut(
+            study / "iterations.json", close, as_of=close.index[-1],
+        )
+        if cut_hold is not None and vote_trend is not None:
+            raise DataError("the iteration log kept both an off-trend dip cut and a sleeve-gate override")
+        if cut_hold is not None and core_hold is not None:
+            raise DataError("the iteration log kept both an off-trend dip cut and an off-trend core rule")
+        cut_kwargs = {}
+        if cut_hold is not None:
+            core_hold = cut_hold
+            cut_kwargs = {"dip_boost": cut_boost, "dip_cut_info": cut_info}
         sleeve_fast, gear_info = kept_sleeve_gear(study / "iterations.json", close, as_of=close.index[-1])
         sleeve_upro_share, vol_gear_info = kept_vol_gear(study / "iterations.json", close, as_of=close.index[-1])
         if sleeve_upro_share is not None and sleeve_fast is not None:
@@ -331,6 +343,7 @@ def _signals(args) -> int:
             reentry_info=reentry_info,
             breaker_info=breaker_info,
             mom_info=mom_info,
+            **cut_kwargs,
             **idle_kwargs,
             **drift_kwargs,
             **sym_kwargs,

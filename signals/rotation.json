@@ -11,8 +11,8 @@
     "entry": "week-ending close, top trailing 63-session return among TQQQ, TMF, and UGL, and only if it beats cash",
     "entry_level": 0.009994824187599116,
     "entry_value": {
-      "TQQQ": -0.4018306408788297,
-      "TMF": -0.040337466204452666,
+      "TQQQ": -0.40183064087883,
+      "TMF": -0.040337466204452777,
       "UGL": -0.4429287099544891,
       "BIL": 0.009994824187599116
     },
@@ -21,21 +21,21 @@
     "stop": "cash when the best risky sleeve does not beat the T-bill return over the same window",
     "stop_level": 0.009994824187599116,
     "reference_close": {
-      "TQQQ": 133.20002180085032,
-      "TMF": 72.9719776459737,
+      "TQQQ": 133.19956468435987,
+      "TMF": 72.97189268390568,
       "UGL": 1025.9172178058247
     }
   },
   "validated": false,
-  "generated_at": "2026-11-20T22:04:46Z",
+  "generated_at": "2026-11-21T22:12:15Z",
   "diagnostics": {
     "cell": "TQQQ_L63",
     "equity": "TQQQ",
     "lookback": 63,
     "pick": "BIL",
     "scores": {
-      "TQQQ": -0.4018306408788297,
-      "TMF": -0.040337466204452666,
+      "TQQQ": -0.40183064087883,
+      "TMF": -0.040337466204452777,
       "UGL": -0.4429287099544891,
       "BIL": 0.009994824187599116
     },

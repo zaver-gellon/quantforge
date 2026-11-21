@@ -282,6 +282,7 @@ def build_trend_signal(
     reentry_info: dict | None = None,
     breaker_info: dict | None = None,
     mom_info: dict | None = None,
+    dip_cut_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -360,6 +361,9 @@ def build_trend_signal(
     stop.
     ``mom_info`` records a kept absolute-momentum ensemble. The sleeve state
     is ``trend_override``. It does not change the weights by itself.
+    ``dip_cut_info`` records a kept off-trend dip cut. The invested share is
+    ``core_hold`` and the SSO share of that stake is ``dip_boost``. The
+    published dip flag stays the live hold clock.
     """
     if breaker_info and dd_info:
         raise ValueError("a trailing-peak stop and a book drawdown breaker cannot both be kept")
@@ -388,6 +392,10 @@ def build_trend_signal(
     visible = close.loc[:as_of_ts]
     if dip_boost is not None and dip_hold_flag is not None:
         raise ValueError("a sized dip and a dip-hold exit cannot both be kept")
+    if dip_cut_info is not None and dip_hold_flag is not None:
+        raise ValueError("an off-trend dip cut and a dip-hold exit cannot both be kept")
+    if dip_cut_info is not None and dip_size_info is not None:
+        raise ValueError("an off-trend dip cut and a sized dip cannot both be kept")
     if dip_boost is not None:
         aligned_boost = dip_boost.reindex(visible.index).astype(float)
         if aligned_boost.isna().any() or not np.isfinite(aligned_boost.to_numpy(dtype=float)).all():
@@ -657,7 +665,12 @@ def build_trend_signal(
         reason = scale_label
     elif hold_changed:
         trade = True
-        reason = "fast_reentry" if (core_hold_info or {}).get("reentry_rule") else "core_hold"
+        if dip_cut_info:
+            reason = "dip_cut"
+        elif (core_hold_info or {}).get("reentry_rule"):
+            reason = "fast_reentry"
+        else:
+            reason = "core_hold"
     elif gear_changed:
         trade = True
         reason = "sleeve_gear"
@@ -774,6 +787,10 @@ def build_trend_signal(
         payload["diagnostics"].update(reentry_info)
     if mom_info:
         payload["diagnostics"].update(mom_info)
+    if dip_cut_info:
+        payload["diagnostics"].update(dip_cut_info)
+        if "dip_clock_on" in dip_cut_info:
+            payload["diagnostics"]["dip_on"] = bool(dip_cut_info["dip_clock_on"])
     if core_hold_info:
         payload["diagnostics"].update(core_hold_info)
         payload["diagnostics"]["core_hold"] = hold_now
