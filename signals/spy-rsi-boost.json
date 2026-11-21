@@ -20,11 +20,11 @@
     "reference_close": 689.8099975585938,
     "rsi2": 0.3255112129329092,
     "boost_on": true,
-    "sma200": 730.2862496948242,
+    "sma200": 730.2862530517579,
     "sessions_held": 4
   },
   "validated": false,
-  "generated_at": "2026-11-20T22:04:46Z",
+  "generated_at": "2026-11-21T22:12:15Z",
   "diagnostics": {
     "cell": "rsi10_f33_n10",
     "fill": "next_open",

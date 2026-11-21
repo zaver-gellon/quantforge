@@ -55,6 +55,7 @@ from quantforge.strategies.bookbreaker import has_kept_book_breaker, kept_book_b
 from quantforge.strategies.drift import kept_drift_mix
 from quantforge.strategies.symdrift import kept_sym_drift
 from quantforge.strategies.absmom import kept_abs_momentum
+from quantforge.strategies.dipcut import kept_dip_cut
 from quantforge.strategies.ema import kept_ema_trend
 from quantforge.strategies.idle import idle_signal_kwargs, kept_idle_choice
 from quantforge.strategies.onslice import kept_ontrend_slice
@@ -418,6 +419,18 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         raise RuntimeError("the iteration log kept both an off-trend core hold and a fast re-entry")
     if reentry_hold is not None:
         core_hold, core_hold_info = reentry_hold, reentry_info
+    cut_hold, cut_boost, cut_info = kept_dip_cut(
+        HERE / "iterations.json", bundle["spy_close"], as_of=as_of,
+    )
+    if cut_hold is not None and trend_override is not None:
+        raise RuntimeError("the iteration log kept both an off-trend dip cut and a sleeve-gate override")
+    if cut_hold is not None and core_hold is not None:
+        raise RuntimeError("the iteration log kept both an off-trend dip cut and an off-trend core rule")
+    if cut_hold is not None and (sized is not None or hold_flag is not None):
+        raise RuntimeError("the iteration log kept both an off-trend dip cut and another dip rule")
+    if cut_hold is not None:
+        core_hold = cut_hold
+        dip_kwargs = {"dip_boost": cut_boost, "dip_cut_info": cut_info}
     sleeve_fast, gear_info = kept_sleeve_gear(
         HERE / "iterations.json", bundle["spy_close"], as_of=as_of,
     )
