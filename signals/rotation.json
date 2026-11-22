@@ -12,7 +12,7 @@
     "entry_level": 0.009994824187599116,
     "entry_value": {
       "TQQQ": -0.40183064087883,
-      "TMF": -0.040337466204452777,
+      "TMF": -0.040337466204452,
       "UGL": -0.4429287099544891,
       "BIL": 0.009994824187599116
     },
@@ -21,13 +21,13 @@
     "stop": "cash when the best risky sleeve does not beat the T-bill return over the same window",
     "stop_level": 0.009994824187599116,
     "reference_close": {
-      "TQQQ": 133.19956468435987,
-      "TMF": 72.97189268390568,
+      "TQQQ": 133.200045300253,
+      "TMF": 72.97197795570143,
       "UGL": 1025.9172178058247
     }
   },
   "validated": false,
-  "generated_at": "2026-11-21T22:12:15Z",
+  "generated_at": "2026-11-22T22:07:44Z",
   "diagnostics": {
     "cell": "TQQQ_L63",
     "equity": "TQQQ",
@@ -35,7 +35,7 @@
     "pick": "BIL",
     "scores": {
       "TQQQ": -0.40183064087883,
-      "TMF": -0.040337466204452777,
+      "TMF": -0.040337466204452,
       "UGL": -0.4429287099544891,
       "BIL": 0.009994824187599116
     },

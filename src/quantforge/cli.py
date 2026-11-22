@@ -37,6 +37,7 @@ from quantforge.strategies.volgear import kept_vol_gear
 from quantforge.strategies.volscale import kept_sleeve_scale
 from quantforge.strategies.vote import kept_vote_trend
 from quantforge.strategies.absmom import kept_abs_momentum
+from quantforge.strategies.cadence import kept_eval_cadence
 from quantforge.strategies.dipcut import kept_dip_cut
 
 
@@ -150,6 +151,13 @@ def _signals(args) -> int:
             raise DataError("the iteration log kept both an absolute-momentum filter and another trend override")
         if mom_trend is not None:
             vote_trend, vote_info = mom_trend, None
+        cadence_trend, cadence_info = kept_eval_cadence(
+            study / "iterations.json", close, as_of=close.index[-1],
+        )
+        if cadence_trend is not None and vote_trend is not None:
+            raise DataError("the iteration log kept both an evaluation cadence and another trend override")
+        if cadence_trend is not None:
+            vote_trend, vote_info = cadence_trend, None
         idle_choice = kept_idle_choice(study / "iterations.json", close.index[-1])
         idle_closes = {}
         if idle_choice is not None:
@@ -343,6 +351,7 @@ def _signals(args) -> int:
             reentry_info=reentry_info,
             breaker_info=breaker_info,
             mom_info=mom_info,
+            cadence_info=cadence_info,
             **cut_kwargs,
             **idle_kwargs,
             **drift_kwargs,
