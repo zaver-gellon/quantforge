@@ -9,26 +9,26 @@
   },
   "levels": {
     "entry": "QQQ close above 695.7162 (200-day average times 1.02)",
-    "entry_level": 695.7161744018555,
+    "entry_level": 695.716175958252,
     "entry_value": 608.4500122070312,
     "exit": "QQQ close below 668.4332 (200-day average times 0.98)",
-    "exit_level": 668.4331871704102,
+    "exit_level": 668.4331886657715,
     "stop": "no price stop; the position is resized every session to the vol target and capped at 100% TQQQ",
     "stop_level": null,
     "reference_close": 608.4500122070312,
     "vol_target": 0.3,
-    "realized_vol": 1.1544170360923312
+    "realized_vol": 1.154417036092334
   },
   "validated": false,
-  "generated_at": "2026-11-21T22:12:15Z",
+  "generated_at": "2026-11-22T22:07:44Z",
   "diagnostics": {
     "cell": "band02_vol30",
     "band": 0.02,
     "vol_target": 0.3,
     "trend_on": false,
     "tqqq_weight": 0.0,
-    "realized_vol": 1.1544170360923312,
-    "sma200": 682.0746807861328,
+    "realized_vol": 1.154417036092334,
+    "sma200": 682.0746823120118,
     "rule": "Hold TQQQ only while the 200-day band is on. Size it to 30% / 20-day realized vol of TQQQ, capped at 100%. The rest is BIL. TQQQ before its listing is a daily-reset 3x QQQ with financing and the expense ratio."
   },
   "validated_reason": "did_not_clear_materiality_bar",

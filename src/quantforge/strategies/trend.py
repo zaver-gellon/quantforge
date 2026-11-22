@@ -46,8 +46,8 @@ class TrendCoreSpec:
             raise ValueError("leverage must be 1, 2, or 3")
         if self.core_weight < 0 or sleeve < 0 or self.core_weight + sleeve > 1 + 1e-8:
             raise ValueError("core and sleeve weights must be non-negative and sum to at most 1")
-        if self.freq not in ("daily", "monthly"):
-            raise ValueError("freq must be daily or monthly")
+        if self.freq not in ("daily", "weekly", "monthly"):
+            raise ValueError("freq must be daily, weekly, or monthly")
         if self.rebalance not in ("daily", "monthly", "quarterly"):
             raise ValueError("rebalance must be daily, monthly, or quarterly")
         if self.core_symbol not in ALLOWED_TREND_TICKERS or self.cash_symbol not in ALLOWED_TREND_TICKERS:
@@ -87,18 +87,19 @@ def trend_state(close: pd.Series, window: int, band: float = 0.0, freq: str = "d
     The value at t uses the close at t and earlier bars only. With a band, the
     sleeve turns on only when price is above ``SMA * (1 + band)`` and turns off
     only when price is below ``SMA * (1 - band)``. Inside the band the previous
-    state is kept, and the book stays off until the first real entry. Monthly
-    evaluation updates only on month-end closes and carries the state forward.
-    Before the SMA exists the state is off.
+    state is kept, and the book stays off until the first real entry. Weekly
+    evaluation updates only on the last session of each ISO week. Monthly
+    evaluation updates only on month-end closes. Between those checks the
+    previous state is carried forward. Before the SMA exists the state is off.
     """
     series = close.astype(float).sort_index()
     average = series.rolling(window, min_periods=window).mean()
     if freq == "daily":
         evaluate = np.ones(len(series), dtype=bool)
-    elif freq == "monthly":
-        evaluate = rebalance_mask(series.index, "monthly").to_numpy()
+    elif freq in ("weekly", "monthly"):
+        evaluate = rebalance_mask(series.index, freq).to_numpy()
     else:
-        raise ValueError("freq must be daily or monthly")
+        raise ValueError("freq must be daily, weekly, or monthly")
     prices = series.to_numpy(dtype=float)
     means = average.to_numpy(dtype=float)
     state = False
@@ -283,6 +284,7 @@ def build_trend_signal(
     breaker_info: dict | None = None,
     mom_info: dict | None = None,
     dip_cut_info: dict | None = None,
+    cadence_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -361,6 +363,9 @@ def build_trend_signal(
     stop.
     ``mom_info`` records a kept absolute-momentum ensemble. The sleeve state
     is ``trend_override``. It does not change the weights by itself.
+    ``cadence_info`` records a kept weekly or monthly evaluation of the same
+    200-day band. The sleeve state is ``trend_override``. The published
+    ``freq`` becomes that cadence. It does not change the weights by itself.
     ``dip_cut_info`` records a kept off-trend dip cut. The invested share is
     ``core_hold`` and the SSO share of that stake is ``dip_boost``. The
     published dip flag stays the live hold clock.
@@ -787,6 +792,10 @@ def build_trend_signal(
         payload["diagnostics"].update(reentry_info)
     if mom_info:
         payload["diagnostics"].update(mom_info)
+    if cadence_info:
+        payload["diagnostics"].update(cadence_info)
+        if cadence_info.get("cadence"):
+            payload["diagnostics"]["freq"] = str(cadence_info["cadence"])
     if dip_cut_info:
         payload["diagnostics"].update(dip_cut_info)
         if "dip_clock_on" in dip_cut_info:

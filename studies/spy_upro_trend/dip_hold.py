@@ -55,6 +55,7 @@ from quantforge.strategies.bookbreaker import has_kept_book_breaker, kept_book_b
 from quantforge.strategies.drift import kept_drift_mix
 from quantforge.strategies.symdrift import kept_sym_drift
 from quantforge.strategies.absmom import kept_abs_momentum
+from quantforge.strategies.cadence import kept_eval_cadence
 from quantforge.strategies.dipcut import kept_dip_cut
 from quantforge.strategies.ema import kept_ema_trend
 from quantforge.strategies.idle import idle_signal_kwargs, kept_idle_choice
@@ -358,6 +359,14 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
     if mom_trend is not None:
         trend_override = mom_trend
         vote_info = None
+    cadence_trend, cadence_info = kept_eval_cadence(
+        HERE / "iterations.json", bundle["spy_close"], as_of=as_of,
+    )
+    if cadence_trend is not None and trend_override is not None:
+        raise RuntimeError("the iteration log kept both an evaluation cadence and another trend override")
+    if cadence_trend is not None:
+        trend_override = cadence_trend
+        vote_info = None
     idle_choice = kept_idle_choice(HERE / "iterations.json", as_of)
     idle_kwargs = {}
     if idle_choice is not None:
@@ -519,6 +528,7 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         reentry_info=reentry_info,
         breaker_info=breaker_info,
         mom_info=mom_info,
+        cadence_info=cadence_info,
         **slice_kwargs,
         **dip_kwargs,
         **idle_kwargs,

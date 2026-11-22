@@ -18,7 +18,7 @@
     "reference_close": 689.8099975585938
   },
   "validated": false,
-  "generated_at": "2026-11-21T22:12:15Z",
+  "generated_at": "2026-11-22T22:07:44Z",
   "diagnostics": {
     "cell": "ibs_0.2_n03_UPRO",
     "entry": "ibs_0.2",
@@ -30,7 +30,7 @@
     "sma5": 721.65400390625,
     "rsi2": 0.3255112129329092,
     "ibs": 0.09701964776072035,
-    "lower_band": 703.9248672100599,
+    "lower_band": 703.9248672100586,
     "rule": "Enter at the close while SPY is above its 200-day average. Exit at the next open after SPY closes above its 5-day average, after 3 sessions, or after a close at or below the 200-day average. Cash is BIL."
   },
   "validated_reason": "did_not_clear_materiality_bar",
