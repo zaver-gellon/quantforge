@@ -2760,3 +2760,83 @@ Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample win
 Decision: rejected.
 
 Refreshed lead out-of-sample 2006-01-03 to 2026-11-20 (5255 sessions): CAGR 0.144172, Sharpe 0.578486, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-20 (8512 sessions). SSO ends 2026-11-20, UPRO ends 2026-11-20, ^IRX ends 2026-11-20, ^VIX ends 2026-11-20, ^VIX3M ends 2026-11-20, GLD ends 2026-11-20, IEF ends 2026-11-20, TLT ends 2026-11-20. That is the Friday 2026-11-20 close. The next NYSE session is 2026-11-23. The latest close is the Friday 2026-11-20 session, which is the close this 2026-11-22 iteration was asked to confirm. The 2026-11-20 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book matches the prior row. On these prices, the lead book cut at the prior end 2026-11-20 (5255 sessions) has CAGR 0.144172, Sharpe 0.578486, max drawdown -0.468261, against the stored row CAGR 0.144172, Sharpe 0.578486, max drawdown -0.468261. That prior-cut path matches the stored row at write-up rounding. The comparison row is the prior cut stored by `2026-11-20-dip-cut`. That row is the live trend-core book. The off-trend dip cut tested that day was rejected. Candidate versus that refreshed book: Sharpe 0.578486 -> 0.609010 (delta 0.030524), CAGR 0.144172 -> 0.158494 (delta 0.014322), max drawdown -0.468261 -> -0.453167 (delta 0.015094). Last walk-forward pick: zcad_monthly. Out-of-sample turnover per year 13.17 -> 13.01. Out-of-sample sessions where a frozen cadence differs from the daily band: {'zcad_weekly': 157, 'zcad_monthly': 378}. Out-of-sample sessions on which a frozen cadence is allowed to update: {'zcad_weekly': 1090, 'zcad_monthly': 250}. The stitched evaluation cadence does not clear the materiality bar. The live book stays the plain trend core. SPY close 689.8100 versus the 200-day average 730.2863 (-5.54% versus the average), below the lower band. Previous signal 2026-11-23 (close 2026-11-20): SSO 0.5000, BIL 0.5000; trend on False; dip on True. This signal 2026-11-23 (close 2026-11-20): SSO 0.5000, BIL 0.5000; trend on False; dip on True. Weights changed: False. Trend state changed: False. Dip state changed: False.
+
+### 2026-11-26 — RSI(2) trigger for the dip overlay
+
+The live dip swaps the SPY half into SSO after three strictly down closes and leaves at the first up close or five sessions. The desk wants a faster short-horizon trigger on that same half. Wilder RSI(2) below 5, 10, or 15, with an exit when the close is back above the 5-day average or RSI(2) is above 70, is that trigger. The standalone mean-reversion account (family meanrev) and the SPY RSI(2) boost (family spy_rsi_boost) are already in the ledger. They are not rerun. Those books replace the whole account, the mean-reversion book also requires SPY above its 200-day average, and the boost moves weight into UPRO. This test keeps the 50/50 trend core, the 200-day 2% band, the quarterly mix, and the SSO vehicle on the SPY half. It does not put a 200-day gate on the overlay, because the live dip trades while the sleeve is off and the sleeve already has its own filter. There is no session cap. The exit close does not re-enter. Thresholds 5, 10, and 15 were fixed before this sample was scored. One step on that axis is a neighbor. The three-down book is already counted. Its name sorts first, so a tie keeps it. Internal bar strength is not a cell: it is not a step on the RSI axis, and an IBS entry is already a mean-reversion trial. Fills stay next-open with 5 bp one-way costs. Cash pays no spread. The stitched path is kept only when it clears the materiality bar.
+
+- `SPY` from 1993-01-29 to 2026-11-25 (8515 sessions).
+- `SSO` from 2006-06-21 to 2026-11-25 (5141 sessions).
+- `UPRO` from 2009-06-25 to 2026-11-25 (4383 sessions).
+- `^IRX` from 1990-01-02 to 2026-11-25 (9263 sessions).
+- `^VIX` from 1990-01-02 to 2026-11-26 (9297 sessions).
+- `^VIX3M` from 2006-07-17 to 2026-11-25 (5124 sessions).
+- `GLD` from 2004-11-18 to 2026-11-25 (5540 sessions).
+- `IEF` from 2002-07-30 to 2026-11-25 (6122 sessions).
+- `TLT` from 2002-07-30 to 2026-11-25 (6122 sessions).
+
+Refreshed lead book, out of sample, before the candidate is judged. Window 2006-01-03 to 2026-11-25 (5258 sessions): CAGR 14.97%, Sharpe 0.595, max drawdown -46.83%. Prior write-up `2026-11-22-eval-cadence` through 2026-11-20: CAGR 14.42%, Sharpe 0.578, max drawdown -46.83%. Deltas versus that row: CAGR 0.55%, Sharpe 0.017, max drawdown 0.00%. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-25 (8515 sessions). SSO ends 2026-11-25, UPRO ends 2026-11-25, ^IRX ends 2026-11-25, ^VIX ends 2026-11-26, ^VIX3M ends 2026-11-25, GLD ends 2026-11-25, IEF ends 2026-11-25, TLT ends 2026-11-25. That is the Wednesday 2026-11-25 close. The next NYSE session is 2026-11-27. The latest close is the Wednesday 2026-11-25 session. Thursday 2026-11-26 is Thanksgiving and the NYSE is closed. The 2026-11-25 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-20 (5255 sessions) has CAGR 0.144172, Sharpe 0.578486, max drawdown -0.468261, against the stored row CAGR 0.144172, Sharpe 0.578486, max drawdown -0.468261. That prior-cut path matches the stored row at write-up rounding. The comparison row is the prior cut stored by `2026-11-22-eval-cadence`. That row is the live trend-core book. The weekly or monthly band check tested that day was rejected.
+
+Variants tried. Counting rows increment the ledger. The walk-forward stitch is a selection over those rows and is stored as an audit.
+
+| variant | counts | full-sample CAGR | Sharpe | max DD | years selected |
+| --- | --- | --- | --- | --- | --- |
+| dmr_off | no | 12.3% | 0.50 | -46.8% | 9 |
+| zdmr_rsi05 | yes | 12.7% | 0.51 | -48.6% | 6 |
+| zdmr_rsi10 | yes | 12.5% | 0.50 | -51.1% | 6 |
+| zdmr_rsi15 | yes | 12.6% | 0.49 | -51.1% | 0 |
+
+Walk-forward picks, using only returns strictly before each decision date.
+
+| year | variant |
+| --- | --- |
+| 2006-01-03 | dmr_off |
+| 2007-01-03 | dmr_off |
+| 2008-01-02 | dmr_off |
+| 2009-01-02 | zdmr_rsi10 |
+| 2010-01-04 | dmr_off |
+| 2011-01-03 | dmr_off |
+| 2012-01-03 | dmr_off |
+| 2013-01-02 | zdmr_rsi10 |
+| 2014-01-02 | zdmr_rsi10 |
+| 2015-01-02 | dmr_off |
+| 2016-01-04 | zdmr_rsi10 |
+| 2017-01-03 | zdmr_rsi10 |
+| 2018-01-02 | zdmr_rsi10 |
+| 2019-01-02 | dmr_off |
+| 2020-01-02 | dmr_off |
+| 2021-01-04 | zdmr_rsi05 |
+| 2022-01-03 | zdmr_rsi05 |
+| 2023-01-03 | zdmr_rsi05 |
+| 2024-01-02 | zdmr_rsi05 |
+| 2025-01-02 | zdmr_rsi05 |
+| 2026-01-02 | zdmr_rsi05 |
+
+Out-of-sample window: 2006-01-03 to 2026-11-25 (5258 sessions).
+
+| book | CAGR | Sharpe | deflated Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| current | 14.97% | 0.595 | n/a | -46.83% |
+| candidate | 15.02% | 0.593 | n/a | -48.63% |
+
+Materiality bar. Each line is produced by the scorer from the paths it just ran.
+
+| check | pass | detail |
+| --- | --- | --- |
+| a Sharpe +0.05 | no | Sharpe 0.595172 -> 0.592526 (delta -0.002646; need >= 0.05). |
+| a drawdown +3pp and CAGR within 0.5pp | no | Max drawdown -0.468261 -> -0.486318 (delta -0.018057; need >= 0.03). CAGR 0.149720 -> 0.150250 (delta 0.000530; floor -0.0050). |
+| a overall | no | Either the Sharpe clause or the drawdown clause is enough. |
+| b deflated Sharpe of the improvement >= 0.75 | no | Improvement Sharpe 0.056010, deflated Sharpe 0.028896 (need >= 0.75). Trials 551, daily-Sharpe dispersion 0.009643, daily multiple-testing benchmark 0.029716. |
+| b still helps with the best improvement year removed | no | Removed 2025 (summed daily improvement 0.031972). Remaining Sharpe delta -0.008527, CAGR delta -0.001285, max-drawdown delta -0.018057. |
+| b overall | no | The deflated-Sharpe cutoff and the best-year check both have to pass. |
+| c neighboring parameters | yes | All 1 neighbors are within 0.05 Sharpe and 3% drawdown of the selected cell. |
+
+Frozen-parameter neighbors of the last walk-forward pick, same out-of-sample window.
+
+| neighbor | similar | CAGR | Sharpe | max DD |
+| --- | --- | --- | --- | --- |
+| zdmr_rsi10 | yes | 15.75% | 0.603 | -51.14% |
+
+Decision: rejected.
+
+Refreshed lead out-of-sample 2006-01-03 to 2026-11-25 (5258 sessions): CAGR 0.149720, Sharpe 0.595172, max drawdown -0.468261. After a forced Yahoo refresh, SPY closes run from 1993-01-29 to 2026-11-25 (8515 sessions). SSO ends 2026-11-25, UPRO ends 2026-11-25, ^IRX ends 2026-11-25, ^VIX ends 2026-11-26, ^VIX3M ends 2026-11-25, GLD ends 2026-11-25, IEF ends 2026-11-25, TLT ends 2026-11-25. That is the Wednesday 2026-11-25 close. The next NYSE session is 2026-11-27. The latest close is the Wednesday 2026-11-25 session. Thursday 2026-11-26 is Thanksgiving and the NYSE is closed. The 2026-11-25 close is published. On the write-up's rounding (CAGR and drawdown to 0.01 points, Sharpe to 0.001) the refreshed lead book differs from the prior row. On these prices, the lead book cut at the prior end 2026-11-20 (5255 sessions) has CAGR 0.144172, Sharpe 0.578486, max drawdown -0.468261, against the stored row CAGR 0.144172, Sharpe 0.578486, max drawdown -0.468261. That prior-cut path matches the stored row at write-up rounding. The comparison row is the prior cut stored by `2026-11-22-eval-cadence`. That row is the live trend-core book. The weekly or monthly band check tested that day was rejected. Candidate versus that refreshed book: Sharpe 0.595172 -> 0.592526 (delta -0.002646), CAGR 0.149720 -> 0.150250 (delta 0.000530), max drawdown -0.468261 -> -0.486318 (delta -0.018057). Last walk-forward pick: zdmr_rsi05. Out-of-sample turnover per year 13.20 -> 10.30. Out-of-sample sessions where a frozen RSI trigger differs from the three-down dip: {'zdmr_rsi05': 488, 'zdmr_rsi10': 645, 'zdmr_rsi15': 857}. Out-of-sample sessions a frozen RSI trigger holds SSO: {'zdmr_rsi05': 432, 'zdmr_rsi10': 839, 'zdmr_rsi15': 1171}. The stitched RSI(2) dip trigger does not clear the materiality bar. The live book stays the plain trend core. SPY close 716.7000 versus the 200-day average 730.7721 (-1.93% versus the average), inside the 2% band. Previous signal 2026-11-23 (close 2026-11-20): SSO 0.5000, BIL 0.5000; trend on False; dip on True. This signal 2026-11-27 (close 2026-11-25): SPY 0.5000, BIL 0.5000; trend on False; dip on False. Weights changed: True. Trend state changed: False. Dip state changed: True.

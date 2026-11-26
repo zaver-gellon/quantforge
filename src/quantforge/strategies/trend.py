@@ -285,6 +285,8 @@ def build_trend_signal(
     mom_info: dict | None = None,
     dip_cut_info: dict | None = None,
     cadence_info: dict | None = None,
+    dip_mr_flag: pd.Series | None = None,
+    dip_mr_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -369,6 +371,12 @@ def build_trend_signal(
     ``dip_cut_info`` records a kept off-trend dip cut. The invested share is
     ``core_hold`` and the SSO share of that stake is ``dip_boost``. The
     published dip flag stays the live hold clock.
+    ``dip_mr_flag`` replaces the three-down trigger when a walk-forward
+    RSI(2) overlay cleared the materiality bar. True at the signal close
+    holds the core in SSO on the next session. It cannot be set together
+    with a sized dip, a dip-hold exit, or an off-trend dip cut.
+    ``dip_mr_info`` records that cell. When it is not the live three-down
+    book, ``dip_rule`` becomes the cell name.
     """
     if breaker_info and dd_info:
         raise ValueError("a trailing-peak stop and a book drawdown breaker cannot both be kept")
@@ -401,6 +409,12 @@ def build_trend_signal(
         raise ValueError("an off-trend dip cut and a dip-hold exit cannot both be kept")
     if dip_cut_info is not None and dip_size_info is not None:
         raise ValueError("an off-trend dip cut and a sized dip cannot both be kept")
+    if dip_mr_flag is not None and dip_hold_flag is not None:
+        raise ValueError("a mean-reversion dip trigger and a dip-hold exit cannot both be kept")
+    if dip_mr_flag is not None and dip_boost is not None:
+        raise ValueError("a mean-reversion dip trigger and a sized dip cannot both be kept")
+    if dip_mr_flag is not None and dip_cut_info is not None:
+        raise ValueError("a mean-reversion dip trigger and an off-trend dip cut cannot both be kept")
     if dip_boost is not None:
         aligned_boost = dip_boost.reindex(visible.index).astype(float)
         if aligned_boost.isna().any() or not np.isfinite(aligned_boost.to_numpy(dtype=float)).all():
@@ -416,6 +430,13 @@ def build_trend_signal(
         aligned_hold = aligned_hold.astype(bool)
         boost_now = 1.0 if bool(aligned_hold.iloc[-1]) else 0.0
         boost_prev = 1.0 if len(aligned_hold) > 1 and bool(aligned_hold.iloc[-2]) else 0.0
+    elif dip_mr_flag is not None:
+        aligned_mr = dip_mr_flag.reindex(visible.index)
+        if aligned_mr.isna().any():
+            raise ValueError("dip mean-reversion flag is missing sessions at or before as_of")
+        aligned_mr = aligned_mr.astype(bool)
+        boost_now = 1.0 if bool(aligned_mr.iloc[-1]) else 0.0
+        boost_prev = 1.0 if len(aligned_mr) > 1 and bool(aligned_mr.iloc[-2]) else 0.0
     else:
         dips = dip_active(visible, dip_rule, dip_hold) if apply_dip else pd.Series(False, index=visible.index)
         dip_flag = bool(dips.iloc[-1]) if len(dips) else False
@@ -815,6 +836,11 @@ def build_trend_signal(
     if dip_hold_info or dip_hold_flag is not None:
         if dip_hold_info:
             payload["diagnostics"].update(dip_hold_info)
+    if dip_mr_info or dip_mr_flag is not None:
+        if dip_mr_info:
+            payload["diagnostics"].update(dip_mr_info)
+            if not dip_mr_info.get("dip_mr_live", True) and dip_mr_info.get("dip_mr_rule"):
+                payload["diagnostics"]["dip_rule"] = str(dip_mr_info["dip_mr_rule"])
     if drift_info:
         payload["diagnostics"].update(drift_info)
         if drift_replaced_calendar:

@@ -39,6 +39,7 @@ from quantforge.strategies.vote import kept_vote_trend
 from quantforge.strategies.absmom import kept_abs_momentum
 from quantforge.strategies.cadence import kept_eval_cadence
 from quantforge.strategies.dipcut import kept_dip_cut
+from quantforge.strategies.dipmr import kept_dip_mr
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -199,6 +200,14 @@ def _signals(args) -> int:
         if cut_hold is not None:
             core_hold = cut_hold
             cut_kwargs = {"dip_boost": cut_boost, "dip_cut_info": cut_info}
+        mr_flag, mr_info = kept_dip_mr(study / "iterations.json", close, as_of=close.index[-1])
+        if mr_flag is not None and cut_hold is not None:
+            raise DataError(
+                "the iteration log kept both a mean-reversion dip trigger and an off-trend dip cut"
+            )
+        mr_kwargs = {}
+        if mr_flag is not None:
+            mr_kwargs = {"dip_mr_flag": mr_flag, "dip_mr_info": mr_info}
         sleeve_fast, gear_info = kept_sleeve_gear(study / "iterations.json", close, as_of=close.index[-1])
         sleeve_upro_share, vol_gear_info = kept_vol_gear(study / "iterations.json", close, as_of=close.index[-1])
         if sleeve_upro_share is not None and sleeve_fast is not None:
@@ -352,6 +361,7 @@ def _signals(args) -> int:
             breaker_info=breaker_info,
             mom_info=mom_info,
             cadence_info=cadence_info,
+            **mr_kwargs,
             **cut_kwargs,
             **idle_kwargs,
             **drift_kwargs,
