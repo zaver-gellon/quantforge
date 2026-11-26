@@ -57,6 +57,7 @@ from quantforge.strategies.symdrift import kept_sym_drift
 from quantforge.strategies.absmom import kept_abs_momentum
 from quantforge.strategies.cadence import kept_eval_cadence
 from quantforge.strategies.dipcut import kept_dip_cut
+from quantforge.strategies.dipmr import kept_dip_mr
 from quantforge.strategies.ema import kept_ema_trend
 from quantforge.strategies.idle import idle_signal_kwargs, kept_idle_choice
 from quantforge.strategies.onslice import kept_ontrend_slice
@@ -393,11 +394,16 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
     hold_flag, hold_info = kept_dip_hold(HERE / "iterations.json", bundle["spy_close"], as_of=as_of)
     if sized is not None and hold_flag is not None:
         raise RuntimeError("the iteration log kept both a sized dip and a dip-hold exit")
+    mr_flag, mr_info = kept_dip_mr(HERE / "iterations.json", bundle["spy_close"], as_of=as_of)
+    if mr_flag is not None and (sized is not None or hold_flag is not None):
+        raise RuntimeError("the iteration log kept both a mean-reversion dip trigger and another dip rule")
     dip_kwargs = {}
     if sized is not None:
         dip_kwargs = {"dip_boost": sized, "dip_size_info": dip_info}
     if hold_flag is not None:
         dip_kwargs = {"dip_hold_flag": hold_flag, "dip_hold_info": hold_info}
+    if mr_flag is not None:
+        dip_kwargs = {"dip_mr_flag": mr_flag, "dip_mr_info": mr_info}
     drift_mix, drift_info = kept_drift_mix(
         HERE / "iterations.json",
         bundle["spy_open"], bundle["spy_close"],
@@ -435,7 +441,7 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         raise RuntimeError("the iteration log kept both an off-trend dip cut and a sleeve-gate override")
     if cut_hold is not None and core_hold is not None:
         raise RuntimeError("the iteration log kept both an off-trend dip cut and an off-trend core rule")
-    if cut_hold is not None and (sized is not None or hold_flag is not None):
+    if cut_hold is not None and (sized is not None or hold_flag is not None or mr_flag is not None):
         raise RuntimeError("the iteration log kept both an off-trend dip cut and another dip rule")
     if cut_hold is not None:
         core_hold = cut_hold
@@ -544,6 +550,8 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
     write_signal(payload, HERE / "signals.json", allowed_tickers=frozenset(allowed))
     if hold_info and not hold_info.get("dip_hold_live", True):
         title = "Trend-core whose dip keeps the bounce and drops the continuation"
+    elif mr_info and not mr_info.get("dip_mr_live", True):
+        title = "Trend-core whose dip trigger is Wilder RSI(2)"
     elif slice_info and not slice_info.get("slice_live", True):
         title = "Trend-core that holds a fixed gold or Treasury slice in the on-trend sleeve"
     elif dip_info:

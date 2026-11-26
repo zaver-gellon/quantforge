@@ -1,24 +1,24 @@
 {
   "strategy": "meanrev",
   "strategy_id": "meanrev",
-  "date": "2026-11-23",
-  "as_of": "2026-11-20",
-  "signal_date": "2026-11-20",
+  "date": "2026-11-27",
+  "as_of": "2026-11-25",
+  "signal_date": "2026-11-25",
   "weights": {
     "BIL": 1.0
   },
   "levels": {
     "entry": "IBS < 0.2",
     "entry_level": 0.2,
-    "entry_value": 0.09701964776072035,
+    "entry_value": 0.9247179312835986,
     "exit": "SPY close above its 5-day average",
-    "exit_level": 721.65400390625,
+    "exit_level": 712.6900024414062,
     "stop": "flat after 3 sessions, or when SPY closes at or below its 200-day average",
-    "stop_level": 730.2862530517579,
-    "reference_close": 689.8099975585938
+    "stop_level": 730.7721255493165,
+    "reference_close": 716.7000122070312
   },
   "validated": false,
-  "generated_at": "2026-11-22T22:07:44Z",
+  "generated_at": "2026-11-26T22:07:06Z",
   "diagnostics": {
     "cell": "ibs_0.2_n03_UPRO",
     "entry": "ibs_0.2",
@@ -26,11 +26,11 @@
     "vehicle": "UPRO",
     "regime_on": false,
     "in_position": false,
-    "sma200": 730.2862530517579,
-    "sma5": 721.65400390625,
-    "rsi2": 0.3255112129329092,
-    "ibs": 0.09701964776072035,
-    "lower_band": 703.9248672100586,
+    "sma200": 730.7721255493165,
+    "sma5": 712.6900024414062,
+    "rsi2": 49.47387277928449,
+    "ibs": 0.9247179312835986,
+    "lower_band": 701.0372335556273,
     "rule": "Enter at the close while SPY is above its 200-day average. Exit at the next open after SPY closes above its 5-day average, after 3 sessions, or after a close at or below the 200-day average. Cash is BIL."
   },
   "validated_reason": "did_not_clear_materiality_bar",

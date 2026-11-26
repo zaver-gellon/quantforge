@@ -58,6 +58,19 @@ def load_spec(path: Path) -> dict:
     return json.loads(path.read_text())
 
 
+def _dip_stop(diagnostics: dict) -> str:
+    """Stop line for the published trend book. The live dip is three down closes."""
+    rule = diagnostics.get("dip_mr_rule")
+    if rule and not diagnostics.get("dip_mr_live", True):
+        threshold = diagnostics.get("dip_mr_threshold")
+        return (
+            "no trailing stop; the SPY half switches to SSO when Wilder RSI(2) "
+            f"is below {threshold} and leaves when the close is above the 5-day average "
+            "or RSI(2) is above 70"
+        )
+    return "no trailing stop; the SPY half switches to SSO after three down closes"
+
+
 def annotate_lead(payload: dict, spec: dict) -> dict:
     """Add the publisher fields without removing the keys the trend bot reads."""
     lead = spec.get("lead") or {}
@@ -74,7 +87,7 @@ def annotate_lead(payload: dict, spec: dict) -> dict:
             "entry_value": float(close_px),
             "exit": f"SPY close below {float(sma) * (1.0 - float(band)):.4f}",
             "exit_level": float(sma) * (1.0 - float(band)),
-            "stop": "no trailing stop; the SPY half switches to SSO after three down closes",
+            "stop": _dip_stop(diagnostics),
             "stop_level": None,
             "reference_close": float(close_px),
         }
