@@ -1,8 +1,8 @@
 {
-  "date": "2026-11-27",
+  "date": "2026-11-30",
   "as_of": "2026-11-16T13:35:00-08:00",
-  "spy_close": 716.7000122070312,
-  "exit_level": 716.1566830383301,
+  "spy_close": 728.3200073242188,
+  "exit_level": 716.3611237548828,
   "tight_band": 0.02,
   "note": null,
   "positions": [
@@ -16,9 +16,9 @@
       "stop_pct": 0.179956,
       "leverage": 2,
       "implied_spy_move": 0.089978,
-      "implied_spy": 652.212829,
-      "exit_gap": -63.943854,
-      "exit_gap_pct": -0.089288,
+      "implied_spy": 662.787281,
+      "exit_gap": -53.573842,
+      "exit_gap_pct": -0.074786,
       "too_tight": false
     },
     {
@@ -31,9 +31,9 @@
       "stop_pct": 0.127022,
       "leverage": 3,
       "implied_spy_move": 0.042341,
-      "implied_spy": 686.354466,
-      "exit_gap": -29.802217,
-      "exit_gap_pct": -0.041614,
+      "implied_spy": 697.482463,
+      "exit_gap": -18.878661,
+      "exit_gap_pct": -0.026354,
       "too_tight": false
     }
   ],

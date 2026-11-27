@@ -1,31 +1,31 @@
 {
   "strategy": "btc-trend",
   "strategy_id": "btc-trend",
-  "date": "2026-11-27",
-  "as_of": "2026-11-25",
-  "signal_date": "2026-11-25",
+  "date": "2026-11-30",
+  "as_of": "2026-11-27",
+  "signal_date": "2026-11-27",
   "weights": {
     "BIL": 1.0
   },
   "levels": {
     "entry": "BTC 10-day average above its 30-day average",
-    "entry_level": 73701.68566666666,
-    "entry_value": 63019.74199999999,
+    "entry_level": 73090.26766666667,
+    "entry_value": 62260.984,
     "exit": "BTC 10-day average at or below its 30-day average",
-    "exit_level": 73701.68566666666,
+    "exit_level": 73090.26766666667,
     "stop": "no price stop; the alternative is BIL",
     "stop_level": null,
-    "reference_close": 60383.51
+    "reference_close": 59659.05
   },
   "validated": false,
-  "generated_at": "2026-11-26T22:07:06Z",
+  "generated_at": "2026-11-27T22:09:42Z",
   "diagnostics": {
     "cell": "sma10_030",
     "fast": 10,
     "slow": 30,
     "trend_on": false,
-    "sma_fast": 63019.74199999999,
-    "sma_slow": 73701.68566666666,
+    "sma_fast": 62260.984,
+    "sma_slow": 73090.26766666667,
     "rule": "Hold BTC-USD when its 10-day average is above its 30-day average. Otherwise hold BIL. The decision is the NYSE close; fill the next NYSE open."
   },
   "validated_reason": "did_not_clear_materiality_bar",

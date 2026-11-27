@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 
 import numpy as np
@@ -287,6 +287,8 @@ def build_trend_signal(
     cadence_info: dict | None = None,
     dip_mr_flag: pd.Series | None = None,
     dip_mr_info: dict | None = None,
+    turn_on: pd.Series | None = None,
+    turn_info: dict | None = None,
 ) -> dict:
     """Target weights for the next NYSE session after ``as_of``.
 
@@ -331,6 +333,12 @@ def build_trend_signal(
     ready, and ``sleeve_cash_on`` is true, the sleeve budget is held in that
     asset instead of BIL. The core is not moved. The flag is ignored while the
     equity trend is on.
+    ``turn_on`` is set only when a walk-forward turn-of-month tilt cleared the
+    materiality bar. True at the signal close means the next session is inside
+    the kept window. While the equity trend is on and the book is not parked
+    by the yield-curve clock, the core and sleeve targets become the raised
+    weights in ``turn_info``. While the trend is off the window does not
+    change the book. A missing series leaves the 50/50 targets.
     ``sleeve_upro_share`` is set only when a walk-forward vol-gear rule cleared
     the materiality bar. While the sleeve is on, that share of the sleeve
     budget is UPRO and the rest is SPY. The dip does not cover the SPY stake.
@@ -495,7 +503,47 @@ def build_trend_signal(
         curve_now = bool(aligned_curve.iloc[-1])
         if len(aligned_curve) > 1:
             curve_prev = bool(aligned_curve.iloc[-2])
+    turn_window_now = False
+    turn_window_prev = False
+    turn_core = float(spec.core_weight)
+    turn_sleeve = float(spec.sleeve_weight)
+    if turn_on is not None:
+        if turn_info is None:
+            raise ValueError("a turn-of-month tilt requires its parameter record")
+        if (
+            sleeve_scale is not None
+            or sleeve_fast is not None
+            or sleeve_upro_share is not None
+            or cushion_share is not None
+            or bill_share is not None
+            or pause_share is not None
+            or term_share is not None
+            or slice_symbol is not None
+        ):
+            raise ValueError("a turn-of-month tilt and another sleeve rule cannot both be kept")
+        turn_core = float(turn_info["turn_core_weight"])
+        turn_sleeve = float(turn_info["turn_sleeve_weight"])
+        if (
+            not np.isfinite(turn_core)
+            or not np.isfinite(turn_sleeve)
+            or turn_core < 0
+            or turn_sleeve < 0
+            or turn_core + turn_sleeve > 1 + 1e-8
+        ):
+            raise ValueError("turn-of-month weights must be non-negative and sum to at most 1")
+        aligned_turn = turn_on.reindex(visible.index)
+        if aligned_turn.isna().any():
+            raise ValueError("turn-of-month window is missing sessions at or before as_of")
+        aligned_turn = aligned_turn.astype(bool)
+        turn_window_now = bool(aligned_turn.iloc[-1])
+        if len(aligned_turn) > 1:
+            turn_window_prev = bool(aligned_turn.iloc[-2])
     prev_on = False if previous is None else bool(previous)
+    turn_applied_now = bool(turn_window_now and on and not hedge_now and not curve_now)
+    turn_applied_prev = bool(
+        turn_window_prev and prev_on and not hedge_prev and not curve_prev and previous is not None
+    )
+    turn_changed = bool(turn_on is not None and previous is not None and turn_applied_now != turn_applied_prev)
     hold_changed = abs((1.0 if on else hold_now) - (1.0 if prev_on else hold_prev)) > 1e-8
     fast_now = True
     fast_prev = True
@@ -709,6 +757,9 @@ def build_trend_signal(
     elif slice_changed:
         trade = True
         reason = "ontrend_slice"
+    elif turn_changed:
+        trade = True
+        reason = "turn_of_month"
     elif scheduled:
         trade = True
         if sym_replaced_calendar:
@@ -752,8 +803,11 @@ def build_trend_signal(
     elif mode == "cash":
         weights = {spec.cash_symbol: round(invested, 6)}
     else:
+        weight_spec = spec
+        if turn_applied_now:
+            weight_spec = replace(spec, core_weight=turn_core, sleeve_weight=turn_sleeve)
         weights = strategic_weights(
-            spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0,
+            weight_spec, sleeve_on, dip_on, fraction if sleeve_on else 1.0,
             core_hold=hold_now, trend_is_on=on, dip_boost=boost_now,
             sleeve_unlevered=unlevered_now,
             sleeve_upro_share=None if blend_share is None else share_now,
@@ -786,8 +840,8 @@ def build_trend_signal(
             "band": spec.band,
             "freq": spec.freq,
             "rebalance": spec.rebalance,
-            "core_weight": spec.core_weight,
-            "sleeve_weight": spec.sleeve_weight,
+            "core_weight": turn_core if turn_applied_now else spec.core_weight,
+            "sleeve_weight": turn_sleeve if turn_applied_now else spec.sleeve_weight,
             "sleeve_symbol": spec.sleeve_symbol,
             "leverage": spec.leverage,
         },
@@ -841,6 +895,11 @@ def build_trend_signal(
             payload["diagnostics"].update(dip_mr_info)
             if not dip_mr_info.get("dip_mr_live", True) and dip_mr_info.get("dip_mr_rule"):
                 payload["diagnostics"]["dip_rule"] = str(dip_mr_info["dip_mr_rule"])
+    if turn_info or turn_on is not None:
+        if turn_info:
+            payload["diagnostics"].update(turn_info)
+        payload["diagnostics"]["turn_window"] = bool(turn_window_now)
+        payload["diagnostics"]["turn_on"] = bool(turn_applied_now)
     if drift_info:
         payload["diagnostics"].update(drift_info)
         if drift_replaced_calendar:
