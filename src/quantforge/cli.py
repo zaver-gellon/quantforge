@@ -40,6 +40,7 @@ from quantforge.strategies.absmom import kept_abs_momentum
 from quantforge.strategies.cadence import kept_eval_cadence
 from quantforge.strategies.dipcut import kept_dip_cut
 from quantforge.strategies.dipmr import kept_dip_mr
+from quantforge.strategies.turnofmonth import kept_turn_of_month
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -343,6 +344,19 @@ def _signals(args) -> int:
                 irx, as_of=spy_frame.index[-1],
             )
             sym_kwargs = {"sym_mix": sym_mix, "sym_info": sym_info}
+        turn_flag, turn_info = kept_turn_of_month(study / "iterations.json", close, as_of=close.index[-1])
+        turn_kwargs = {}
+        if turn_flag is not None:
+            if (
+                scale is not None
+                or sleeve_fast is not None
+                or sleeve_upro_share is not None
+                or cushion_share is not None
+                or bill_share is not None
+                or pause_share is not None
+            ):
+                raise DataError("the iteration log kept both a turn-of-month tilt and another sleeve rule")
+            turn_kwargs = {"turn_on": turn_flag, "turn_info": turn_info}
         payload = build_trend_signal(
             TrendCoreSpec(), close, strategy_id="trend_core",
             hedge_on=stress, hedge_rule=rule, hedge_info=info,
@@ -367,6 +381,7 @@ def _signals(args) -> int:
             **drift_kwargs,
             **sym_kwargs,
             **sleeve_cash_kwargs,
+            **turn_kwargs,
         )
         dest = Path(args.out) if args.out else study / "signals.json"
         allowed = ALLOWED_TREND_TICKERS

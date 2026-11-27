@@ -1,29 +1,29 @@
 {
   "strategy": "spy-rsi-boost",
   "strategy_id": "spy-rsi-boost",
-  "date": "2026-11-27",
-  "as_of": "2026-11-25",
-  "signal_date": "2026-11-25",
+  "date": "2026-11-30",
+  "as_of": "2026-11-27",
+  "signal_date": "2026-11-27",
   "weights": {
     "SPY": 1.0
   },
   "levels": {
     "entry": "Wilder RSI(2) < 10 and SPY above its 200-day average",
     "entry_level": 10.0,
-    "entry_value": 49.47387277928449,
-    "exit": "RSI(2) > 70, or SPY close above its 5-day average (712.6900), or 10 sessions",
-    "exit_level": 712.6900024414062,
+    "entry_value": 79.06463354935296,
+    "exit": "RSI(2) > 70, or SPY close above its 5-day average (715.1800), or 10 sessions",
+    "exit_level": 715.1800048828125,
     "exit_rsi": 70.0,
     "stop": "none",
     "stop_level": null,
-    "reference_close": 716.7000122070312,
-    "rsi2": 49.47387277928449,
+    "reference_close": 728.3200073242188,
+    "rsi2": 79.06463354935296,
     "boost_on": false,
-    "sma200": 730.7721255493165,
+    "sma200": 730.9807373046875,
     "sessions_held": 0
   },
   "validated": false,
-  "generated_at": "2026-11-26T22:07:06Z",
+  "generated_at": "2026-11-27T22:09:42Z",
   "diagnostics": {
     "cell": "rsi10_f33_n10",
     "fill": "next_open",
@@ -31,7 +31,7 @@
     "max_hold": 10,
     "threshold": 10.0,
     "boost_on": false,
-    "rsi2": 49.47387277928449,
+    "rsi2": 79.06463354935296,
     "sessions_held": 0,
     "rule": "Hold SPY. After the close, if Wilder RSI(2) is below the threshold and SPY is above its 200-day average, move that fraction from SPY into UPRO at the next open. Return to SPY when RSI(2) is above 70, SPY closes above its 5-day average, or the hold expires. No stop. This daily signal is not the 12:50 PT check."
   },

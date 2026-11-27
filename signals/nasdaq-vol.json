@@ -1,34 +1,34 @@
 {
   "strategy": "nasdaq-vol",
   "strategy_id": "nasdaq-vol",
-  "date": "2026-11-27",
-  "as_of": "2026-11-25",
-  "signal_date": "2026-11-25",
+  "date": "2026-11-30",
+  "as_of": "2026-11-27",
+  "signal_date": "2026-11-27",
   "weights": {
     "BIL": 1.0
   },
   "levels": {
-    "entry": "QQQ close above 696.1948 (200-day average times 1.02)",
-    "entry_level": 696.1948070983887,
-    "entry_value": 633.9299926757812,
-    "exit": "QQQ close below 668.8930 (200-day average times 0.98)",
-    "exit_level": 668.8930499572754,
+    "entry": "QQQ close above 696.3986 (200-day average times 1.02)",
+    "entry_level": 696.398608190918,
+    "entry_value": 650.989990234375,
+    "exit": "QQQ close below 669.0889 (200-day average times 0.98)",
+    "exit_level": 669.0888588500976,
     "stop": "no price stop; the position is resized every session to the vol target and capped at 100% TQQQ",
     "stop_level": null,
-    "reference_close": 633.9299926757812,
+    "reference_close": 650.989990234375,
     "vol_target": 0.3,
-    "realized_vol": 1.3590905090162941
+    "realized_vol": 1.3995730405385511
   },
   "validated": false,
-  "generated_at": "2026-11-26T22:07:06Z",
+  "generated_at": "2026-11-27T22:09:42Z",
   "diagnostics": {
     "cell": "band02_vol30",
     "band": 0.02,
     "vol_target": 0.3,
     "trend_on": false,
     "tqqq_weight": 0.0,
-    "realized_vol": 1.3590905090162941,
-    "sma200": 682.543928527832,
+    "realized_vol": 1.3995730405385511,
+    "sma200": 682.7437335205078,
     "rule": "Hold TQQQ only while the 200-day band is on. Size it to 30% / 20-day realized vol of TQQQ, capped at 100%. The rest is BIL. TQQQ before its listing is a daily-reset 3x QQQ with financing and the expense ratio."
   },
   "validated_reason": "did_not_clear_materiality_bar",

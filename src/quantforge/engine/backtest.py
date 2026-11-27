@@ -301,6 +301,9 @@ def run_trend_core(
     upro_cost: float = 0.0,
     execution: str = "next_open",
     record_sleeve: bool = False,
+    tilt_on: pd.Series | None = None,
+    tilt_core: float = 0.30,
+    tilt_sleeve: float = 0.70,
 ) -> BacktestResult:
     """50/50 trend book with the dip overlay on the core only.
 
@@ -311,6 +314,9 @@ def run_trend_core(
     pile's dollars where they were, apart from its share of any trading cost.
     ``record_sleeve`` stores the close weight of the sleeve pile on sessions
     when that pile is UPRO, and leaves the other sessions missing.
+    ``tilt_on[t]`` true, and the trend on, resets both piles to ``tilt_core`` /
+    ``tilt_sleeve`` for the next session. Leaving that state resets them to
+    the base weights. A false or missing tilt is the ordinary book.
     """
     if execution not in ("next_open", "next_close"):
         raise ValueError(f"unknown execution {execution!r}")
@@ -331,6 +337,20 @@ def run_trend_core(
     trend = trend_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
     dip = dip_on.reindex(idx).fillna(False).to_numpy(dtype=bool)
     mix = mix_rebalance.reindex(idx).fillna(False).to_numpy(dtype=bool)
+    tilt = None
+    if tilt_on is not None:
+        aligned_tilt = tilt_on.reindex(idx)
+        if aligned_tilt.isna().any():
+            raise ValueError("tilt_on is missing sessions")
+        tilt = aligned_tilt.to_numpy(dtype=bool)
+        if (
+            not np.isfinite(tilt_core)
+            or not np.isfinite(tilt_sleeve)
+            or tilt_core < 0
+            or tilt_sleeve < 0
+            or float(tilt_core) + float(tilt_sleeve) > 1 + 1e-8
+        ):
+            raise ValueError("tilt weights must be non-negative and sum to at most 1")
     rf = cash_yield.reindex(idx).astype(float).fillna(0.0).to_numpy(dtype=float)
     n = len(idx)
     core = 0.0
@@ -338,6 +358,8 @@ def run_trend_core(
     resid = 1.0
     core_sso = False
     sleeve_upro = False
+    prev_cw = float(core_weight)
+    prev_sw = float(sleeve_weight)
     rets = np.full(n, np.nan)
     turn = np.zeros(n)
     drag = np.zeros(n)
@@ -345,6 +367,15 @@ def run_trend_core(
     sleeve_w = np.full(n, np.nan)
     for i in range(1, n):
         prev = core + sleeve + resid
+        want_trend = bool(trend[i - 1])
+        cw = float(core_weight)
+        sw = float(sleeve_weight)
+        if tilt is not None and bool(tilt[i - 1]) and want_trend:
+            cw = float(tilt_core)
+            sw = float(tilt_sleeve)
+        weight_changed = tilt is not None and (cw != prev_cw or sw != prev_sw)
+        do_mix = bool(i == 1 or mix[i - 1] or weight_changed)
+        prev_cw, prev_sw = cw, sw
         if execution == "next_open":
             core = _mark(core, prices["sso_o"][i], prices["sso_c"][i - 1], prices["spy_o"][i], prices["spy_c"][i - 1], core_sso)
             if sleeve_upro:
@@ -354,8 +385,8 @@ def run_trend_core(
             resid *= 1.0 + rf[i]
             core, sleeve, resid, core_sso, sleeve_upro, turn[i], drag[i] = _allocate_trend(
                 core + sleeve + resid, core, sleeve, resid, core_sso, sleeve_upro,
-                bool(dip[i - 1]), bool(trend[i - 1]), bool(i == 1 or mix[i - 1]),
-                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+                bool(dip[i - 1]), want_trend, do_mix,
+                cw, sw, spy_cost, sso_cost, upro_cost,
             )
             core = _mark(core, prices["sso_c"][i], prices["sso_o"][i], prices["spy_c"][i], prices["spy_o"][i], core_sso)
             if sleeve_upro:
@@ -369,8 +400,8 @@ def run_trend_core(
             resid *= 1.0 + rf[i]
             core, sleeve, resid, core_sso, sleeve_upro, turn[i], drag[i] = _allocate_trend(
                 core + sleeve + resid, core, sleeve, resid, core_sso, sleeve_upro,
-                bool(dip[i - 1]), bool(trend[i - 1]), bool(i == 1 or mix[i - 1]),
-                core_weight, sleeve_weight, spy_cost, sso_cost, upro_cost,
+                bool(dip[i - 1]), want_trend, do_mix,
+                cw, sw, spy_cost, sso_cost, upro_cost,
             )
         new = core + sleeve + resid
         rets[i] = new / prev - 1.0

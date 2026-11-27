@@ -39,6 +39,7 @@ from quantforge.strategies.creditregime import has_kept_credit_regime, kept_cred
 from quantforge.strategies.cushion import kept_cushion
 from quantforge.strategies.curve import kept_curve_clock
 from quantforge.strategies.dipbuy import dip_active
+from quantforge.strategies.turnofmonth import kept_turn_of_month
 from quantforge.strategies.diphold import (
     EXITS,
     HOLDS,
@@ -513,6 +514,21 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
             scale = breaker_scale
             vol_info = None
             dd_info = None
+    turn_flag, turn_info = kept_turn_of_month(HERE / "iterations.json", bundle["spy_close"], as_of=as_of)
+    turn_kwargs = {}
+    if turn_flag is not None:
+        if (
+            scale is not None
+            or sleeve_upro is not None
+            or sleeve_fast is not None
+            or cushion is not None
+            or bill is not None
+            or pause is not None
+            or term is not None
+            or slice_symbol is not None
+        ):
+            raise RuntimeError("the iteration log kept both a turn-of-month tilt and another sleeve rule")
+        turn_kwargs = {"turn_on": turn_flag, "turn_info": turn_info}
     payload = build_trend_signal(
         TrendCoreSpec(), bundle["spy_close"], as_of=as_of, strategy_id="trend_core",
         hedge_on=hedge_stress, hedge_rule=hedge_rule, hedge_info=hedge_info,
@@ -539,6 +555,7 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
         **dip_kwargs,
         **idle_kwargs,
         **sleeve_kwargs,
+        **turn_kwargs,
     )
     allowed = set(ALLOWED_TREND_TICKERS)
     if idle_kwargs.get("idle_symbol"):
@@ -550,6 +567,8 @@ def _write_live_signal(bundle, sso, upro, bill_yield, vix_close, vix3m_close, as
     write_signal(payload, HERE / "signals.json", allowed_tickers=frozenset(allowed))
     if hold_info and not hold_info.get("dip_hold_live", True):
         title = "Trend-core whose dip keeps the bounce and drops the continuation"
+    elif turn_info and not turn_info.get("turn_live", True):
+        title = "Trend-core that raises the UPRO sleeve around the turn of the month"
     elif mr_info and not mr_info.get("dip_mr_live", True):
         title = "Trend-core whose dip trigger is Wilder RSI(2)"
     elif slice_info and not slice_info.get("slice_live", True):
